@@ -57,9 +57,9 @@ limitations under the License.
 	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 		<property name="name" value="Vaadin"/>
 	</bean>
-<!-- 	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" /> -->
-	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerWeb">
-		<property name="directory" value="/home/roger/madura-workflows/madura-workflows/madura-workflow-ui/bundles"/>
+ 	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
+	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
+ 		<property name="directory" ref="bundlesDir"/>
 		<property name="inheritableBeans">
 			<map>
 				<entry key="jpaVendorAdapter" value-ref="jpaVendorAdapter"/>
