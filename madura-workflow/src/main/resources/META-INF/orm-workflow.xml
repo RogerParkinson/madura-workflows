@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<entity-mappings
+        xmlns="http://java.sun.com/xml/ns/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+        http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+                 version="1.0">
+
+    <named-query name="ActiveProcesses">
+        <query>select x from nz.co.senanque.workflow.instances.ProcessInstance x WHERE x.status = 'PENDING' OR x.status = 'ABORTING' OR x.status = 'GO' OR x.status = 'TIMEOUT'</query>
+    </named-query>
+
+    <named-query name="QueuedProcesses">
+        <query>select x from nz.co.senanque.workflow.instances.ProcessInstance x WHERE (x.status = 'WAIT' AND x.queueName = :queueName) OR (x.status = 'BUSY' AND x.lockedBy = :userName)</query>
+    </named-query>
+
+    <named-query name="DeferredEventsDebug">
+        <query>select x from nz.co.senanque.workflow.instances.DeferredEvent x</query>
+    </named-query>
+
+    <named-query name="DeferredEvents">
+        <query>select x from nz.co.senanque.workflow.instances.DeferredEvent x WHERE (eventType = 'DEFERRED' AND x.fire &lt; :rightNow) OR eventType = 'FORCE_ABORT' OR eventType = 'SUBPROCESS_END'</query>
+    </named-query>
+
+    <named-query name="clearDeferredEvents">
+        <query>select x from nz.co.senanque.workflow.instances.DeferredEvent x where x.eventType != 'DONE'</query>
+    </named-query>
+
+    <named-query name="currentAttachments">
+        <query>select x from nz.co.senanque.workflow.instances.Attachment x where x.processInstanceId = :pid order by created</query>
+    </named-query>
+
+</entity-mappings>

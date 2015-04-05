@@ -1,0 +1,218 @@
+/* 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+package nz.co.senanque.process.test;
+
+queue: name="OrderSupervisor" 
+    permission="SUPERVISOR" 
+    read-permission="STOCKSUPERVISOR";
+
+process: Order "testWAITandGO" {
+	try {
+		message=MyMessage;
+		compute=orderCompute log="#1";
+	}
+	catch (abort) {
+		compute=orderCompute log="#2";
+		continue;
+	}
+	compute=orderCompute log="#3";
+}  
+
+process: Order "testABORTandCatch" {
+	try {
+		compute=orderCompute log="abort" abort="true";
+	}
+	catch (abort) {
+		compute=orderCompute log="caught";
+	}
+	compute=orderCompute log="final";
+}  
+process: Order "testABORTandNoCatch" {
+	try {
+		compute=orderCompute log="abort" abort="true";
+	}
+	compute=orderCompute log="final";
+}  
+
+process: Order "testABORTandCatch2" {
+	try {
+		abort;
+	}
+	catch (abort) {
+		compute=orderCompute log="caught";
+	}
+	compute=orderCompute log="final";
+}  
+process: Order "testABORTandNoCatch" {
+	try {
+		compute=orderCompute log="abort" abort="true";
+	}
+	compute=orderCompute log="final";
+}  
+
+process: Order "testABORTandContinue" {
+	try {
+		compute=orderCompute log="abort" abort="true";
+		compute=orderCompute log="no abort" abort="false";
+	}
+	catch (abort) {
+		compute=orderCompute log="caught";
+		continue; // should go to the 'no abort' compute
+	}
+	compute=orderCompute log="final";
+}  
+
+process: Order "testABORTandRetry" {
+	try {
+		message=MyMessage;
+		compute=orderCompute log="no abort" abort="false";
+	}
+	catch (abort) {
+		compute=orderCompute log="caught";
+		retry;
+	}
+	compute=orderCompute log="final";
+}  
+process: Order "testTIMEOUTandRetry" {	// testTIMEOUTandRetry taskId=0
+	try {								// testTIMEOUTandRetry taskId=1
+		message=MyMessage;				// testTIMEOUTandRetry_1 taskId=0
+		compute=orderCompute log="no abort" abort="false";
+										// testTIMEOUTandRetry_1 taskId=1
+	}									// testTIMEOUTandRetry_1 taskId=2
+	catch (timeout=1) {
+		compute=orderCompute log="caught";
+										// testTIMEOUTandRetry_2 taskId=0
+		retry;							// testTIMEOUTandRetry_2 taskId=1
+	}
+	compute=orderCompute log="final";
+}
+
+process: Order "testTIMEOUTandRetry2" {	// testTIMEOUTandRetry2 taskId=0
+	try {								// testTIMEOUTandRetry2 taskId=1
+	    message=MyMessage;				// testTIMEOUTandRetry2_1 taskId=0
+	    try {							// testTIMEOUTandRetry2_1
+	        message=ReserveStockForm;	// testTIMEOUTandRetry2_1_1 taskId=0
+	    } catch (timeout=100) {
+	        compute=orderCompute log="caught timeout=100";
+	    }
+	} catch (timeout=1000) {
+	    	compute=orderCompute log="caught timeout=1000";
+	    								// testTIMEOUTandRetry2_2 taskId=0
+	    								// testTIMEOUTandRetry2_2 taskId=1
+	}									// testTIMEOUTandRetry2 taskId=2
+}  
+process: OrderItem "testIf" { // the context has been moved to the specific OrderItem
+    if (approved) { // always a boolean so no value>100 etc here
+		compute=orderItemCompute log="approved";
+    }
+	compute=orderItemCompute log="final";
+}  
+process: OrderItem "testIfElse" { // the context has been moved to the specific OrderItem
+    if (approved) { // always a boolean so no value>100 etc here
+		compute=orderItemCompute log="approved";
+    } else {
+		compute=orderItemCompute log="not approved";
+    }
+	compute=orderItemCompute log="final";
+}  
+process: Order "testSubprocesses" {
+	do {
+		compute=orderItemCompute log="subprocess";
+	} for orderItems;
+	compute=orderCompute log="final";
+}
+process: OrderItem "testSubprocesses2a" { // the context has been moved to the specific OrderItem
+	compute=orderItemCompute log="subprocess";
+}  
+process: Order "testSubprocesses2" {
+	do "testSubprocesses2a" for orderItems;
+	compute=orderCompute log="final";
+}
+process: OrderItem "testSubprocesses3a" {
+	abort "deliberate abort";
+}  
+process: Order "testSubprocesses3" {
+	do "testSubprocesses3a" for orderItems;
+	compute=orderCompute log="final";
+}
+
+process: Order "testTimeout" {
+	try {
+		form=InitialForm;
+							// ^testTimeout_1:1
+		compute=orderCompute log="#1";
+	}
+	catch (timeout=100) {
+		compute=orderCompute log="#2";
+		continue;			// testTimeout_2:1
+	}
+	compute=orderCompute log="#3";
+}  
+
+process: Order "testComplex" {
+	if (decisionField) {
+        try {
+	       form=SecondForm;
+        }
+        catch (timeout=10) {
+           compute=orderCompute log="timed out";
+           retry;
+        }
+        catch (abort) {
+           compute=orderCompute log="aborted";
+           continue;
+        }
+	}
+   compute=orderCompute log="final";
+}        
+
+process: Order "testTwoTimers" {
+	try {
+		form=InitialForm;
+        try {
+	       form=SecondForm;
+        } catch (timeout=10) {
+			compute=orderCompute log="timeout=10";
+        }
+	} catch (timeout=100) {
+		compute=orderCompute log="timeout=100";
+	}
+}        
+process: Order "subprocess1" {
+	compute=orderCompute log="subprocess1";
+}
+process: Order "subprocess2" {
+	compute=orderCompute log="subprocess2";
+}
+process: Order "MainProcess" {
+	fork "subprocess1","subprocess2";
+	compute=orderCompute log="MainProcess";
+}
+
+process: Order "testDoWhile" {
+	do {
+		form=SecondForm queue="OrderSupervisor";
+	} while (decisionField);
+	compute=orderCompute log="final";
+}
+process: Order "testDoUntil" {
+	do {
+		form=SecondForm queue="OrderSupervisor";
+	} until (decisionField);
+	compute=orderCompute log="final";
+}
+        
+

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.senanque.co.nz/pizzaorder"
+	xmlns:tns="http://www.senanque.co.nz/pizzaorder" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc hj annox orm"
+	xmlns:hj="http://hyperjaxb3.jvnet.org/ejb/schemas/customizations"
+    xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:annox="http://annox.dev.java.net"
+	xmlns:md="http://annox.dev.java.net/nz.co.senanque.validationengine.annotations"
+	elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+	<!-- xmlns:jv="http://annox.dev.java.net/javax.validation.constraints" xmlns:hv="http://annox.dev.java.net/org.hibernate.validator.constraints" -->
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:globalBindings generateIsSetMethod="false" localScoping="toplevel">
+             <xjc:simple/>
+			</jaxb:globalBindings>
+			<jaxb:schemaBindings>
+				<jaxb:package name="nz.co.senanque.workflow.orderinstances" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+    <complexType name="OrderItem">
+        <sequence>
+            <element name="id" type="long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <hj:id>
+                            <orm:generated-value strategy="AUTO" />
+                        </hj:id>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="version" type="long">
+                <annotation>
+                    <appinfo>
+                        <hj:version />
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="itemName">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="itemName" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="approved" type="boolean"></element>
+            <element name="created" type="dateTime"></element>
+        </sequence>
+    </complexType>
+
+	<complexType name="Order">
+		<sequence>
+			<element name="id" type="long" nillable="false">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:id>
+							<orm:generated-value strategy="AUTO" />
+						</hj:id>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+            <element name="version" type="long">
+                <annotation>
+                    <appinfo>
+                        <hj:version />
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="orderName">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="orderName" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="fahrenheit" default="20" type="float">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="Fahrenheit" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="retryFlag" type="boolean">
+               <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="retryFlag" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="rejected" type="boolean">
+               <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="rejected" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="decisionField" type="boolean">
+               <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="decisionField" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="celsius" type="float">
+	           <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="Celsius" />
+                            <md:ReadOnly/>
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="orderItems" type="tns:OrderItem" maxOccurs="unbounded"  minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<element name="Session" type="tns:Session"></element>
+    <element name="OrderResponse" type="tns:OrderResponse"></element>
+    <element name="Order" type="tns:Order"></element>
+
+    <complexType name="OrderResponse">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <hj:ignored/>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <sequence>
+            <element name="rejected" type="boolean"></element>
+        </sequence>
+    </complexType>
+
+	<complexType name="Session">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <hj:ignored/>
+            </xsd:appinfo>
+        </xsd:annotation>
+		<sequence>
+			<element name="user" type="string" nillable="false"></element>
+			<element name="started" type="dateTime"></element>
+		</sequence>
+	</complexType>
+
+</schema>

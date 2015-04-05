@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!-- 
+	This context is instantiated per Vaadin Application, ie one for every session.
+	So it is prudent to keep the cross session beans in a separate parent context
+	defined in applicationContext.xml
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:bundle="http://www.senanque.co.nz/madura/bundle"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation=" 
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.senanque.co.nz/madura/bundle http://www.senanque.co.nz/madura/bundle/MaduraBundle.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+    <!-- Activate Spring annotation support -->
+    <context:component-scan base-package="nz.co.senanque.vaadinsupport" />
+    <context:annotation-config/>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+
+    <bean id="application" class="nz.co.senanque.workflowui.WorkflowUI" factory-bean="springContextLoader" factory-method="get">
+    	<property name="theme" value="pizza"/>
+    </bean>
+	<bean id="viewManager" class="nz.co.senanque.vaadinsupport.viewmanager.ViewManagerImpl">
+		<property name="mainWindow">
+			<bean class="com.vaadin.ui.Window"/>
+		</property>
+		<property name="initialLayouts">
+			<list>
+				<bean class="nz.co.senanque.vaadinsupport.viewmanager.LoginLayout"/>
+			</list>
+		</property>
+		<property name="applicationLayouts">
+			<list>
+				<bean id="mainLayout" class="nz.co.senanque.workflowui.MainLayout"/>
+			</list>
+		</property>
+		<property name="adjustCaptions" value="false"/>
+	</bean>
+	
+	<bean id="processInstances" class="nz.co.senanque.workflowui.ProcessInstances"/>
+	<bean id="launchWizard" class="nz.co.senanque.workflowui.LaunchWizard"/>
+	<bean id="formWizard" class="nz.co.senanque.workflowui.FormWizard"/>
+	<bean id="auditPopup" class="nz.co.senanque.workflowui.AuditPopup"/>
+    <bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager"/>
+
+	<!-- This is a demo login listener. Replace it with a your own production login listener for production systems  -->
+  	<bean id="loginListener" class="nz.co.senanque.vaadinsupport.viewmanager.SpringLoginListener"/>
+    <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory"/>
+    <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints"/>
+    <bean id="audits" class="nz.co.senanque.workflowui.Audits"/>
+    <bean id="attachmentsPopup" class="nz.co.senanque.workflowui.AttachmentsPopup"/>
+    <bean id="attachmentPopup" class="nz.co.senanque.workflowui.AttachmentPopup"/>
+
+ 
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>Madura Workflow UI</display-name>
+  <context-param>
+    <description>Vaadin production mode</description>
+    <param-name>productionMode</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <listener>
+    <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <filter>
+    <filter-name>LoggerContextFilter</filter-name>
+    <filter-class>ch.qos.logback.classic.selector.servlet.LoggerContextFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoggerContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>MaduraWorkflowUI</servlet-name>
+    <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+    <init-param>
+      <param-name>application</param-name>
+      <param-value>nz.co.senanque.workflowui.WorkflowUI</param-value>
+    </init-param>
+    <init-param>
+      <description>Application widgetset</description>
+      <param-name>widgetset</param-name>
+      <param-value>nz.co.senanque.workflowui.widgetset.MaduraWorkflowUIWidgetset</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MaduraWorkflowUI</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+  <env-entry>
+    <env-entry-name>logback/context-name</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>madura_workflow_ui</env-entry-value>
+  </env-entry>
+  <!-- 
+  <env-entry>
+    <env-entry-name>WorkflowUIBundlesDir</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>/home/roger/madura4/MaduraWorkflowUI/bundles</env-entry-value>
+  </env-entry>
+   -->
+</web-app>

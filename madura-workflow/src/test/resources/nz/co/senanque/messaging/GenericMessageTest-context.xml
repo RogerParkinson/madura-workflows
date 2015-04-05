@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:int="http://www.springframework.org/schema/integration" 
+    xmlns:int-file="http://www.springframework.org/schema/integration/file"
+    xmlns:int-jms="http://www.springframework.org/schema/integration/jms" 
+    xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+    xmlns:int-rmi="http://www.springframework.org/schema/integration/rmi" 
+    xmlns:int-ws="http://www.springframework.org/schema/integration/ws"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/integration
+            http://www.springframework.org/schema/integration/spring-integration.xsd
+            http://www.springframework.org/schema/integration/file
+            http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+            http://www.springframework.org/schema/integration/jms
+            http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+            http://www.springframework.org/schema/integration/mail
+            http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
+            http://www.springframework.org/schema/integration/rmi
+            http://www.springframework.org/schema/integration/rmi/spring-integration-rmi.xsd
+            http://www.springframework.org/schema/integration/ws
+            http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
+
+    <!--
+    orderMessageSender creates a new Order and sends it to the orderChannel, specifying that
+    the response be passed to orderReplyChannel.
+    The orderChannel accepts an Order message and passes it to the OrderEndPoint. 
+    OrderEndpoint generates a response. In this sample the message has so far remained
+    as an Order object, which is what the OrderEndpoint sees. It responds with an updated Order object. 
+    -->
+    <int:chain input-channel="orderChannel">
+        <int:service-activator>
+            <bean class="nz.co.senanque.messaging.OrderEndpoint"/>
+        </int:service-activator>
+    </int:chain>
+
+    <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderMock">
+        <property name="channel" ref="orderChannel" />
+        <property name="replyChannel" ref="orderReplyChannel" />
+    </bean>
+
+    <!--
+    The orderReplyChannel gets the response and transforms it into a Document
+    (org.w3c.dom.Document). The endpoint is generic and accepts a Document
+    that it unpacks into the context object with appropriate locking and database
+    fetching etc. In the real world there would probably be an XSLT transform of
+    the message from some external format before it reaches the endpoint.  
+    -->
+    <int:chain input-channel="orderReplyChannel">
+        <int:transformer ref="marshallingTransformer"/>
+        <int:service-activator>
+            <bean class="nz.co.senanque.messaging.OrderReplyEndpoint"/>
+        </int:service-activator>
+    </int:chain>
+
+    <bean id="marshallingTransformer" class="org.springframework.integration.xml.transformer.MarshallingTransformer">
+        <constructor-arg>
+            <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+                <property name="contextPath" value="nz.co.senanque.workflowtest.instances"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.springframework.integration.xml.transformer.ResultToDocumentTransformer"/>
+        </constructor-arg>
+    </bean>       
+
+</beans>
+

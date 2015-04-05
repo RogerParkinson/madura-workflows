@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.senanque.co.nz/workflow"
+	xmlns:tns="http://www.senanque.co.nz/workflow" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	jaxb:extensionBindingPrefixes="xjc hj annox orm"
+	xmlns:hj="http://hyperjaxb3.jvnet.org/ejb/schemas/customizations"
+    xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:annox="http://annox.dev.java.net"
+	xmlns:md="http://annox.dev.java.net/nz.co.senanque.validationengine.annotations"
+	elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+	<!-- xmlns:jv="http://annox.dev.java.net/javax.validation.constraints" xmlns:hv="http://annox.dev.java.net/org.hibernate.validator.constraints" -->
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:globalBindings generateIsSetMethod="false" localScoping="toplevel">
+		      	 <jaxb:javaType name="java.util.Date" 
+		      	 	xmlType="xsd:dateTime" 
+		      	 	parseMethod="nz.co.senanque.validationengine.ConvertUtils.parseDateTime"
+		      	 	printMethod="nz.co.senanque.validationengine.ConvertUtils.printDateTime" /> 
+                 <jaxb:javaType name="java.util.Date" 
+                    xmlType="xsd:date" 
+                    parseMethod="nz.co.senanque.validationengine.ConvertUtils.parseDate"
+                    printMethod="nz.co.senanque.validationengine.ConvertUtils.printDate" />
+ 			</jaxb:globalBindings>
+			<jaxb:schemaBindings>
+				<jaxb:package name="nz.co.senanque.workflow.instances" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+    <xsd:simpleType name="TaskStatus">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="pending"/>
+            <xsd:enumeration value="done"/>
+            <xsd:enumeration value="busy"/>
+            <xsd:enumeration value="error"/>
+            <xsd:enumeration value="aborted"/>
+            <xsd:enumeration value="aborting"/>
+            <xsd:enumeration value="wait"/>
+            <xsd:enumeration value="timeout"/>
+            <xsd:enumeration value="go"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="EventType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="deferred"/>
+            <xsd:enumeration value="forceAbort"/>
+            <xsd:enumeration value="subprocessEnd"/>
+            <xsd:enumeration value="done"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <complexType name="Audit">
+        <sequence>
+            <element name="id" type="long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <hj:id>
+                            <orm:generated-value strategy="AUTO"/>
+                        </hj:id>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="parentId" type="long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="processDefinitionName">
+                <annotation>
+                    <appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </appinfo>
+                </annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="comment">
+                <annotation>
+                    <appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </appinfo>
+                </annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="256"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="taskId" type="long" nillable="true"/>
+            <element name="handler" type="boolean" nillable="true"/>
+            <element name="interrupted" type="boolean" nillable="true"/>
+            <element name="created" type="dateTime">
+                <annotation>
+                    <appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="status" type="tns:TaskStatus" nillable="true">
+                <annotation>
+                    <appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="lockedBy" nillable="true">
+                <annotation>
+                    <appinfo>
+                    	<annox:annotate>
+							<md:WritePermission name="NOONE" />
+						</annox:annotate>
+                    </appinfo>
+                </annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+        </sequence>
+    </complexType>
+
+    <complexType name="DeferredEvent">
+        <sequence>
+            <element name="id" type="long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <hj:id>
+                            <orm:generated-value strategy="AUTO"/>
+                        </hj:id>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="processDefinitionName" nillable="true">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="taskId" type="long" nillable="true"/>
+            <element name="eventType" type="tns:EventType" nillable="false"/>
+            <element name="created" type="long"/>
+            <element name="fire" type="long" nillable="true"/>
+            <element name="processInstance" type="tns:ProcessInstance" nillable="false"/>
+            <element name="comment">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+        </sequence>
+    </complexType>
+
+    <complexType name="Attachment">
+        <sequence>
+            <element name="id" type="long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <hj:id>
+                            <orm:generated-value strategy="AUTO"/>
+                        </hj:id>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="body" type="base64Binary">
+                <xsd:annotation>
+                    <xsd:appinfo>
+		            	<hj:basic>
+		            		<orm:lob/>
+		            	</hj:basic>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="created" type="dateTime"/>
+            <element name="fileName" nillable="false">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="MIMEType" nillable="false">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="20"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="processInstanceId" type="long" nillable="false"/>
+            <element name="protectedDocument" type="boolean" nillable="false"/>
+            <element name="comment">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+        </sequence>
+    </complexType>
+
+	<complexType name="ProcessInstance">
+		<sequence>
+			<element name="id" type="long" nillable="false">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:id>
+							<orm:generated-value strategy="AUTO"/>
+						</hj:id>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+            <element name="version" type="long">
+                <annotation>
+                    <appinfo>
+                        <hj:version />
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="processDefinitionName">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="queueName">
+            	<xsd:annotation>
+                    <xsd:documentation>
+                    The queue name is an arbitrary string loaded from a form task or message task.
+                    External programs can scan the table looking for processes that are in queues they are interested in.
+                    </xsd:documentation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="permission">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="readPermission">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="bundleName">
+            	<xsd:annotation>
+                    <xsd:documentation>
+                    The bundle name refers to the name of the MaduraBundle (or alt mechanism) that the process was launched with.
+                    Subsequent process operations should switch to that same bundle before proceeding.
+                    </xsd:documentation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="comment">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="reference">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="objectInstance" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:Ignore/>
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="status" type="tns:TaskStatus" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <element name="lockedBy" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="taskId" type="long" nillable="true"/>
+            <element name="waitCount" type="int" nillable="true" default="0"/>
+            <element name="cyclic" type="boolean" nillable="true" default="false"/>
+            <element name="audits" type="tns:Audit" maxOccurs="unbounded"  minOccurs="0" >
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:Ignore/>
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <element name="childProcesses" type="tns:ProcessInstance" maxOccurs="unbounded"  minOccurs="0" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:Ignore/>
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <element name="deferredEvent" type="tns:DeferredEvent" nillable="true"/>
+            <element name="deferredEvents" type="tns:DeferredEvent" maxOccurs="unbounded"  minOccurs="0" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:Ignore/>
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <element name="parentProcess" type="tns:ProcessInstance" nillable="true">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:Ignore/>
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <element name="lastUpdated" type="dateTime">
+            	<xsd:annotation>
+					<xsd:appinfo>
+						<annox:annotate>
+							<md:WritePermission name="TECHSUPPORT" />
+						</annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+            </element>
+            <!-- Need a way to attach misc binary objects: files, images... -->
+		</sequence>
+	</complexType>
+
+	<element name="Session" type="tns:Session"></element>
+
+	<complexType name="Session">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <hj:ignored/>
+            </xsd:appinfo>
+        </xsd:annotation>
+		<sequence>
+			<element name="user" type="string" nillable="false"></element>
+			<element name="started" type="date"></element>
+		</sequence>
+	</complexType>
+    
+</schema>
