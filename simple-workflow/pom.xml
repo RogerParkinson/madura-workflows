@@ -62,22 +62,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-vaadinsupport</artifactId>
-			<version>${madura.vaadinsupport.version}</version>
-			<exclusions>
-				<!-- Needs to be excluded because it pulls the wrong version -->
-				<exclusion>
-					<artifactId>spring-context</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>spring-beans</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.jboss.spec.javax.servlet</groupId>
 			<artifactId>jboss-servlet-api_3.0_spec</artifactId>
 			<version>1.0.2.Final</version>
@@ -176,7 +160,7 @@
 		</dependency>
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-workflow</artifactId>
+			<artifactId>madura-workflow-vaadin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

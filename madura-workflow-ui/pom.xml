@@ -151,11 +151,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-workflow</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.jvnet.hyperjaxb3</groupId>
 			<artifactId>hyperjaxb3-ejb-runtime</artifactId>
 			<version>${hyperjaxb-version}</version>
@@ -226,19 +221,8 @@
 		</dependency>
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-vaadinsupport</artifactId>
-			<version>${madura.vaadinsupport.version}</version>
-			<exclusions>
-				<!-- Needs to be excluded because it pulls the wrong version -->
-				<exclusion>
-					<artifactId>spring-context</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>spring-beans</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-			</exclusions>
+			<artifactId>madura-workflow-vaadin</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
