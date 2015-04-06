@@ -12,7 +12,7 @@
 			<reference t="Madura Objects" url="www.madurasoftware.com/home/madura-objects" />
 			<reference t="Madura Rules" url="www.madurasoftware.com/home/madura-rules" />
 			<reference t="Madura Utils" url="https://github.com/RogerParkinson/MaduraUtils" />
-			<reference t="Madura Workflow UI" url="https://github.com/RogerParkinson/MaduraWorkflowUI" />
+			<reference t="Madura Workflow UI" url="https://github.com/RogerParkinson/madura-workflows/tree/master/madura-workflow-ui" />
             <reference t="Spring Framework" url="http://www.springframework.org" />
             <reference t="Spring Integration" url="http://projects.spring.io/spring-integration/" />
 			<reference t="Apache Commons Beanutils" url="http://commons.apache.org/proper/commons-beanutils/javadocs/v1.8.3/apidocs/org/apache/commons/beanutils/package-summary.html#package_description" />
@@ -414,6 +414,9 @@ process: Order "Process1" "my description" launchForm=MyLaunchForm queue="Q1" {
 		used directly by the processes, there are there for users to refer to during manual tasks.</p>
 		<p>There may be restictions around the size of individual documents depending on what database product you choose to store the data in. Check how
 		your database handles blob fields for specifics.</p>
+		<p>You can attach as many documents as you like to any process. They are attached to the <emph>process</emph> rather than the object
+		associated with the process. That means you do not have to assign attachments to fields on the object, which some systems require. The list
+		of attachments is arbitrarily long.</p>
 		</h1>
         <h1 t="Messaging">
         <p>In simple terms a message task forms a message of some kind, typically a web services message. All of our examples here assume Spring Integration<referenceLink t="Spring Integration"/>
