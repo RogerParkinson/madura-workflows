@@ -422,7 +422,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>gwt-maven-plugin</artifactId>
-						<version>2.3.0-1</version>
+						<version>${gwt.version}</version>
 						<configuration>
 							<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 							<!-- <runTarget>mobilemail</runTarget> -->
