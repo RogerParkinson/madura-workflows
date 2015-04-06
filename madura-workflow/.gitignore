@@ -1,7 +1,5 @@
 /target/
-/127.0.1.1.tm23.epoch
-/tmlog31.log
+/127.0.1.1.tm*.epoch
+/tmlog*.log
 /generated-sources/
 /generated-test-sources/
-/127.0.1.1.tm26.epoch
-/tmlog35.log
