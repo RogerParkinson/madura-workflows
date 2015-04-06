@@ -44,7 +44,7 @@ import com.vaadin.ui.VerticalLayout;
 public class Audits extends VerticalLayout implements MessageSourceAware {
 	
 	private static final long serialVersionUID = 1L;
-	private MessageSourceAccessor m_messageSourceAccessor;
+	private transient MessageSourceAccessor m_messageSourceAccessor;
 	@PersistenceContext(unitName="em-workflow")
 	private EntityManager m_entityManager;
 	private JPAContainer<Audit> m_container;

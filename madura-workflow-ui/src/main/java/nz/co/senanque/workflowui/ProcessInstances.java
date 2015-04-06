@@ -55,7 +55,7 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 	@Autowired QueueProcessManager m_queueProcessManager;
 	@PersistenceContext(unitName="em-workflow")
 	private EntityManager m_entityManager;
-	private MessageSourceAccessor m_messageSourceAccessor;
+	private transient MessageSourceAccessor m_messageSourceAccessor;
 	private ProcessTable m_processTable;
 	
 	public class ProcessTable extends FormattingTable {
