@@ -21,7 +21,7 @@ Other things you would expect from a workflow system are also implemented here:
 
 Just run mvn in the top level directory. To run the tests you need to be connected to the internet, but you can turn the tests off, of course. 
 
-There is one issue that sometimes appears in a build. The first build is inevitably fine but subsequent builds sometimes fail with an error reported by Atomikos's 2 phase commit transaction handler. The error reports `no XAResource to rollback - the required resource is probably not yet intialized?`. The solution is to remove the \*.epoch and tmlog\*.log from your /tmp and madura-workflows/madura-workflow directories.
+There is one issue that sometimes appears in a build. The first build is inevitably fine but subsequent builds sometimes fail with an error reported by Atomikos's 2 phase commit transaction handler. The error reports `no XAResource to rollback - the required resource is probably not yet intialized?`. The solution is to remove the \*.epoch and tmlog\*.log from your /tmp directory. This is an issue with the unit tests that use Atomikos not always shutting down correctly.
 
 # Subprojects
 
