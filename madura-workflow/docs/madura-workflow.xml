@@ -52,16 +52,6 @@
         the appropriate form, or possibly by some custom program that updates the database status correctly.</le>
 		</list>
 		</h1>
-        <h1 t="Terminology">
-        <p>To save confusion we need to define some terms.</p>
-        <list>
-        <ll name="Process Definition">This is the static definition of a process eg the Order Process. It may be overidden by a new version and old, unused versions may be dropped. It is normally tied to a version of the rules and objects.</ll>
-        <ll name="Process Instance">An actual running process as opposed to its definition, for example and order. This is always tied to a process definition.</ll>
-        <ll name="Task">An step in the process definition. Tasks may be one of several types: a Form, which presents a form to a user for interaction, a Compute step which invokes some
-        custom code and a Message which handles sending a message and getting a response back. Further customisations of the generic Task can be added.</ll>
-        <ll name="Task Instance">An actual running task, as opposed to its definition.</ll>
-        </list>
-        </h1>
 		<h1 t="Process Definitions">
         <p>A process definition looks something like this:</p>
         <code><![CDATA[
@@ -444,7 +434,7 @@ message=orderMessageSender;
         the marshaller is defined and translates to an XML document.</p>
         <h2 t="Simple Spring Integration Example">
         <p>The usual case is that the message is sent through some transport like Web Services or JMS and a response comes back which we may or may not
-        be interested in. But it is likely we want to unpack the response in some way, and especially we want to know it tells us about an error.</p>
+        be interested in. But it is likely we want to unpack the response in some way, and especially we want to know if it tells us about an error.</p>
         <p>The order channel might be configured like this:</p>
         <code><![CDATA[
 <int:chain input-channel="orderChannel">
