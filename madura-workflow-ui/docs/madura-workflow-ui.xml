@@ -49,7 +49,7 @@
 			are used to restrict users' access to certain queues and process instances.</le>
 			<le>A way to deploy new process definitions on the fly using Madura Bundles<referenceLink t="Madura Bundles"/>. The bundles also contain all associated
 			resources, such as forms, messages, object definitions and custom code.</le>
-			<le>A JPA database implementation, including a two phase commit transaction supporter. The configuration for this is worth reviewing.</le>
+			<le>A JPA database implementation, including a two phase commit transaction supporter (Atomikos<referenceLink t="Atomikos"/>). The configuration for this is worth reviewing.</le>
 			<le>Integration with Madura Rules<referenceLink t="Madura Rules"/>. This means the objects defined in the process definitions can have
 			rules attached to them. The forms and other interactions with these objects will automatically invoke the rules. This greatly simplifies the
 			code that you would otherwise have to write for the UI and message handling.</le>
@@ -96,7 +96,7 @@ INFO  n.c.s.m.bundle.BundleManagerImpl - BundleManagerImpl.java:224 Added bundle
 			not the full list of process definitions anyway. There might be multiple versions of each of these processes and only the
 			latest versions are presented because we cannot launch old versions. Also some process definitions are not directly launchable,
 			they can only be launched by another process so they are not included either.</p>
-			<p>Just clicking on one of the process definitions eg the first one will show its launch form. Click on the first one, the Demo process.</p>
+			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process.</p>
 			<p>Before going any further we should look at what this process does.</p>
 				<code><![CDATA[
 process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q1"{
@@ -118,22 +118,22 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			the underlying object. The underlying object is, of course, a Madura Object and includes rich metadata, so this is more functional that you
 			might suppose.</p>
 				<code><![CDATA[
-    <bean id="VaadinLaunchDemo" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
-    	<property name="referenceName" value="orderName"/>
-    	<property name="fieldList">
-    		<list>
-    			<value>orderName</value>
-    			<value>fahrenheit</value>
-    		</list>
-    	</property>
-    </bean>
-    <bean id="VaadinDisplayFahrenheit" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
-    	<property name="fieldList">
-    		<list>
-    			<value>celsius</value>
-    		</list>
-    	</property>
-    </bean>
+<bean id="VaadinLaunchDemo" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+	<property name="referenceName" value="orderName"/>
+	<property name="fieldList">
+		<list>
+			<value>orderName</value>
+    		<value>fahrenheit</value>
+    	</list>
+    </property>
+</bean>
+<bean id="VaadinDisplayFahrenheit" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+   	<property name="fieldList">
+   		<list>
+   			<value>celsius</value>
+   		</list>
+   	</property>
+</bean>
 				]]></code>
 			<p>Using the <courier>fieldList</courier> property we show only the fields we are interested in.</p>
 			<p>The message definition looks like this:</p>
@@ -303,7 +303,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 		<h1 t="Workflow Bundles">
 			<p>By making use of Madura Bundles<referenceLink t="Madura Bundles"/> the application supports deploying of new workflow definitions and their associated
 			resources on the fly. A bundle is a specially packaged jar file and by copying a new jar file into the monitored directory a new bundle can be
-			deployed or an existing bundle can be upgraded. In the case of new bundles the workflow definitions contained in the bundle will become visible on
+			deployed or an existing bundle can be upgraded<footnote>Since Madura Bundle 4.0.0 bundles may be deployed to a maven repository
+			and, instead of copying the jar file to the monitored directory you copy a small text file describing the bundle instead.</footnote>. In the case of new bundles the workflow definitions contained in the bundle will become visible on
 			the list of launchable processes in the UI. For upgraded bundles the situation is more complex because there may be active process instances using
 			the previous version (say, version 0.0.1) and now we have 0.0.2. Those active process instances will actually continue to use the workflow definition they started with,
 			and only new launches will use the 0.0.2 version.</p>
@@ -688,8 +689,8 @@ Bundle-Version: 0.0.2
 		<p>The application supports JMX. Using JMX you can monitor the status of <courier>SimpleLocking</courier> and, if necessary, kill
 		rogue locks. You can also freeze and restart the executor mentioned in <sectionLink t="Scheduler"/>.</p>
 	</h1>
-        <h1 t="Configuring for Production">
-        <p>The process bundles are held in a sweep directory defined as follows:</p>
+    <h1 t="Configuring for Production">
+		<p>The process bundles are held in a sweep directory defined as follows:</p>
 		<code><![CDATA[
 <jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 <bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
@@ -703,19 +704,11 @@ Bundle-Version: 0.0.2
 		<code><![CDATA[
 <Environment name="WorkflowUIBundlesDir" value="MY_DIRECTORY/bundles" type="java.lang.String" override="true"/>
 		]]></code>
-        <p>Finally you want to actually add some bundles to that directory. There are two bundle projects you can use right away, these are projects
-        inside the main project's <courier>bundles</courier> directory: <courier>tbundle</courier> and <courier>workflow1</courier>, though the
-        first one is not very interesting and the second one has more useful information.</p>
-        <p>These are both maven projects. Just build them and copy the resulting jar files to your bundles directory (actually the copy happens automatically). 
-        But you will want to change their
-        versions to later ones <emph>or</emph> delete the bundles in the <courier>WEB-INF/bundles</courier> directory and rebuild the main application. 
-        Otherwise the main application will load the internal bundles and see the external ones as duplicates to be ignored.</p>
-        <p>As long as you keep changing the version you can change, build and deploy those bundles without restarting the main application, though you do
-        have to log out and back in to see the new bundle you added.</p> 
-        </h1>
-	<h1 t="Building Your Own">
+        <p>Finally you want to actually add some bundles to that directory. There are two example bundle projects you can use right away, these are projects
+        inside the main project's <courier>bundles</courier> directory and they are from child projects (simple-workflow and order-workflow). Use those as templates
+        for your own bundles.</p> 
 		<p>You can use this application in production, with appropriate configuration changes, or you can enhance it. Here is a summary of things
-		to look at if you follow that route.</p>
+		to look at if you follow the former route.</p>
 		<list>
 		<le>Database. Obviously you do not want an in-memory database for a production system. You may want to review whether you want H2 or
 		some other database product more widely used in enterprise applications. Hibernate and Atomikos are also only options that can be
@@ -736,10 +729,12 @@ Bundle-Version: 0.0.2
 		<le>Writing your own workflow definitions, forms, objects and rules. The whole reason for doing this is to get the workflow you really want,
 		so this step is obvious. It is where, hopefully, most of the work will go to get the application where you want it.</le>
 		</list>
+        </h1>
+	<h1 t="Building Your Own">
 		<p>But there may be times when it is simpler to deploy a new application for your workflow. This might be because you don't like Vaadin as
 		a UI or perhaps you want to deploy smaller applications to specific user groups, and perhaps you aren't even bothered
 		about using bundles to hold the forms. Maybe you want a very cut down app that someone can run on a tablet. In that case all you really need is a way for them to scan the PROCESSINSTANCE table for
-		records that are in WAIT state and whose Queue Name is the one they are to access. Once they find one they do the following:</p>
+		records that are in WAIT state and whose Queue Name is the one they are to access. Once they find one they should do the following:</p>
 		<list>
 		<le>Lock the process instance using the chosen lock mechanism.</le>
 		<le>Change the status to BUSY and write their user name into the LockedBy field.</le>
@@ -749,7 +744,7 @@ Bundle-Version: 0.0.2
 		<le>Present a form or some kind of input facility for the user to complete and have them indicate when they are done.</le>
 		<le>Lock the process instance (again) using the chosen lock mechanism.</le>
 		<le>Save the updated context and update the PROCESSINSTANCE status to GO and clear the lockedBy field. This should be a 2 phase commit.</le>
-		<le>Unlock.</le>
+		<le>Release the lock.</le>
 		</list>
 		<p>That assumes you have the scheduler running in some other application, perhaps this one or a modified version of it. The scheduler
 		application will ensure the process instances move through the process definition while keeping the above application as simple as possible.</p>
