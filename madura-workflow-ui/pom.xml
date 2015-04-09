@@ -228,6 +228,32 @@
 	<build>
 		<defaultGoal>package</defaultGoal>
 		<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9.1</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			<plugin>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>maduradocs</artifactId>
@@ -327,12 +353,28 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> <artifactId>maven-jar-plugin</artifactId> <version>2.3.1</version> 
-				<executions> <execution> <id>default-jar</id> <phase>package</phase> <goals> 
-				<goal>jar</goal> </goals> <configuration> <archive> <index>false</index> 
-				<addMavenDescriptor>false</addMavenDescriptor> <manifest> <addClasspath>false</addClasspath> 
-				</manifest> </archive> <finalName>${project.artifactId}</finalName> </configuration> 
-				</execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<id>attach-artifacts</id>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>${pdf}</file>
+									<type>pdf</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
