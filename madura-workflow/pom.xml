@@ -23,15 +23,6 @@
 			</roles>
 		</developer>
 	</developers>
-	<scm>
-		<url>https://github.com/RogerParkinson/madura-workflows/</url>
-		<connection>scm:git:ssh://git@github.com:RogerParkinson/madura-workflows.git</connection>
-		<developerConnection>scm:git:https://github.com/RogerParkinson/madura-workflows.git</developerConnection>
-	</scm>
-	<issueManagement>
-		<url>https://github.com/RogerParkinson/madura-workflows/issues</url>
-		<system>GitHub</system>
-	</issueManagement>
 	<dependencies>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -274,10 +265,6 @@
 			<plugin>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>maduradocs</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -597,26 +584,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>properties-maven-plugin</artifactId>
-					<version>1.0-alpha-2</version>
-					<executions>
-						<execution>
-							<phase>initialize</phase>
-							<goals>
-								<goal>read-project-properties</goal>
-							</goals>
-							<configuration>
-								<files>
-									<file>../../dev.properties</file>
-								</files>
-								<quiet>true</quiet>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
@@ -640,25 +607,6 @@
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>
-											properties-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0-alpha-2,)
-										</versionRange>
-										<goals>
-											<goal>
-												read-project-properties
-											</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>

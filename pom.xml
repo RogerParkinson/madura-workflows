@@ -34,15 +34,6 @@
 			</roles>
 		</developer>
 	</developers>
-	<scm>
-		<url>https://github.com/RogerParkinson/madura-workflows/</url>
-		<connection>scm:git:ssh://git@github.com:RogerParkinson/madura-workflows.git</connection>
-		<developerConnection>scm:git:https://github.com/RogerParkinson/madura-workflows.git</developerConnection>
-	</scm>
-	<issueManagement>
-		<url>https://github.com/RogerParkinson/madura-workflows/issues</url>
-		<system>GitHub</system>
-	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>3.2.6.RELEASE</spring.framework.version>
@@ -71,4 +62,64 @@
 		<module>simple-workflow</module>
  		<module>madura-workflow-ui</module>
 	</modules>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.kuali.maven.plugins</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.1.9</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<locations>
+								<location>${HOME}/madura.properties</location>
+							</locations>
+							<quiet>true</quiet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.kuali.maven.plugins
+										</groupId>
+										<artifactId>
+											properties-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.1.9,)
+										</versionRange>
+										<goals>
+											<goal>
+												read-project-properties
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
