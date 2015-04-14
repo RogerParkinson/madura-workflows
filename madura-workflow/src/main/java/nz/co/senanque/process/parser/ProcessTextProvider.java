@@ -42,6 +42,7 @@ public class ProcessTextProvider extends AbstractTextProvider
     private final StringBuilder m_accumulate = new StringBuilder();
 	private String m_packageName;
 	private TOCInterface m_toc;
+	private boolean m_negate;
     
     public ProcessTextProvider(ParserSource parserSource, SchemaParser schemaParser, WorkflowManager workflowManager) throws ParserException
     {
@@ -118,6 +119,12 @@ public class ProcessTextProvider extends AbstractTextProvider
 			return m_toc.addTOCElement(parent,name,start,end,type);
 		}
 		return null;
+	}
+	public boolean getNegate() {
+		return m_negate;
+	}
+	public void setNegate(boolean negate) {
+		m_negate = negate;
 	}
 
 }

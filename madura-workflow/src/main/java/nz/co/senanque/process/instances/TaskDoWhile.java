@@ -43,6 +43,9 @@ public class TaskDoWhile extends TaskDo {
 	public boolean execute(ProcessInstance processInstance) {
 		log.debug("{}",this);
 		Boolean bool = (Boolean)getField(processInstance, getFd());
+		if (isNegate()) {
+			bool = !bool;
+		}
 		if (bool) {
 			launchOneCyclicSubprocess(processInstance);
 			processInstance.setCyclic(true);

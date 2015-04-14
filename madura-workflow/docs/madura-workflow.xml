@@ -44,7 +44,8 @@
         <le>The objects involved in a process instance are optionally monitored by Madura Rules<referenceLink t="Madura Rules"/>. This simplifies the decisions in a process because all decisions
         use simple booleans rather than complex expressions. Rules will fire to set the appropriate flags and the process only needs to query those flags.
         This means that the business rules are only in one place rather than some being in the process and some being in custom code etc. That ensures the
-        same rules apply to this object regardless of where it is used.</le>
+        same rules apply to this object regardless of where it is used. The only concession from this principle is that you can negate the flags in a condition,
+        so you can say <courier>!decisionField</courier> if you want.</le>
         <le>Process definitions can be updated on the fly without bouncing the servers. This is managed carefully to ensure that existing process instances
         continue with the same environment (process definition, rules, objects) while new process instances use the new environment. Thus you can have two
         or more environments running simultaneously.</le>
@@ -86,6 +87,10 @@ process: Order "AcceptOrder" "Accept an order" launchForm=InitialForm queue="Q1"
         true. So once the process is launched the <courier>decisionField</courier> is examined by the 'if' clause and the fairly obvious logic happens.</p>
 		<p>If the <courier>decisionField</courier> is true the <courier>SecondForm</courier> is sent to <courier>Q2</courier>. Anyone with permission
 		STOCKCLERK can see the process waiting for the <courier>SecondForm</courier> and update it. The order clerk can see it but cannot update it.</p>
+		<note>It is worth highlighting that the condition in the <courier>if</courier> statement can <emph>only</emph> contain a boolean. Unlike Java it
+		does not contain an expression that evaluates to a boolean, just a boolean. So no <courier>a == b</courier> or even <courier>a && b</courier>. The
+		one exception is you can have a negation of the boolean, so you can say <courier>!decisionField</courier>, which can save a lot of trivial
+		rules and dummy properties which would add little value.</note>
 		<p>Once the stock clerk has completed the update the process executes a piece of custom computing and moves on to the second 'if' clause.</p>
 		<p>The second 'if' clause tests the <courier>rejected</courier> and aborts the process if it is true. Otherwise it sends a message to the stock
 		management system and waits for a reply.</p>
@@ -806,6 +811,9 @@ process: Order "AcceptOrder" {
 		</tr>
 		<tr>
 			<td>First real release. Refactored the associated projects into sub projects in the same repo and realigned dependencies.</td>
+		</tr>
+		<tr>
+			<td>Negation of conditions fields.</td>
 		</tr>
 		<tr>
 			<th>0.0.4</th>

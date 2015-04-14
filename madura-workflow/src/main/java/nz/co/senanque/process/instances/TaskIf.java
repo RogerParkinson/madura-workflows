@@ -71,6 +71,9 @@ public class TaskIf extends TaskBase {
 
 	public TaskBase getConditionalTask(ProcessInstance processInstance) {
 		Boolean bool = (Boolean)getField(processInstance, getCondition());
+		if (isNegate()) {
+			bool = !bool;
+		}
 		log.debug("condition={}",bool);
 
 		TaskBase ret=null;
@@ -86,6 +89,7 @@ public class TaskIf extends TaskBase {
 		}
 		return ret;
 	}
+
 
 
 }

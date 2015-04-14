@@ -230,6 +230,7 @@ public final class ParsePackage extends Parser
 	        	TaskIf task = new TaskIf(processDefinition);
 	        	processDefinition.addTask(task);
 	        	task.setCondition(processCondition(textProvider));
+	        	task.setNegate(textProvider.getNegate());
 //	        	exactOrError("(",textProvider);
 //	            if (!CVariable(textProvider))
 //	            {
@@ -282,12 +283,14 @@ public final class ParsePackage extends Parser
 	        		FieldDescriptor fd = processCondition(textProvider);
 	        		exactOrError(";",textProvider);
 	        		TaskBase task = new TaskDoWhile(subProcess,fd, processDefinition);
+	        		task.setNegate(textProvider.getNegate());
 		        	processDefinition.addTask(task);
 	        	} else if (exact("until",textProvider)) {
 	        		// do...until
 	        		FieldDescriptor fd = processCondition(textProvider);
 	        		exactOrError(";",textProvider);
 	        		TaskBase task = new TaskDoUntil(subProcess,fd, processDefinition);
+	        		task.setNegate(textProvider.getNegate());
 		        	processDefinition.addTask(task);
 	        	} else {
 	        		// for...
@@ -434,6 +437,10 @@ public final class ParsePackage extends Parser
     
     private FieldDescriptor processCondition(ProcessTextProvider textProvider) {
     	exactOrError("(",textProvider);
+    	textProvider.setNegate(false);
+    	if (exact("!",textProvider)) {
+    		textProvider.setNegate(true);
+    	}
         if (!CVariable(textProvider))
         {
             throw new ParserException("Missing condition name",textProvider);

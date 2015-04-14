@@ -24,6 +24,7 @@ import nz.co.senanque.workflow.instances.DeferredEvent;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
 /**
+ * 
  * @author Roger Parkinson
  * 
  */
@@ -32,6 +33,7 @@ public abstract class TaskBase {
 	private final ProcessDefinition m_ownerProcess;
 	private Map<String, String> m_arguments;
 	private long m_id;
+	private boolean m_negate;
 
 	public TaskBase(ProcessDefinition ownerProcess) {
 		m_ownerProcess = ownerProcess;
@@ -105,6 +107,14 @@ public abstract class TaskBase {
 	}
 	public TaskBase getPreviousTask(ProcessInstance processInstance) {
 		return getOwnerProcess().getTask(m_id-1L);
+	}
+
+	public void setNegate(boolean negate) {
+		m_negate = negate;
+	}
+
+	public boolean isNegate() {
+		return m_negate;
 	}
 
 //	public void loadNextTask(ProcessInstance processInstance) {

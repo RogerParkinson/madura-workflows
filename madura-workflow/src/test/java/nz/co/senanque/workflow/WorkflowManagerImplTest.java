@@ -199,6 +199,17 @@ public class WorkflowManagerImplTest {
 		assertEquals(0,m_workflowDAO.clearDeferredEvents());
 	}
 	@Test
+	public void testIfNot() throws Exception {
+		OrderItem context = new OrderItem();
+		context.setApproved(false);
+		ProcessInstance processInstance = m_workflowLauncher.launch("testIfNot", context, "hello");
+		assertTrue(processInstance.getId()>-1);
+		executeAllActiveProcessInstances();
+		processInstance = m_workflowDAO.refreshProcessInstance(processInstance);
+		assertEquals(6,processInstance.getAudits().size());
+		assertEquals(0,m_workflowDAO.clearDeferredEvents());
+	}
+	@Test
 	public void testIf2() throws Exception {
 		OrderItem context = new OrderItem();
 		context.setApproved(true);

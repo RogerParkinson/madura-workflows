@@ -120,6 +120,12 @@ process: OrderItem "testIf" { // the context has been moved to the specific Orde
     }
 	compute=orderItemCompute log="final";
 }  
+process: OrderItem "testIfNot" { // the context has been moved to the specific OrderItem
+    if (!approved) { // always a boolean so no value>100 etc here
+		compute=orderItemCompute log="notapproved";
+    }
+	compute=orderItemCompute log="final";
+}  
 process: OrderItem "testIfElse" { // the context has been moved to the specific OrderItem
     if (approved) { // always a boolean so no value>100 etc here
 		compute=orderItemCompute log="approved";
