@@ -88,7 +88,7 @@ process: Order "AcceptOrder" "Accept an order" launchForm=InitialForm queue="Q1"
 		<p>If the <courier>decisionField</courier> is true the <courier>SecondForm</courier> is sent to <courier>Q2</courier>. Anyone with permission
 		STOCKCLERK can see the process waiting for the <courier>SecondForm</courier> and update it. The order clerk can see it but cannot update it.</p>
 		<note>It is worth highlighting that the condition in the <courier>if</courier> statement can <emph>only</emph> contain a boolean. Unlike Java it
-		does not contain an expression that evaluates to a boolean, just a boolean. So no <courier>a == b</courier> or even <courier>a && b</courier>. The
+		does not contain an expression that evaluates to a boolean, just a boolean. So no <courier>a == b</courier> or even <courier>a || b</courier>. The
 		one exception is you can have a negation of the boolean, so you can say <courier>!decisionField</courier>, which can save a lot of trivial
 		rules and dummy properties which would add little value.</note>
 		<p>Once the stock clerk has completed the update the process executes a piece of custom computing and moves on to the second 'if' clause.</p>
