@@ -34,7 +34,7 @@ public class TaskIf extends TaskBase {
 	private ProcessDefinition m_elseHandler;
 
 	public String toString() {
-		return super.toString()+" condition=" + m_condition;
+		return super.toString()+" condition=" + (isNegate()?"!":"")+m_condition;
 	}
 
 	public void setCondition(FieldDescriptor fd) {
