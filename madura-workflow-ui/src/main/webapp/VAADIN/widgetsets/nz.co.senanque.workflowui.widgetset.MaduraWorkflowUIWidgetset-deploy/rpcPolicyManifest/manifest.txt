@@ -1,0 +1,2 @@
+# Module nz.co.senanque.workflowui.widgetset.MaduraWorkflowUIWidgetset
+# RPC service class, partial path of RPC policy file
