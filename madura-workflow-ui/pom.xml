@@ -413,11 +413,13 @@
 	<profiles>
 		<profile>
 			<id>compile-widgetset</id>
+			<!-- compiling widgetsets from maven fails under v6
 			<activation>
 				<file>
 					<missing>${basedir}/src/main/webapp/VAADIN/widgetsets/</missing>
 				</file>
 			</activation>
+			 -->
 			<build>
 				<plugins>
 					<plugin>
