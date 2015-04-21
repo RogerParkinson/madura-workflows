@@ -93,7 +93,7 @@ public class WorkflowWithRules2Test {
 		executeAllActiveProcessInstances();
 		processInstance = m_workflowDAO.refreshProcessInstance(processInstance);
 		// This will fail if you are offline because the value is then 7
-		assertEquals(7,processInstance.getAudits().size());
+		assertEquals(10,processInstance.getAudits().size());
 		assertEquals(0,m_workflowDAO.clearDeferredEvents());
 		
 		validationSession.close();
@@ -138,7 +138,7 @@ public class WorkflowWithRules2Test {
 		processInstance = m_workflowDAO.refreshProcessInstance(processInstance);
 		// Change to 10 if you force an abort.
 		// This will fail if you are offline because the value is then 7
-		assertEquals(7,processInstance.getAudits().size());
+		assertEquals(10,processInstance.getAudits().size());
 		assertEquals(0,m_workflowDAO.clearDeferredEvents());
 	}
 	
