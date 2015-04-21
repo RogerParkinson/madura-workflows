@@ -112,7 +112,7 @@ limitations under the License.
                 </annotation>
                 <simpleType>
                     <restriction base="string">
-                        <maxLength value="256"></maxLength>
+                        <maxLength value="512"></maxLength>
                     </restriction>
                 </simpleType>
             </element>

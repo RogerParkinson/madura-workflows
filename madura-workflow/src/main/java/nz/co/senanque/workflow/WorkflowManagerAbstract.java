@@ -222,8 +222,8 @@ public abstract class WorkflowManagerAbstract implements WorkflowManager, BeanFa
 	
 	protected String trimComment(String comment) {
 		String ret = comment.trim();
-		if (ret.length() > 50) {
-			return ret.substring(0, 50);
+		if (ret.length() > 510) {
+			return ret.substring(0, 510);
 		}
 		return ret;
 	}
