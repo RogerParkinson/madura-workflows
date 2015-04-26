@@ -29,6 +29,8 @@ import nz.co.senanque.workflow.instances.ProcessInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
 
 import com.vaadin.data.util.BeanItem;
@@ -38,7 +40,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -46,7 +48,7 @@ import com.vaadin.ui.Window;
  * @author Roger Parkinson
  *
  */
-public class FormWizard extends Window {
+public class FormWizard extends Window implements MessageSourceAware {
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(FormWizard.class);
@@ -66,6 +68,7 @@ public class FormWizard extends Window {
 	@Autowired private transient Audits m_audits;
 	@Autowired private transient WorkflowClient m_workflowClient;
 	@Autowired private transient AttachmentsPopup m_attachmentsPopup;
+	private transient MessageSourceAccessor m_messageSourceAccessor;
 	
 	public FormWizard() {
 	}
@@ -76,20 +79,17 @@ public class FormWizard extends Window {
         setContent(main);
         setModal(true);
         main.setStyleName(Panel.STYLE_LIGHT);
-        main.setWidth(getWindowWidth());
-        main.setHeight(getWindowHeight());
+        this.setWidth(getWindowWidth());
+        this.setHeight(getWindowHeight());
         
         tabSheet = new TabSheet();
         
         formPanel = new Panel();
-        formPanel.setCaption("Form");
-        tabSheet.addTab(formPanel);
+        tabSheet.addTab(formPanel,m_messageSourceAccessor.getMessage("formwizard.form"));
         processPanel = new Panel();
-        processPanel.setCaption("Process");
-        tabSheet.addTab(processPanel);
+        tabSheet.addTab(processPanel,m_messageSourceAccessor.getMessage("formwizard.process"));
         auditPanel = new Panel();
-        auditPanel.setCaption("Audit");
-        tabSheet.addTab(auditPanel);
+        tabSheet.addTab(auditPanel,m_messageSourceAccessor.getMessage("formwizard.audit"));
         main.setMargin(true);
         main.addComponent(tabSheet);
 	}
@@ -106,21 +106,22 @@ public class FormWizard extends Window {
     		ownerProcessDefinition = processDefinition;
     		processDefinition = processDefinition.getOwnerProcess();
     	}
-    	MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(getMaduraSessionManager().getMessageSource());
-    	setCaption(messageSourceAccessor.getMessage("form.wizard.caption", 
+    	setCaption(m_messageSourceAccessor.getMessage("form.wizard.caption", 
     			new Object[]{new Long(form.getProcessInstance().getId()),
     			ownerProcessDefinition.getName(),
     			form.getProcessInstance().getReference()}));
     	setDescription(ownerProcessDefinition.getDescription());
     	formPanel.removeAllComponents();
+//    	formPanel.setSizeUndefined();
     	formPanel.addComponent((VerticalLayout)form);
+//    	((VerticalLayout)form).setSizeFull();
     	ProcessInstance processInstance = form.getProcessInstance();
     	if (!form.isReadOnly()) {
 	    	PermissionManager pm = m_maduraSessionManager.getPermissionManager();
 	    	processInstance = getWorkflowClient().lockProcessInstance(form.getProcessInstance(), 
 	    			pm.hasPermission(FixedPermissions.TECHSUPPORT), pm.getCurrentUser());
 	     	if (processInstance == null) {
-				String message = messageSourceAccessor.getMessage("failed.to.get.lock");
+				String message = m_messageSourceAccessor.getMessage("failed.to.get.lock");
 				m_viewManager.getMainWindow().showNotification(message);
 	    		return;
 	    	}
@@ -146,14 +147,16 @@ public class FormWizard extends Window {
     	m_processForm.setFieldList(fieldList);
     	m_processForm.setReadOnly(form.isReadOnly());
     	m_processForm.setItemDataSource(beanItem);
-    	TextField taskField = new TextField(messageSourceAccessor.getMessage("task"));
+    	TextArea taskField = new TextArea(m_messageSourceAccessor.getMessage("task"));
+    	taskField.setRows(3);
+    	taskField.setWordwrap(true);
     	m_processForm.addField("Task", taskField);
     	taskField.setValue(task);
     	taskField.setReadOnly(true);
 
      	processPanel.removeAllComponents();
     	processPanel.addComponent(m_processForm);
-    	Button attachments = new Button(messageSourceAccessor.getMessage("attachments", "Attachments"));
+    	Button attachments = new Button(m_messageSourceAccessor.getMessage("attachments", "Attachments"));
 		attachments.addListener(new ClickListener(){
 
 			@Override
@@ -228,6 +231,10 @@ public class FormWizard extends Window {
 
 	public void setAttachmentsPopup(AttachmentsPopup attachmentsPopup) {
 		m_attachmentsPopup = attachmentsPopup;
+	}
+	@Override
+	public void setMessageSource(MessageSource messageSource) {
+		m_messageSourceAccessor = new MessageSourceAccessor(messageSource);
 	}
 
 }

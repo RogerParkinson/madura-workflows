@@ -124,8 +124,8 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         setContent(main);
         setModal(true);
         main.setStyleName(Panel.STYLE_LIGHT);
-        main.setWidth(getWindowWidth());
-        main.setHeight(getWindowHeight());
+        this.setWidth(getWindowWidth());
+        this.setHeight(getWindowHeight());
         
         panel = new Panel();
         main.setMargin(true);
@@ -179,6 +179,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 							}
 						}});
 					panel.removeAllComponents();
+					panel.setSizeUndefined();
 					panel.addComponent((VerticalLayout)form);
 					panel.requestRepaint();
 				}
