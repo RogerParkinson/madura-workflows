@@ -20,6 +20,8 @@ import nz.co.senanque.vaadinsupport.MaduraPropertyWrapper;
 
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 
 /**
@@ -43,7 +45,23 @@ public class WorkflowUIHints extends HintsImpl {
 		return super.getDateField(property);
 	}
     public AbstractField getTextField(MaduraPropertyWrapper property) {
-    	AbstractTextField ret = (AbstractTextField)super.getTextField(property);
+    	AbstractTextField ret = null;
+        if (property.isSecret())
+        {
+            ret = new PasswordField();
+        }
+        else
+        {
+        	if ("comment".equals(property.getName())) {
+        		TextArea textArea = new TextArea();
+        		textArea.setRows(5);
+        		textArea.setWordwrap(true);
+        		ret = textArea;
+        	} else {
+        		ret = new TextField();
+        	}
+        }
+        ret.setMaxLength(property.getMaxLength());
     	if (property.getValue() == null) {
     		property.setValue("");
     	}
