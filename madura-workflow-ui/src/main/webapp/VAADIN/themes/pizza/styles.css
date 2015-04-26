@@ -32,6 +32,7 @@
 	text-align: left;
 	font-size:	16px;
 	font-family: verdana,sans-serif;
+	vertical-align: text-top;
 }
 .v-app-loginpage .v-button {
 	margin-top: 5px;
@@ -101,6 +102,12 @@
 	margin: 0px;
 	margin-left: 10px;
 	}
+.v-formlayout-row {
+	vertical-align: top;
+}
+.v-formlayout-caption-cell {
+	vertical-align: top;
+}
 .v-panel .v-panel-popup-extrafields .popup-extrafields {
 	padding: 0px;
 	border: none;
