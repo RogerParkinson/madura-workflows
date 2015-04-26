@@ -170,7 +170,6 @@ public class GenericEndpoint implements MessageMapper {
 			}
 		}
 		finally {
-			validationSessonHolder.unbind(context);
 			validationSessonHolder.close();
 		}
 	}

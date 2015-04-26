@@ -55,7 +55,6 @@ public class TaskCompute extends TaskBase {
 		} catch (Exception e) {
 			throw new AbortException(e);
 		} finally {
-			validationSessonHolder.unbind(context);
 			validationSessonHolder.close();
 		}			
 		ProcessInstanceUtils.clearQueue(processInstance, TaskStatus.DONE);
