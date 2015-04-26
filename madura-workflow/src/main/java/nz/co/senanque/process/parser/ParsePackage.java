@@ -220,7 +220,9 @@ public final class ParsePackage extends Parser
         while (true) {
         	
 	        if (exact("}",textProvider)) {
-	        	processDefinition.addTask(new TaskEnd(processDefinition));
+	        	TaskEnd task = new TaskEnd(processDefinition);
+	        	task.setPosition(textProvider.getPosition());
+	        	processDefinition.addTask(task);
 	    		commit(textProvider);
 	        	return;
 	        }
@@ -229,6 +231,7 @@ public final class ParsePackage extends Parser
 	        	// Process an 'if'
 	        	TaskIf task = new TaskIf(processDefinition);
 	        	processDefinition.addTask(task);
+	        	task.setPosition(textProvider.getPosition());
 	        	task.setCondition(processCondition(textProvider));
 	        	task.setNegate(textProvider.getNegate());
 //	        	exactOrError("(",textProvider);
@@ -251,8 +254,11 @@ public final class ParsePackage extends Parser
 	            }
 	            else
 	            {
-	            	elseProcess.addTask(new TaskStart(elseProcess));
-	            	elseProcess.addTask(new TaskEnd(elseProcess));
+	            	TaskBase taskBase = new TaskStart(elseProcess);
+	            	taskBase.setPosition(textProvider.getPosition());
+	            	elseProcess.addTask(taskBase);
+	            	taskBase = new TaskEnd(elseProcess);
+	            	elseProcess.addTask(taskBase);
 	            }
 	            task.setTrueHandler(trueProcess);
 	            task.setElseHandler(elseProcess);
@@ -284,6 +290,7 @@ public final class ParsePackage extends Parser
 	        		exactOrError(";",textProvider);
 	        		TaskBase task = new TaskDoWhile(subProcess,fd, processDefinition);
 	        		task.setNegate(textProvider.getNegate());
+	        		task.setPosition(textProvider.getPosition());
 		        	processDefinition.addTask(task);
 	        	} else if (exact("until",textProvider)) {
 	        		// do...until
@@ -291,6 +298,7 @@ public final class ParsePackage extends Parser
 	        		exactOrError(";",textProvider);
 	        		TaskBase task = new TaskDoUntil(subProcess,fd, processDefinition);
 	        		task.setNegate(textProvider.getNegate());
+	        		task.setPosition(textProvider.getPosition());
 		        	processDefinition.addTask(task);
 	        	} else {
 	        		// for...
@@ -302,6 +310,7 @@ public final class ParsePackage extends Parser
 		            FieldDescriptor fd = textProvider.getSchemaParser().findOperandInScope(textProvider.getCurrentScope(), textProvider.getLastToken());
 		            exactOrError(";",textProvider);
 		        	TaskBase task = new TaskDoFor(subProcess,fd, processDefinition);
+		        	task.setPosition(textProvider.getPosition());
 		        	processDefinition.addTask(task);	        		
 	        	}
 	            continue;
@@ -328,12 +337,14 @@ public final class ParsePackage extends Parser
 
 	            exactOrError(";",textProvider);
 	        	TaskFork task = new TaskFork(subprocesses,processDefinition);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	            continue;
 	        }
 	        if (exact("try",textProvider)) {
 	        	// Process a 'try'
 	        	TaskTry tryTask = new TaskTry(processDefinition);
+	        	tryTask.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(tryTask);
 	            ProcessDefinition tryProcess = new ProcessDefinition(processDefinition);
 	            processTaskList(tryProcess,textProvider);
@@ -344,12 +355,14 @@ public final class ParsePackage extends Parser
 	        if (exact("retry;",textProvider)) {
 	        	// Process a 'resume'
 	        	TaskRetry task = new TaskRetry(processDefinition);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	            continue;
 	        }
 	        if (exact("continue;",textProvider)) {
 	        	// Process a 'continue'
 	        	TaskContinue task = new TaskContinue(processDefinition);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	            continue;
 	        }
@@ -362,6 +375,7 @@ public final class ParsePackage extends Parser
 	    		}
 	    		exactOrError(";",textProvider);
 	        	TaskAbort task = new TaskAbort(processDefinition,comment);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	            continue;
 	        }
@@ -387,6 +401,7 @@ public final class ParsePackage extends Parser
 		            }
 	            }
 	        	TaskForm task = new TaskForm(processDefinition,formName,queueName);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	            exactOrError(";",textProvider);
 	            continue;
@@ -394,6 +409,7 @@ public final class ParsePackage extends Parser
 	        if (exact("message",textProvider)) {
 	        	// Process a 'message'
 	        	TaskMessage task = new TaskMessage(processDefinition);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	        	exactOrError("=",textProvider);
 	            if (!CVariable(textProvider))
@@ -414,6 +430,7 @@ public final class ParsePackage extends Parser
 	        if (exact("compute",textProvider)) {
 	        	// Process a 'compute'
 	        	TaskCompute task = new TaskCompute(processDefinition);
+	        	task.setPosition(textProvider.getPosition());
 	        	processDefinition.addTask(task);
 	        	exactOrError("=",textProvider);
 	            if (!CVariable(textProvider))
