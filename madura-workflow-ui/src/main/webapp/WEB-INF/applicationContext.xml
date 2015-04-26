@@ -30,7 +30,7 @@ limitations under the License.
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-		http://www.senanque.co.nz/madura/bundle https://repo1.maven.org/maven2/nz/co/senanque/madura-bundle/4.0.1/madura-bundle-4.0.1-spring.xsd
+		http://www.senanque.co.nz/madura/bundle http://www.senanque.co.nz/madura/bundle/MaduraBundle.xsd
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
