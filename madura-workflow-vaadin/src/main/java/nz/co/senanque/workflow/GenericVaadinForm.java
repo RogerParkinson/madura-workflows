@@ -72,6 +72,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	private transient MessageSourceAccessor m_messageSourceAccessor;
 	private String m_referenceName="reference";
 	private List<String> m_fieldList;
+	private boolean m_readOnlyForm;
 	
 	public class CloseEvent extends Event {
 
@@ -139,8 +140,14 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 			m_form.setFieldList(m_fieldList);
 		}
         m_form.setItemDataSource(newDataSource);
-        m_form.setReadOnly(isReadOnly());
-    	park.setVisible(!isLauncher());
+		if (m_fieldList != null) {
+			if (isReadOnlyForm()) {
+				for (String field: m_fieldList) {
+					m_form.getField(field).setReadOnly(true);
+				}
+			}
+		}
+        park.setVisible(!isLauncher());
 	}
 	@Override
 	public void close() {
@@ -227,6 +234,10 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	public void setReadOnly(boolean b) {
 		super.setReadOnly(b);
+		if (m_form == null) {
+			log.warn("Injection of readOnly into {} is a mistake. Should inject readOnlyForm instead");
+			return;
+		}
     	if (isReadOnly()) {
         	m_form.setReadOnly(true);
         	if (readOnlyMessage == null) {
@@ -254,6 +265,14 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 
 	public void setFieldList(List<String> fieldList) {
 		m_fieldList = fieldList;
+	}
+
+	public boolean isReadOnlyForm() {
+		return m_readOnlyForm;
+	}
+
+	public void setReadOnlyForm(boolean readOnlyForm) {
+		m_readOnlyForm = readOnlyForm;
 	}
 
 }
