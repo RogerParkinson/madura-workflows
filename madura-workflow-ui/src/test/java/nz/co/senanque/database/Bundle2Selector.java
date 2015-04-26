@@ -62,9 +62,9 @@ public class Bundle2Selector implements BundleSelector {
 	 */
 	@Override
 	public String selectInitialBundle(Object o) {
-		m_bundleManager.setBundle("order-workflow-0.0.5-SNAPSHOT");
+		m_bundleManager.setBundle("order-workflow-1.0.0-SNAPSHOT");
 		log.debug("Selected bundle order-workflow");
-		return "order-workflow-0.0.5-SNAPSHOT";
+		return "order-workflow-1.0.0-SNAPSHOT";
 	}
 
 	public BundleManager getBundleManager() {
