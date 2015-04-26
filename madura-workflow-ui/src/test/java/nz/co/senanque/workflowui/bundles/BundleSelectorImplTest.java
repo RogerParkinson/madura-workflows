@@ -83,7 +83,7 @@ public class BundleSelectorImplTest {
 		String bundle = bundleSelector.selectInitialBundle("Process1");
 		assertTrue(bundle.startsWith("order-workflow"));
 		Set<ProcessDefinition> processes = queueProcessManager.getVisibleProcesses(permissionManager);
-		assertEquals(5,processes.size());
+		assertEquals(6,processes.size());
 		Set<String> queues = queueProcessManager.getVisibleQueues(permissionManager);
 		assertEquals(2,queues.size());
 	}
