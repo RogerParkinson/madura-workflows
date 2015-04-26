@@ -48,11 +48,12 @@ abstract class TaskDo extends TaskBase {
 	}
 
 	public String toString() {
-		return super.toString()+" subProcess=" + m_subProcess;
+		return super.toString()+" condition=" + (isNegate()?"!":"")+m_fd+" subProcess=" + m_subProcess;
 	}
 
 	protected void launchOneCyclicSubprocess(ProcessInstance processInstance) {
 		ProcessInstance subProcess = new ProcessInstance();
+		subProcess.setBundleName(processInstance.getBundleName());
 		getSubProcess().startProcess(subProcess);
 		processInstance.getChildProcesses().add(subProcess);
 		subProcess.setObjectInstance(processInstance.getObjectInstance());

@@ -53,6 +53,7 @@ public class TaskDoFor extends TaskDo {
 			for (Object o:list)
 			{
 				ProcessInstance subProcess = new ProcessInstance();
+				subProcess.setBundleName(processInstance.getBundleName());
 				getSubProcess().startProcess(subProcess);
 				processInstance.getChildProcesses().add(subProcess);
 				subProcess.setObjectInstance(workflowManager.createContextDescriptor(o));

@@ -19,6 +19,9 @@ import java.util.Map;
 
 import nz.co.senanque.schemaparser.FieldDescriptor;
 import nz.co.senanque.validationengine.ValidationEngine;
+import nz.co.senanque.validationengine.ValidationSessionHolder;
+import nz.co.senanque.validationengine.ValidationSessionHolderImpl;
+import nz.co.senanque.workflow.AbortException;
 import nz.co.senanque.workflow.WorkflowManager;
 import nz.co.senanque.workflow.instances.DeferredEvent;
 import nz.co.senanque.workflow.instances.ProcessInstance;
@@ -34,6 +37,7 @@ public abstract class TaskBase {
 	private Map<String, String> m_arguments;
 	private long m_id;
 	private boolean m_negate;
+	private String m_position;
 
 	public TaskBase(ProcessDefinition ownerProcess) {
 		m_ownerProcess = ownerProcess;
@@ -61,7 +65,7 @@ public abstract class TaskBase {
 	}
 
 	public String toString() {
-		return Indentation.getIndent()+getClass().getSimpleName()+" process="+getOwnerProcess().getName()+" taskId="+this.getTaskId();
+		return Indentation.getIndent()+getClass().getSimpleName()+getPosition()+" process="+getOwnerProcess().getName()+" taskId="+this.getTaskId();
 	}
 	abstract public boolean execute(ProcessInstance processInstance);
 
@@ -97,9 +101,20 @@ public abstract class TaskBase {
 	protected TaskBase getTask(DeferredEvent deferredEvent) {
 		return getWorkflowManager().getTask(deferredEvent);
 	}
-	protected Object getField(ProcessInstance processInstance,
+	protected Boolean getConditionalField(ProcessInstance processInstance,
 			FieldDescriptor condition) {
-		return getWorkflowManager().getField(processInstance, condition);
+
+		Object context = getContext(processInstance);
+		ValidationSessionHolder validationSessonHolder = null;
+		try {
+			validationSessonHolder = new ValidationSessionHolderImpl(getValidationEngine());
+			validationSessonHolder.bind(context);
+			return (Boolean)getWorkflowManager().getField(processInstance, condition);
+		} catch (Exception e) {
+			throw new AbortException(e);
+		} finally {
+			validationSessonHolder.close();
+		}			
 	}
 
 	public TaskBase getNextTask(ProcessInstance processInstance) {
@@ -115,6 +130,20 @@ public abstract class TaskBase {
 
 	public boolean isNegate() {
 		return m_negate;
+	}
+
+	public void setPosition(String position) {
+		int i = position.indexOf('!');
+		int j = position.indexOf("jar:");
+		if (i > -1 && j > -1 && i > j) {
+			m_position = position.substring(0,j-1)+position.substring(i+1);
+			return;
+		}
+		m_position = position;
+	}
+
+	public String getPosition() {
+		return m_position;
 	}
 
 //	public void loadNextTask(ProcessInstance processInstance) {

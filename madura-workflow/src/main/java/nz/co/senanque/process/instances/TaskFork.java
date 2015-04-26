@@ -47,6 +47,7 @@ public class TaskFork extends TaskBase {
 		for (ProcessDefinition subProcess:m_subProcess)
 		{
 			ProcessInstance subprocessInstance = new ProcessInstance();
+			subprocessInstance.setBundleName(processInstance.getBundleName());
 			subProcess.startProcess(subprocessInstance);
 			processInstance.getChildProcesses().add(subprocessInstance);
 			subprocessInstance.setObjectInstance(processInstance.getObjectInstance());

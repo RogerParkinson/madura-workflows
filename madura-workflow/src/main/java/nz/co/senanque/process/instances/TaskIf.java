@@ -70,7 +70,7 @@ public class TaskIf extends TaskBase {
 	}
 
 	public TaskBase getConditionalTask(ProcessInstance processInstance) {
-		Boolean bool = (Boolean)getField(processInstance, getCondition());
+		Boolean bool = getConditionalField(processInstance, getCondition());
 		if (isNegate()) {
 			bool = !bool;
 		}
