@@ -58,7 +58,7 @@ limitations under the License.
         <property name="processes" value="classpath:/OrderWorkflow.wrk" />
     </bean>
     <bean id="contextTester" class="nz.co.senanque.workflow.ContextTesterImpl"/>
-    <bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
+    <bean id="contextDAO" class="nz.co.senanque.workflow.simple.ContextJPA"/>
     <bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory" />
 	
     <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>

@@ -55,7 +55,7 @@ limitations under the License.
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
 	</bean>
-
+	
 	<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="session"/>
     <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="session"/>
     <bean id="hints" class="nz.co.senanque.vaadinsupport.HintsImpl" scope="session"/>
@@ -65,7 +65,7 @@ limitations under the License.
         <property name="processes" value="classpath:/OrderWorkflow.wrk" />
     </bean>
 
-    <bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
+    <bean id="contextDAO" class="nz.co.senanque.workflow.order.ContextJPA"/>
 
 	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 		<property name="name" value="Vaadin"/>

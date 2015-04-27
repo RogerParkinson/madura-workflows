@@ -30,7 +30,7 @@ limitations under the License.
 	<bean id="em-local"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-orderinstances.xml" />
-		<property name="persistenceUnitName" value="pu-local" />
+		<property name="persistenceUnitName" value="pu-orderinstances" />
 		<property name="dataSource" ref="dataSourceLocal" />
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 		<property name="jpaDialect">
