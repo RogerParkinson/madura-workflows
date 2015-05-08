@@ -21,6 +21,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -33,6 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 public class FormFactoryImpl implements BeanFactoryAware, FormFactory {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(FormFactoryImpl.class);
 	
 	@Autowired(required=false) private FormEnvironment m_environment;
 	private Map<String,Map<String,String>> m_formsMap = new HashMap<String,Map<String,String>>();
@@ -84,6 +89,8 @@ public class FormFactoryImpl implements BeanFactoryAware, FormFactory {
 		if (m_environment != null) {
 			m_environmentName = m_environment.getName();
 		}
+		log.debug("The FormFactory id is {} bundle {}",
+				System.identityHashCode(this),m_beanFactory.getBean("bundleName"));
 	}
 
 }
