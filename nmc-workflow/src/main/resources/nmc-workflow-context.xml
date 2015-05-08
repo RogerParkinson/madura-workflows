@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c)2014 Prometheus Consulting
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:security="http://www.springframework.org/schema/security" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:int-stream="http://www.springframework.org/schema/integration/stream" 
+    xmlns:int-xml="http://www.springframework.org/schema/integration/xml" 
+    xmlns:int-ws="http://www.springframework.org/schema/integration/ws"
+    xmlns:ws="http://www.springframework.org/schema/web-services" 
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:oxm="http://www.springframework.org/schema/oxm"
+    xsi:schemaLocation=" 
+        http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd
+	    http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
+        http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <description>Main Configuration</description>
+    
+    <import resource="classpath:/database-nmcinstances-context.xml"/>
+
+	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules" />
+	<bean id="R1" class="nz.co.senanque.workflow.nmcrules.R1"/>
+	<bean id="R2" class="nz.co.senanque.workflow.nmcrules.R2"/>
+	<bean id="R3" class="nz.co.senanque.workflow.nmcrules.R3"/>
+	<bean id="R4" class="nz.co.senanque.workflow.nmcrules.R4"/>
+	<bean id="R5" class="nz.co.senanque.workflow.nmcrules.R5"/>
+	<bean id="R6" class="nz.co.senanque.workflow.nmcrules.R6"/>
+    <context:annotation-config />
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+
+	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
+		<constructor-arg value="${bundle.name}"/>
+	</bean>
+<!--
+	<bean id="maduraSessionManager" class="nz.co.senanque.workflow.MaduraSessionManagerFactory" scope="session"/>
+ --> 
+	<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="bundle">
+    	<property name="formFieldFactory" ref="fieldFactory"/>
+    </bean>
+
+    <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="bundle"/>
+<!--     <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints" scope="session"/> -->
+
+    <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
+        <property name="schema" value="classpath:/NMCInstances.xsd" />
+        <property name="processes" value="classpath:/NMCWorkflow.wrk" />
+        <property name="validationEngine" ref="validationEngine" />
+    </bean>
+
+    <bean id="contextDAO" class="nz.co.senanque.workflow.nmc.ContextJPA"/>
+
+	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
+		<property name="name" value="Vaadin"/>
+	</bean>
+    
+    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+
+    <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
+    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />    
+
+	<!-- These are used by the demo process -->
+    <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+    	<property name="caption" value="Launch" />
+    	<property name="referenceName" value="claimId"/>
+    	<property name="fieldList">
+    		<list>
+    			<value>claimId</value>
+    			<value>memberId</value>
+    			<value>memberType</value>
+    			<value>requestedAmount</value>
+    			<value>notes</value>
+    			<value>reservationId</value>
+    			<value>status</value>
+    			<value>hasFunds</value>
+    			<value>loop</value>
+    			<value>rejected</value>
+    			<value>sameClaim</value>
+    			<value>sameAmount</value>
+    		</list>
+    	</property>
+    </bean>
+    <bean id="VaadinReviewClaim" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+    	<property name="caption" value="Review Claim" />
+    	<property name="fieldList">
+    		<list>
+    			<value>claimId</value>
+    			<value>memberId</value>
+    			<value>memberType</value>
+    			<value>requestedAmount</value>
+    			<value>notes</value>
+    			<value>status</value>
+    			<value>sameClaim</value>
+    			<value>sameAmount</value>
+    			<value>hasFunds</value>
+    			<value>loop</value>
+    			<value>rejected</value>
+    		</list>
+    	</property>
+    </bean>
+    <bean id="VaadinContactMember" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+    	<property name="caption" value="Contact Member" />
+    	<property name="fieldList">
+    		<list>
+    			<value>claimId</value>
+    			<value>memberId</value>
+    			<value>memberType</value>
+    			<value>requestedAmount</value>
+    			<value>notes</value>
+    			<value>status</value>
+    			<value>sameClaim</value>
+    			<value>sameAmount</value>
+    		</list>
+    	</property>
+    </bean>
+    <bean id="VaadinReturnOriginals" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+    	<property name="caption" value="Return Originals" />
+     	<property name="readOnlyForm" value="true"/>
+    	<property name="fieldList">
+    		<list>
+    			<value>claimId</value>
+    			<value>memberId</value>
+    			<value>memberType</value>
+    			<value>requestedAmount</value>
+    			<value>rejectReason</value>
+    			<value>notes</value>
+    			<value>status</value>
+    		</list>
+    	</property>
+    </bean>
+
+    <bean id="validationEngine" class="nz.co.senanque.validationengine.ValidationEngineImpl">
+    	<property name="identifier" value="nmcinstances"/>
+        <property name="metadata" ref="metadata"/>
+        <property name="plugins">
+            <list>
+                <ref bean="MaduraRulesPlugin"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="metadata" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
+        <property name="package" value="nz.co.senanque.workflow.nmcinstances"/>
+        <property name="fieldValidators">
+            <list>
+                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
+                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
+                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
+                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
+                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
+            </list>
+        </property>
+        <property name="choicesDocument" value="classpath:choices.xml"/>
+    </bean>
+    <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />
+
+    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
+        <property name="resource" value="classpath:/Messages.xml" />
+        <property name="parentMessageSource">
+            <bean
+                class="org.springframework.context.support.ResourceBundleMessageSource">
+                <property name="basenames">
+                    <list>
+                        <value>localmessages</value>
+                        <value>messages</value>
+                        <value>ValidationMessages</value>
+                        <value>org/springframework/security/messages</value>
+                        <value>/nz/co/senanque/workflow/nmcrules/messages</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <!-- End Madura configuration -->
+
+</beans>

@@ -1,0 +1,6 @@
+/target/
+/generated-sources/
+/todo.txt
+/*~
+/*.epoch
+/*.log

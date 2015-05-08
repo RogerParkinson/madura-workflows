@@ -1,0 +1,46 @@
+rule: NMC "p0"
+{
+	if (reservationId == "none")
+	{
+		status = "rejected";
+		hasFunds = false;
+		rejected = true;
+	}
+}
+rule: NMC "p0_1"
+{
+	if (!(reservationId == "none"))
+	{
+		hasFunds = true;
+	}
+}
+rule: NMC "p1"
+{
+	if (!sameClaim)
+	{
+		status = "rejected";
+		rejected = true;
+	}
+}
+formula: NMC "p3"
+{
+	loop = sameClaim && !sameAmount;
+}
+
+rule: NMC "p4"
+{
+	if (hasFunds==true)
+	{
+		readonly(claimId);
+		readonly(memberId);
+		readonly(memberType);
+		readonly(requestedAmount);
+	}
+}
+rule: NMC "p5"
+{
+	if (sameClaim && sameAmount && hasFunds)
+	{
+		status = "approved";
+	}
+}

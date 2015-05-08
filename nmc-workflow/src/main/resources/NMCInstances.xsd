@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.senanque.co.nz/pizzaorder"
+	xmlns:tns="http://www.senanque.co.nz/pizzaorder" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc hj annox orm"
+	xmlns:hj="http://hyperjaxb3.jvnet.org/ejb/schemas/customizations"
+    xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:annox="http://annox.dev.java.net"
+	xmlns:md="http://annox.dev.java.net/nz.co.senanque.validationengine.annotations"
+	elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+	<!-- xmlns:jv="http://annox.dev.java.net/javax.validation.constraints" xmlns:hv="http://annox.dev.java.net/org.hibernate.validator.constraints" -->
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:globalBindings generateIsSetMethod="false" localScoping="toplevel">
+             <xjc:simple/>
+			</jaxb:globalBindings>
+			<jaxb:schemaBindings>
+				<jaxb:package name="nz.co.senanque.workflow.nmcinstances" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<complexType name="NMC">
+		<sequence>
+			<element name="id" type="long" nillable="false">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:id>
+							<orm:generated-value strategy="AUTO" />
+						</hj:id>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+            <element name="version" type="long">
+                <annotation>
+                    <appinfo>
+                        <hj:version />
+                    </appinfo>
+                </annotation>
+            </element>
+            <element name="claimId">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="claimId" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="10"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="memberId">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="memberId" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="10"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="memberType" type="tns:MemberType" nillable="false">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="memberType" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="reservationId" default="none">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="reservationId" />
+                            <md:ReadOnly/>
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="10"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="requestedAmount" type="float">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="requestedAmount" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="rejectReason">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="rejectReason" />
+                            <md:ReadOnly/>
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="status">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="status" />
+                            <md:ReadOnly/>
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="50"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="notes">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="notes" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="200"></maxLength>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="sameClaim" nillable="false" type="boolean">
+               <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="sameClaim" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+            <element name="sameAmount" nillable="false" type="boolean">
+               <xsd:annotation>
+                    <xsd:appinfo>
+                        <annox:annotate>
+                            <md:Label labelName="sameAmount" />
+                        </annox:annotate>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </element>
+			<element name="hasFunds" nillable="false" type="boolean">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:ignored />
+                        <annox:annotate>
+                            <md:ReadOnly/>
+                        </annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+			<element name="loop" nillable="false" type="boolean">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:ignored />
+                        <annox:annotate>
+                            <md:ReadOnly/>
+                        </annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+			<element name="rejected" nillable="false" type="boolean">
+				<xsd:annotation>
+					<xsd:appinfo>
+						<hj:ignored />
+                        <annox:annotate>
+                            <md:ReadOnly/>
+                        </annox:annotate>
+					</xsd:appinfo>
+				</xsd:annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<xsd:simpleType name="MemberType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="gold" />
+			<xsd:enumeration value="silver" />
+			<xsd:enumeration value="bronze" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<element name="Session" type="tns:Session"></element>
+    <element name="NMC" type="tns:NMC"></element>
+
+	<complexType name="Session">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <hj:ignored/>
+            </xsd:appinfo>
+        </xsd:annotation>
+		<sequence>
+			<element name="user" type="string" nillable="false"></element>
+			<element name="started" type="dateTime"></element>
+		</sequence>
+	</complexType>
+
+</schema>

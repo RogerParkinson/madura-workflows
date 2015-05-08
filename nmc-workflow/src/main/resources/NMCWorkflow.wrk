@@ -1,0 +1,22 @@
+package nz.co.senanque.workflow.nmcinstances;
+
+queue: name="Q1" 
+    permission="ADMIN" 
+    read-permission="SUPPORT";
+
+process: NMC "NMCProcess" "NMC process" launchForm=LaunchForm {
+	compute=HCAReserve;
+	if (hasFunds) {
+		form=ReviewClaim queue="Q1";
+		do {
+			form=ContactMember queue="Q1";
+			form=ReviewClaim queue="Q1";
+		} while (loop);
+		if (rejected) {
+			compute=HCAUnreserve;
+		}
+	}
+	if (rejected) {
+		form=ReturnOriginals queue="Q1";
+	}
+}  
