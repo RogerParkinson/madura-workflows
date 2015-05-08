@@ -89,7 +89,16 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
         addComponent(m_form);
         createButtons();
         m_form.setSizeFull();
-	}
+		log.debug("Initialised MaduraSessionManager {} Validation Engine id {} {} Session id {}",
+				System.identityHashCode(getMaduraSessionManager()),
+				System.identityHashCode(getMaduraSessionManager().getValidationEngine()),
+				getMaduraSessionManager().getValidationEngine().getIdentifier(),
+				getMaduraSessionManager().getValidationSession().getValidationEngine().getIdentifier());
+		log.debug("The GenericVaadinForm id is {} ValidationEngine {}",
+				System.identityHashCode(this),
+				System.identityHashCode(getMaduraSessionManager().getValidationEngine()),
+				getCaption());
+		}
 
 	public GenericVaadinForm() {
 	}

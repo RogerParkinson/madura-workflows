@@ -57,6 +57,7 @@ limitations under the License.
 	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 		<property name="name" value="Vaadin"/>
 	</bean>
+
  	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
  		<property name="directory" ref="bundlesDir"/>
@@ -73,6 +74,8 @@ limitations under the License.
 				<entry key="genericEndpoint" value-ref="genericEndpoint"/>
 				<entry key="environment" value-ref="environment"/>
 				<entry key="workflowDAO" value-ref="workflowDAO"/>
+				<entry key="bundleManager" value-ref="bundleManager"/>
+				<entry key="hints" value-ref="hints"/>
 			</map>
 		</property>
 <!-- 		<property name="time" value="5000"/>  Let the scheduler handle this -->
@@ -80,9 +83,11 @@ limitations under the License.
 
 	<bean id="bundleListener" class="nz.co.senanque.workflowui.bundles.BundleListenerImpl">
 		<property name="messageSource" ref="messageSource"/>
+		<property name="queueProcessManager" ref="queueProcessManager"/>
 	</bean>
 	<bean id="queueProcessManager" class="nz.co.senanque.workflowui.bundles.QueueProcessManager">
 	</bean>
+    <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints"/>
 	
 	<bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
 	<bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory"/>
