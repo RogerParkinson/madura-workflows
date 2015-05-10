@@ -19,13 +19,21 @@
 	<logger name="org.springframework.context.support.ResourceBundleMessageSource" level="error"/>
 	<logger name="nz.co.senanque.messaging.GenericEndpoint" level="debug"/>
 	<logger name="nz.co.senanque.workflow.TemperatureComputeClass" level="debug"/>
-	<logger name="nz.co.senanque.workflow.ContextJPA" level="debug"/>
+ 	<logger name="nz.co.senanque.workflow.ContextJPA" level="info"/>
+ 	<logger name="nz.co.senanque.workflow.WorkflowJPA" level="info"/>
 	<logger name="nz.co.senanque.workflowui.MainLayout" level="debug"/>
 	<logger name="nz.co.senanque.workflowui.FormWizard" level="debug"/>
-	<logger name="nz.co.senanque.workflow.GenericVaadinForm" level="debug"/>
 	<logger name="nz.co.senanque.workflow.DisplayContext" level="debug"/>
 	<logger name="nz.co.senanque.madura.bundle" level="info"/>
+	<logger name="nz.co.senanque.process.instances" level="warn"/>
+
 <!-- 
+	<logger name="nz.co.senanque.workflow.WorkflowManagerImpl" level="debug"/>
+	<logger name="nz.co.senanque.workflow.WorkflowManagerAbstract" level="debug"/>
+ 	<logger name="nz.co.senanque.rules" level="debug"/>
+	<logger name="nz.co.senanque.workflow.GenericVaadinForm" level="debug"/>
+	<logger name="nz.co.senanque.madura.bundle" level="debug"/>
+	<logger name="nz.co.senanque.vaadinsupport.application" level="debug"/>
 	<logger name="nz.co.senanque.vaadinsupport.FieldFactory" level="debug"/>
 	<logger name="nz.co.senanque.vaadinsupport.HintsImpl" level="debug"/>
 	<logger name="nz.co.senanque.workflowui.ProcessInstances" level="debug"/>
