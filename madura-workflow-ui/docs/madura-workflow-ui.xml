@@ -318,16 +318,18 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 <!-- 	<property name="directory" ref="bundlesDir"/> -->
 	<property name="inheritableBeans">
 		<map>
-			<entry key="jpaVendorAdapter" value-ref="jpaVendorAdapter"/>
-			<entry key="transactionManager" value-ref="transactionManager"/>
-			<entry key="lockFactory" value-ref="lockFactory"/>
-			<entry key="em-workflow" value-ref="em-workflow"/>
-			<entry key="permissionManager" value-ref="permissionManager"/>
-			<entry key="atomikosTransactionManager" value-ref="atomikosTransactionManager"/>
-			<entry key="atomikosUserTransaction" value-ref="atomikosUserTransaction"/>
-			<entry key="errorEndpoint" value-ref="errorEndpoint"/>
-			<entry key="genericEndpoint" value-ref="genericEndpoint"/>
-			<entry key="environment" value-ref="environment"/>
+				<entry key="jpaVendorAdapter" value-ref="jpaVendorAdapter"/>
+				<entry key="transactionManager" value-ref="transactionManager"/>
+				<entry key="lockFactory" value-ref="lockFactory"/>
+				<entry key="em-workflow" value-ref="em-workflow"/>
+				<entry key="atomikosTransactionManager" value-ref="atomikosTransactionManager"/>
+				<entry key="atomikosUserTransaction" value-ref="atomikosUserTransaction"/>
+				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
+				<entry key="genericEndpoint" value-ref="genericEndpoint"/>
+				<entry key="environment" value-ref="environment"/>
+				<entry key="workflowDAO" value-ref="workflowDAO"/>
+				<entry key="bundleManager" value-ref="bundleManager"/>
+				<entry key="hints" value-ref="hints"/>
 		</map>
 	</property>
 </bean>
@@ -354,25 +356,29 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
         <p>All the beans defined in the bundle context file are singletons unless scoped otherwise, and one or two are. Here are the
         rest of the essential beans:</p>
         <code><![CDATA[
-<import resource="database-orderinstances-context.xml"/>
+<import resource="classpath:/database-nmcinstances-context.xml"/>
+
 <context:annotation-config />
+<context:component-scan base-package="nz.co.senanque.workflow.nmcrules" />
 <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
 <bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 	<constructor-arg value="${bundle.name}"/>
 </bean>
-
-<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="session"/>
-<bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="session"/>
-<bean id="hints" class="nz.co.senanque.vaadinsupport.HintsImpl" scope="session"/>
-
-<bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
-<bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
-
-<bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
-<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
-	<property name="name" value="Vaadin"/>
+<bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl" scope="session"/>
+<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="bundle">
+   	<property name="formFieldFactory" ref="fieldFactory"/>
 </bean>
+
+<bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="bundle"/>
+
+<bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
+	<property name="schema" value="classpath:/NMCInstances.xsd" />
+	<property name="processes" value="classpath:/NMCWorkflow.wrk" />
+	<property name="validationEngine" ref="validationEngine" />
+</bean>
+
+<bean id="contextDAO" class="nz.co.senanque.workflow.nmc.ContextJPA"/>
         ]]></code>
 		<p>This file imports a database configuration which will be discussed in detail in <sectionLink t="Database"/>. There is
 		some necessary housekeeping beans and then three session scoped beans: <courier>maduraSessionManager, fieldFactory</courier> and <courier>hints</courier>. These
@@ -477,6 +483,19 @@ process: Order "Process2" "This is the second process" launchForm=LaunchForm {
 		rules for cross field validation and to make the forms dynamic. For example you can specify rules that will limit the drop down lists
 		on one field depending on values entered into other fields, you can also add rules that switch fields from enabled to disabled, visible and
 		invisible etc.</p>
+		<p>While you can use rules to control if fields are readOnly or not, you sometimes want to make a whole form readOnly. You can do that with the
+		readOnlyForm property like this:</p>
+		<code><![CDATA[
+<bean id="VaadinFirstForm" class="nz.co.senanque.workflow.VaadinFirstForm" scope="prototype">
+	<property name="readOnlyForm" value="true"/>
+	<property name="fieldList">
+		<list>
+			<value>orderName</value>
+			<value>celsius</value>
+		</list>
+	</property>
+</bean>
+		]]></code>
 		<p>So you can get quite a long way with just using <courier>GenericVaadinForm</courier>. But in a production application you would
 		eventually need to add something else. For example if you have an Order which needs OrderItems added you would probably extend <courier>GenericVaadinForm</courier>
 		but you would add more code to it to create OrderItems, attach them to the Order and so on. There would likely be more buttons
