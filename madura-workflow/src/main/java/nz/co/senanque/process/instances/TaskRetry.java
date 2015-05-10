@@ -56,7 +56,7 @@ public class TaskRetry extends TaskBase {
 				deferredEvent.setCreated(now);
 				deferredEvent.setEventType(EventType.DEFERRED);
 				deferredEvent.setFire(now+taskTry.getTimeoutValue());
-				deferredEvent.setComment(taskTry.toString());
+				deferredEvent.setComment(trimComment(taskTry.toString()));
 				processInstance.getDeferredEvents().add(deferredEvent);
 				processInstance.setDeferredEvent(deferredEvent);
 				log.debug("recreating new deferred event for timeout: fire: {}",deferredEvent.getFire());

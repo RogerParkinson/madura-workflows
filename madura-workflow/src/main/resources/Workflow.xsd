@@ -180,7 +180,7 @@ limitations under the License.
             <element name="comment">
                 <simpleType>
                     <restriction base="string">
-                        <maxLength value="200"></maxLength>
+                        <maxLength value="500"></maxLength>
                     </restriction>
                 </simpleType>
             </element>

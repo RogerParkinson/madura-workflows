@@ -72,6 +72,9 @@ public abstract class TaskBase {
 	public Boolean getHandler() {
 		return false;
 	}
+	protected String trimComment(String s) {
+		return getWorkflowManager().trimComment(s);
+	}
 
 	public TaskBase loadTask(ProcessInstance processInstance) {
 		ProcessDefinition processDefinition = getOwnerProcess();

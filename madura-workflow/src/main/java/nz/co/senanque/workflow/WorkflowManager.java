@@ -73,5 +73,6 @@ public interface WorkflowManager {
 	public ValidationEngine getValidationEngine();
 	public Collection<Audit> getAudits(ProcessInstance processInstance);
 	public ProcessInstance refresh(ProcessInstance processInstance);
+	public String trimComment(String comment);
 	public ProcessInstance lockProcessInstance(final ProcessInstance processInstance, final boolean techSupport, final String userName);
 }

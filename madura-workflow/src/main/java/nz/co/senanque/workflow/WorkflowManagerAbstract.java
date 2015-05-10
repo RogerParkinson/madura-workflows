@@ -220,7 +220,7 @@ public abstract class WorkflowManagerAbstract implements WorkflowManager, BeanFa
 		m_allProcesses.add(processDefinition);
 	}
 	
-	protected String trimComment(String comment) {
+	public String trimComment(String comment) {
 		String ret = comment.trim();
 		if (ret.length() > 510) {
 			return ret.substring(0, 510);

@@ -92,7 +92,7 @@ public class TaskTry extends TaskBase {
 			long now = new Date().getTime();
 			deferredEvent.setCreated(now);
 			deferredEvent.setEventType(EventType.DEFERRED);
-			deferredEvent.setComment(this.toString());
+			deferredEvent.setComment(trimComment(this.toString()));
 			deferredEvent.setFire(now+getTimeoutValue());
 			processInstance.getDeferredEvents().add(deferredEvent);
 			processInstance.setDeferredEvent(deferredEvent);
