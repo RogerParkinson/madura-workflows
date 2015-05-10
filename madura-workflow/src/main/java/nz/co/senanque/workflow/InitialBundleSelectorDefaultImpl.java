@@ -26,14 +26,15 @@ import nz.co.senanque.workflow.instances.ProcessInstance;
  * @author Roger Parkinson
  *
  */
-public class BundleSelectorDefaultImpl implements BundleSelector {
+public class InitialBundleSelectorDefaultImpl implements InitialBundleSelector {
 
 	/* (non-Javadoc)
-	 * @see nz.co.senanque.workflow.BundleSelector#selectBundle(nz.co.senanque.workflow.instances.ProcessInstance)
+	 * @see nz.co.senanque.workflow.BundleSelector#selectInitialBundle(nz.co.senanque.workflow.instances.ProcessInstance, java.lang.Object)
 	 */
 	@Override
-	public void selectBundle(ProcessInstance pi) {
+	public String  selectInitialBundle(Object o) {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 

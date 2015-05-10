@@ -35,10 +35,12 @@ public class WorkflowClient {
 	@Autowired
 	private BundleSelector m_bundleSelector;
 	@Autowired
+	private InitialBundleSelector m_initialBundleSelector;
+	@Autowired
 	private LockFactory m_lockFactory;
 
 	public ProcessInstance launch(String processName, Object context, String comment) {
-		String bundleName = getBundleSelector().selectInitialBundle(context);
+		String bundleName = getInitialBundleSelector().selectInitialBundle(context);
 		return m_workflowManager.launch(processName, context, comment, bundleName);
 	}
 
@@ -47,7 +49,7 @@ public class WorkflowClient {
 	}
 	
 	public long launch(WorkflowForm launchForm, String comment) {
-		String bundleName = getBundleSelector().selectInitialBundle(launchForm.getProcessName());
+		String bundleName = getInitialBundleSelector().selectInitialBundle(launchForm.getProcessName());
 		return m_workflowManager.launch(launchForm, comment, bundleName);
 	}
 	
@@ -68,7 +70,7 @@ public class WorkflowClient {
 	}
 
 	public WorkflowForm getLaunchForm(String processName) {
-		getBundleSelector().selectInitialBundle(processName);
+		getInitialBundleSelector().selectInitialBundle(processName);
 		return m_workflowManager.getLaunchForm(processName);
 	}
 
@@ -97,6 +99,14 @@ public class WorkflowClient {
 
 	public void setLockFactory(LockFactory lockFactory) {
 		m_lockFactory = lockFactory;
+	}
+
+	public InitialBundleSelector getInitialBundleSelector() {
+		return m_initialBundleSelector;
+	}
+
+	public void setInitialBundleSelector(InitialBundleSelector initialBundleSelector) {
+		m_initialBundleSelector = initialBundleSelector;
 	}
 
 }

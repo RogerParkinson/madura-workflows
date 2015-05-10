@@ -71,5 +71,6 @@ limitations under the License.
     <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint" />
     <bean id="genericEndpoint" class="nz.co.senanque.messaging.GenericEndpoint" />
     <bean id="bundleSelector" class="nz.co.senanque.workflow.BundleSelectorDefaultImpl"/>
+    <bean id="intialBundleSelector" class="nz.co.senanque.workflow.InitialBundleSelectorDefaultImpl"/>
 
 </beans>

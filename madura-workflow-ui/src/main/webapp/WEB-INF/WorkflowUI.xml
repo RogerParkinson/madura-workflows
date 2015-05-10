@@ -71,12 +71,15 @@ limitations under the License.
     <bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager">
     	<property name="formFieldFactory" ref="fieldFactory"/>
     </bean>
+	<bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient"/>
+	<bean id="initialBundleSelector" class="nz.co.senanque.workflowui.bundles.InitialBundleSelectorImpl">
+		<property name="permissionManager" ref="permissionManager"/>
+	</bean>
 
 	<!-- This is a demo login listener. Replace it with a your own production login listener for production systems  -->
   	<bean id="loginListener" class="nz.co.senanque.vaadinsupport.viewmanager.SpringLoginListener"/>
 
     <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory"/>
-<!--     <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints" scope="session"/> -->
     <bean id="audits" class="nz.co.senanque.workflowui.Audits"/>
     <bean id="attachmentsPopup" class="nz.co.senanque.workflowui.AttachmentsPopup"/>
     <bean id="attachmentPopup" class="nz.co.senanque.workflowui.AttachmentPopup"/>

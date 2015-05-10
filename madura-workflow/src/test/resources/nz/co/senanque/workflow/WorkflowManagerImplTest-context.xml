@@ -64,6 +64,7 @@ limitations under the License.
     <bean id="executor" class="nz.co.senanque.workflow.ExecutorImpl"/>
     <bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory"/>
     <bean id="bundleSelector" class="nz.co.senanque.workflow.BundleSelectorDefaultImpl"/>
+    <bean id="intialBundleSelector" class="nz.co.senanque.workflow.InitialBundleSelectorDefaultImpl"/>
     <!-- 
     <task:scheduler id="myScheduler" pool-size="10" />
     <task:scheduled-tasks scheduler="myScheduler">

@@ -24,6 +24,5 @@ import nz.co.senanque.workflow.instances.ProcessInstance;
 public interface BundleSelector {
 	
 	public void selectBundle(ProcessInstance pi);
-	public String selectInitialBundle(Object o);
 
 }

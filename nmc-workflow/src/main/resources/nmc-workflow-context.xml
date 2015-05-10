@@ -47,28 +47,19 @@ limitations under the License.
     
     <import resource="classpath:/database-nmcinstances-context.xml"/>
 
-	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules" />
-	<bean id="R1" class="nz.co.senanque.workflow.nmcrules.R1"/>
-	<bean id="R2" class="nz.co.senanque.workflow.nmcrules.R2"/>
-	<bean id="R3" class="nz.co.senanque.workflow.nmcrules.R3"/>
-	<bean id="R4" class="nz.co.senanque.workflow.nmcrules.R4"/>
-	<bean id="R5" class="nz.co.senanque.workflow.nmcrules.R5"/>
-	<bean id="R6" class="nz.co.senanque.workflow.nmcrules.R6"/>
     <context:annotation-config />
+	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules" />
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
 	</bean>
-<!--
-	<bean id="maduraSessionManager" class="nz.co.senanque.workflow.MaduraSessionManagerFactory" scope="session"/>
- --> 
+    <bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl" scope="session"/>
 	<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="bundle">
     	<property name="formFieldFactory" ref="fieldFactory"/>
     </bean>
 
     <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="bundle"/>
-<!--     <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints" scope="session"/> -->
 
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/NMCInstances.xsd" />

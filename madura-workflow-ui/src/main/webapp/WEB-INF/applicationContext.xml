@@ -67,7 +67,6 @@ limitations under the License.
 				<entry key="transactionManager" value-ref="transactionManager"/>
 				<entry key="lockFactory" value-ref="lockFactory"/>
 				<entry key="em-workflow" value-ref="em-workflow"/>
-				<entry key="permissionManager" value-ref="permissionManager"/>
 				<entry key="atomikosTransactionManager" value-ref="atomikosTransactionManager"/>
 				<entry key="atomikosUserTransaction" value-ref="atomikosUserTransaction"/>
 				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
@@ -87,13 +86,12 @@ limitations under the License.
 	</bean>
 	<bean id="queueProcessManager" class="nz.co.senanque.workflowui.bundles.QueueProcessManager">
 	</bean>
+    <bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl" scope="session"/>
     <bean id="hints" class="nz.co.senanque.workflowui.WorkflowUIHints"/>
 	
 	<bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
 	<bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory"/>
-    <bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl"/>
 	<bundle:bean id="workflowManager" interface="nz.co.senanque.workflow.WorkflowManager"/>
-	<bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient"/>
 	<bean id="bundleSelector" class="nz.co.senanque.workflowui.bundles.BundleSelectorImpl"/>
 	
    <bean id="validationEngine" class="nz.co.senanque.validationengine.ValidationEngineImpl">

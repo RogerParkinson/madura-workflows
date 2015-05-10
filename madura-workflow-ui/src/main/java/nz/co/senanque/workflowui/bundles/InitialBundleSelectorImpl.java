@@ -18,8 +18,7 @@ package nz.co.senanque.workflowui.bundles;
 import nz.co.senanque.madura.bundle.BundleManager;
 import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
-import nz.co.senanque.workflow.BundleSelector;
-import nz.co.senanque.workflow.instances.ProcessInstance;
+import nz.co.senanque.workflow.InitialBundleSelector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,18 +28,31 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  *
  */
-public class BundleSelectorImpl implements BundleSelector {
+public class InitialBundleSelectorImpl implements InitialBundleSelector {
 
 	private static final Logger log = LoggerFactory
-			.getLogger(BundleSelectorImpl.class);
+			.getLogger(InitialBundleSelectorImpl.class);
 	@Autowired BundleManager m_bundleManager;
+	@Autowired QueueProcessManager m_queueProcessmanager;
+	@Autowired PermissionManager m_permissionManager;
 
 	/* (non-Javadoc)
-	 * @see nz.co.senanque.workflow.BundleSelector#selectBundle(nz.co.senanque.workflow.instances.ProcessInstance)
+	 * @see nz.co.senanque.workflow.BundleSelector#selectInitialBundle(java.lang.Object)
 	 */
 	@Override
-	public void selectBundle(ProcessInstance pi) {
-		m_bundleManager.setBundle(pi.getBundleName());
+	public String selectInitialBundle(Object o) {
+		if (o instanceof String) {
+			String processName = (String)o;
+			for (ProcessDefinition processDefinition :m_queueProcessmanager.getVisibleProcesses(m_permissionManager)) {
+				if (processDefinition.getName().equals(processName)) {
+					m_bundleManager.setBundle(processDefinition.getVersion());
+					return processDefinition.getVersion();
+				}
+			}
+		}
+		m_bundleManager.setBundle("order-workflow");
+		log.debug("Selected bundle order-workflow");
+		return "order-workflow";
 	}
 
 	public BundleManager getBundleManager() {
@@ -49,6 +61,22 @@ public class BundleSelectorImpl implements BundleSelector {
 
 	public void setBundleManager(BundleManager bundleManager) {
 		m_bundleManager = bundleManager;
+	}
+
+	public QueueProcessManager getQueueProcessmanager() {
+		return m_queueProcessmanager;
+	}
+
+	public void setQueueProcessmanager(QueueProcessManager queueProcessmanager) {
+		m_queueProcessmanager = queueProcessmanager;
+	}
+
+	public PermissionManager getPermissionManager() {
+		return m_permissionManager;
+	}
+
+	public void setPermissionManager(PermissionManager permissionManager) {
+		m_permissionManager = permissionManager;
 	}
 
 }
