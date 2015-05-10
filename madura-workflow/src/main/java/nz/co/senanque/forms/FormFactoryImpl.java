@@ -89,8 +89,6 @@ public class FormFactoryImpl implements BeanFactoryAware, FormFactory {
 		if (m_environment != null) {
 			m_environmentName = m_environment.getName();
 		}
-		log.debug("The FormFactory id is {} bundle {}",
-				System.identityHashCode(this),m_beanFactory.getBean("bundleName"));
 	}
 
 }
