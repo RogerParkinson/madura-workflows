@@ -48,15 +48,15 @@
 		<spring.framework.version>3.2.6.RELEASE</spring.framework.version>
 		<vaadin.version>6.8.8</vaadin.version>
 		<gwt.version>2.6.1</gwt.version>
-		<madura.bundle.version>4.0.4-SNAPSHOT</madura.bundle.version>
-		<madura.vaadinsupport.version>2.5.4-SNAPSHOT</madura.vaadinsupport.version>
-		<madura.rules.version>2.2.5</madura.rules.version>
-		<madura.objects.version>2.2.4</madura.objects.version>
+		<madura.bundle.version>4.1.0</madura.bundle.version>
+		<madura.vaadinsupport.version>2.6.0</madura.vaadinsupport.version>
+		<madura.rules.version>2.2.6</madura.rules.version>
+		<madura.objects.version>2.2.5</madura.objects.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.1</logback.version>
 		<jaxb2_commons.version>0.6.2</jaxb2_commons.version>
 		<jaxb22.version>2.2.4-1</jaxb22.version>
-		<hibernate-version>4.1.4.Final</hibernate-version>
+		<hibernate-version>4.2.19.Final</hibernate-version>
 		<hyperjaxb-version>0.5.6</hyperjaxb-version>
 		<pdf>target/${project.artifactId}-${project.version}.pdf</pdf>
 		<sql>target/${project.artifactId}-${project.version}.sql</sql>
@@ -70,6 +70,7 @@
 		<module>order-workflow</module>
 		<module>simple-workflow</module>
  		<module>madura-workflow-ui</module>
+ 		<module>nmc-workflow</module>
 	</modules>
 	<build>
 		<plugins>
