@@ -685,27 +685,29 @@ message=orderMessageSender;
 <plugin>
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>schema-translator-maven-plugin</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<executions>
 		<execution>
-			<id>sql-generate</id>
+			<id>sql-generate-h2</id>
 			<phase>package</phase>
 			<goals>
 				<goal>sql</goal>
 			</goals>
+			<configuration>
+				<persistenceFile>${basedir}/src/main/resources/META-INF/persistence-workflow.xml</persistenceFile>
+				<persistenceUnit>pu-workflow</persistenceUnit>
+				<dialect>org.hibernate.dialect.H2Dialect</dialect>
+				<drops>false</drops>
+				<destFile>${sql}.H2.sql</destFile>
+			</configuration>
 		</execution>
 	</executions>
-	<configuration>
-		<persistenceFile>src/main/resources/META-INF/persistence-workflow.xml</persistenceFile>
-		<persistenceUnit>pu-workflow</persistenceUnit>
-		<dialect>org.hibernate.dialect.H2Dialect</dialect>
-	</configuration>
 	<dependencies>
 		<!-- Need this because the entity classes refer to items in MaduraObjects -->
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-objects</artifactId>
-			<version>2.2.2</version>
+			<version>${madura.objects.version}</version>
 		</dependency>
 	</dependencies>
 </plugin>
@@ -714,7 +716,7 @@ message=orderMessageSender;
 		it outputs not the database itself but the SQL script it would use to create it. By default the output
 		is to <courier>target/${project.artifactId}-${project.version}.sql</courier> but if you may want to override 
 		the default name or location using destdir and destFile.</p>
-		<p>Finally the drop parameter, which defaults to false, can be used to include the drop statements in the
+		<p>Finally the drops parameter, which defaults to false, can be used to include the drop statements in the
 		resulting SQL file.</p>
         </h2>
         </h1>

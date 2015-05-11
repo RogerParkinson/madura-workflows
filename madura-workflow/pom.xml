@@ -23,6 +23,9 @@
 			</roles>
 		</developer>
 	</developers>
+	<properties>
+		<sql>${project.artifactId}-${project.version}</sql>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -277,20 +280,23 @@
 			<plugin>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>schema-translator-maven-plugin</artifactId>
-				<version>0.0.1</version>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
-						<id>sql-generate</id>
+						<id>sql-generate-h2</id>
 						<phase>package</phase>
 						<goals>
 							<goal>sql</goal>
 						</goals>
+						<configuration>
+							<persistenceFile>${basedir}/src/main/resources/META-INF/persistence-workflow.xml</persistenceFile>
+							<persistenceUnit>pu-workflow</persistenceUnit>
+							<dialect>org.hibernate.dialect.H2Dialect</dialect>
+							<drops>false</drops>
+							<destFile>${sql}.H2.sql</destFile>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<persistenceFile>${basedir}/src/main/resources/META-INF/persistence-workflow.xml</persistenceFile>
-					<persistenceUnit>pu-workflow</persistenceUnit>
-				</configuration>
 				<dependencies>
 					<!-- Need this because the entity classes refer to items in MaduraObjects -->
 					<dependency>
@@ -508,8 +514,8 @@
 									<type>pdf</type>
 								</artifact>
 								<artifact>
-									<file>${sql}</file>
-									<type>sql</type>
+									<file>target/${sql}.H2.sql</file>
+									<type>H2.sql</type>
 								</artifact>
 							</artifacts>
 						</configuration>

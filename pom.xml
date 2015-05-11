@@ -59,7 +59,6 @@
 		<hibernate-version>4.2.19.Final</hibernate-version>
 		<hyperjaxb-version>0.5.6</hyperjaxb-version>
 		<pdf>target/${project.artifactId}-${project.version}.pdf</pdf>
-		<sql>target/${project.artifactId}-${project.version}.sql</sql>
 		<spring.framework.data.version>1.4.2.RELEASE</spring.framework.data.version>
 		<spring.framework.security.version>3.2.0.RELEASE</spring.framework.security.version>
 		<spring.framework.integration.version>3.0.0.RELEASE</spring.framework.integration.version>
