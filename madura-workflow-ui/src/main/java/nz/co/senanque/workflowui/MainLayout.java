@@ -159,7 +159,14 @@ public class MainLayout extends CustomComponent implements Serializable, Initial
 	
 	public void formWizardClick(ClickEvent event) {
 		Button button = (com.vaadin.ui.Button)(event.getSource());
-		if (!"cancel".equals(button.getData())) {
+		String eventData = (String)button.getData();
+		if (eventData != null) {
+			if (eventData.startsWith(WorkflowForm.LAUNCH)) {
+				String processId = eventData.substring(WorkflowForm.LAUNCH.length());
+				m_workflowClient.finishLaunch(Long.parseLong(processId));
+			}
+		}
+		if (!"cancel".equals(eventData)) {
 			m_processInstances.refresh();
 		}
 	}

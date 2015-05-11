@@ -185,4 +185,10 @@ public class WorkflowManagerMock extends WorkflowManagerAbstract {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void finishLaunch(long processId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

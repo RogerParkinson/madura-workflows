@@ -80,6 +80,9 @@ public class WorkflowClient {
 	public ProcessInstance lockProcessInstance(final ProcessInstance processInstance, final boolean techSupport, final String userName) {
 		return m_workflowManager.lockProcessInstance(processInstance, techSupport, userName);
 	}
+	public void finishLaunch(long processId) {
+		m_workflowManager.finishLaunch(processId);
+	}
 
 	public WorkflowForm getCurrentForm(ProcessInstance processInstance) {
 		getBundleSelector().selectBundle(processInstance);

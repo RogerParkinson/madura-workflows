@@ -24,6 +24,9 @@ import nz.co.senanque.workflow.instances.ProcessInstance;
  */
 public interface WorkflowForm {
 	
+	public static String OK = "OK:";
+	public static String LAUNCH = "LAUNCH:";
+	
 	public Object getContext();
 	public void setContext(Object context);
 	public void setProcessInstance(ProcessInstance processInstance);

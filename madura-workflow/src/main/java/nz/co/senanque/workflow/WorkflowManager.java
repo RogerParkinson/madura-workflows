@@ -75,4 +75,5 @@ public interface WorkflowManager {
 	public ProcessInstance refresh(ProcessInstance processInstance);
 	public String trimComment(String comment);
 	public ProcessInstance lockProcessInstance(final ProcessInstance processInstance, final boolean techSupport, final String userName);
+	public void finishLaunch(long processId);
 }

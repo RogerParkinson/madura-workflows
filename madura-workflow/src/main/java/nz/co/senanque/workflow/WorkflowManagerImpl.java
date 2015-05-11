@@ -466,6 +466,13 @@ public class WorkflowManagerImpl extends WorkflowManagerAbstract {
 //		}
 	}
 	
+	public void finishLaunch(long processId) {
+		ProcessInstance processInstance = getWorkflowDAO().findProcessInstance(processId);
+		processInstance.setStatus(TaskStatus.GO);
+		getWorkflowDAO().mergeProcessInstance(processInstance);
+		getWorkflowDAO().flush();
+	}
+	
 	public WorkflowForm getLaunchForm(String processName) {
         ProcessDefinition processDefinition = getProcessDefinition(processName);
         String launchForm = processDefinition.getLaunchForm();

@@ -73,6 +73,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	private String m_referenceName="reference";
 	private List<String> m_fieldList;
 	private boolean m_readOnlyForm;
+	private boolean m_launcher;
 	
 	public class CloseEvent extends Event {
 
@@ -138,7 +139,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 		return m_processDefinition.getName();
 	}
 	public boolean isLauncher() {
-		return (m_processInstance==null || m_processInstance.getId()== 0);
+		return m_launcher;
 	}
 	@Override
 	public void bind() {
@@ -156,6 +157,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 				}
 			}
 		}
+		m_launcher = (m_processInstance==null || m_processInstance.getId()== 0);
         park.setVisible(!isLauncher());
 	}
 	@Override
@@ -188,14 +190,14 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 					// ignore errors
 				}
 			}
-			m_processInstance.setStatus(TaskStatus.GO);
+			m_processInstance.setStatus((m_launcher?TaskStatus.WAIT:TaskStatus.GO));
 			m_processInstance.setQueueName(null);
 			m_processInstance.setLockedBy(null);
 			long processId = save();
 			if (processId == 0) {
 				return;
 			}
-			okay.setData("OK:"+processId);
+			okay.setData(WorkflowForm.OK+processId);
 		}
 		if (event.getComponent().equals(cancel)) {
 			long processId = m_processInstance.getId();

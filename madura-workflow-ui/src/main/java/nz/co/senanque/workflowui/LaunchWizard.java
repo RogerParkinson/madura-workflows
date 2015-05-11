@@ -169,9 +169,9 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 								String s = (String)(((Button)event.getComponent()).getData());
 								if ("cancel".equals(s)) {
 									close();
-								} else if (s.startsWith("OK:")) {
+								} else if (s.startsWith(WorkflowForm.OK)) {
 									panel.removeAllComponents();
-									panel.addComponent(getFinalLayout(processDefinition.getName(),Long.parseLong(s.substring(3))));
+									panel.addComponent(getFinalLayout(processDefinition.getName(),Long.parseLong(s.substring(WorkflowForm.OK.length())),form.isLauncher()));
 									panel.requestRepaint();
 								}
 							} catch (Exception e) {
@@ -189,7 +189,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         return ret;
 	}
 	
-	private Component getFinalLayout(String processName, final long processId) {
+	private Component getFinalLayout(String processName, final long processId, final boolean launcher) {
 		VerticalLayout ret = new VerticalLayout();
 		Button okay = new Button(m_messageSourceAccessor.getMessage("OK", "Okay"));
         HorizontalLayout actions = new HorizontalLayout();
@@ -204,6 +204,8 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				close();
+				Button button = (com.vaadin.ui.Button)(event.getSource());
+				button.setData((launcher?WorkflowForm.LAUNCH:WorkflowForm.OK)+processId);
 				fireEvent(event);
 			}});
         ret.addComponent(actions);
