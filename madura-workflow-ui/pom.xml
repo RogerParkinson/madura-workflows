@@ -326,6 +326,8 @@
 									relevant bundles in place. -->
 								<exclude>**/OrderWorkflowTest.java</exclude>
 								<exclude>**/SimpleWorkflowTest.java</exclude>
+								<exclude>**/BundleSelectorImplTest.java</exclude>
+								<exclude>**/LoadContextTest.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
