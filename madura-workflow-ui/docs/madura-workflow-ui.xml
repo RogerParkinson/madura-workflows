@@ -777,12 +777,18 @@ Bundle-Version: 0.0.2
 		<a1 t="Release Notes">
 			<table width="12cm">
 				<tw>12cm</tw>
-				<tr>
-					<th>1.0.0</th>
-				</tr>
-				<tr>
-					<td>Initial version.</td>
-				</tr>
+			<tr>
+				<th>1.0.1</th>
+			</tr>
+			<tr>
+				<td>No actual changes, just a problem with tags.</td>
+			</tr>
+			<tr>
+				<th>1.0.0</th>
+			</tr>
+			<tr>
+				<td>Initial version.</td>
+			</tr>
 			</table>
 		</a1>
 	</body>
