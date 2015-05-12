@@ -91,6 +91,7 @@ limitations under the License.
     </bean>    
 
     <bean id="bundleSelector" class="nz.co.senanque.workflow.BundleSelectorDefaultImpl"/>
+    <bean id="initialBundleSelector" class="nz.co.senanque.workflow.InitialBundleSelectorDefaultImpl"/>
     <!-- The executor is responsible for scanning for active processes etc -->
     <bean id="executor" class="nz.co.senanque.workflow.ExecutorImpl" />
 

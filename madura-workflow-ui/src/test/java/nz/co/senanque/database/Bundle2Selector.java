@@ -32,8 +32,7 @@
 package nz.co.senanque.database;
 
 import nz.co.senanque.madura.bundle.BundleManager;
-import nz.co.senanque.workflow.BundleSelector;
-import nz.co.senanque.workflow.instances.ProcessInstance;
+import nz.co.senanque.workflow.InitialBundleSelector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,19 +42,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  *
  */
-public class Bundle2Selector implements BundleSelector {
+public class Bundle2Selector implements InitialBundleSelector {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(Bundle2Selector.class);
 	@Autowired BundleManager m_bundleManager;
-
-	/* (non-Javadoc)
-	 * @see nz.co.senanque.workflow.BundleSelector#selectBundle(nz.co.senanque.workflow.instances.ProcessInstance)
-	 */
-	@Override
-	public void selectBundle(ProcessInstance pi) {
-		m_bundleManager.setBundle(pi.getBundleName());
-	}
 
 	/* (non-Javadoc)
 	 * @see nz.co.senanque.workflow.BundleSelector#selectInitialBundle(java.lang.Object)

@@ -28,7 +28,8 @@
  *******************************************************************************/
 package nz.co.senanque.workflowui.bundles;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -38,7 +39,7 @@ import nz.co.senanque.madura.bundle.BundleManager;
 import nz.co.senanque.madura.bundle.BundleManagerImpl;
 import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
-import nz.co.senanque.workflow.BundleSelector;
+import nz.co.senanque.workflow.InitialBundleSelector;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
 
@@ -60,7 +61,7 @@ public class BundleSelectorImplTest {
 	@Autowired WorkflowClient workflowClient;
 	@Autowired WorkflowDAO workflowDAO;
 	@Autowired QueueProcessManager queueProcessManager;
-	@Autowired BundleSelector bundleSelector;
+	@Autowired InitialBundleSelector bundleSelector;
 	@Autowired PermissionManager permissionManager;
 
 	// The following is needed to ensure the destroy methods of all the beans

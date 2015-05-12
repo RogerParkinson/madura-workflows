@@ -83,6 +83,7 @@ limitations under the License.
 	
 	<bundle:bean id="workflowManager" interface="nz.co.senanque.workflow.WorkflowManager"/>
 	<bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient"/>
+    <bean id="initialBundleSelector" class="nz.co.senanque.workflowui.bundles.InitialBundleSelectorImpl"/>
     <bean id="bundleSelector" class="nz.co.senanque.workflowui.bundles.BundleSelectorImpl"/>
     <!-- endpoints needed by SI -->
     <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint" />

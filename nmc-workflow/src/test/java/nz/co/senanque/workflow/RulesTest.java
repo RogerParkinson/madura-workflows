@@ -46,13 +46,12 @@ public class RulesTest
         NMC nmc = new NMC();
         validationSession.bind(nmc);
         nmc.setReservationId("none");
+        nmc.setSameClaim(false);
         assertEquals("rejected",nmc.getStatus());
         assertFalse(nmc.isHasFunds());
         nmc.setReservationId("1234");
         assertTrue(nmc.isHasFunds());
         assertNull(nmc.getStatus());
-        nmc.setSameClaim(false);
-        assertEquals("rejected",nmc.getStatus());
         nmc.setSameClaim(true);
         nmc.setSameAmount(false);
         assertTrue(nmc.isLoop());
