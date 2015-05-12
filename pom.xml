@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>madura-workflows</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>madura-workflows</name>
 	<description>Parent project for madura workflows</description>
 	<url>www.madurasoftware.com/home/madura-workflow</url>
