@@ -28,6 +28,7 @@
     <logger name="org.springframework.ws.client.MessageTracing.sent" level="trace"/>
     <logger name="org.springframework.ws.client.MessageTracing.received" level="debug"/>
     <logger name="nz.co.senanque.workflow" level="info"/>
+    <logger name="nz.co.senanque.workflow.WorkflowWithRules2Test" level="debug"/>
     
   <root level="warn">
     <appender-ref ref="STDOUT" />

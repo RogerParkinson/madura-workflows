@@ -46,7 +46,25 @@ limitations under the License.
     <description>Main Configuration</description>
     
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+	<context:component-scan base-package="nz.co.senanque.validationengine,
+		nz.co.senanque.validationengine.annotations" />
+ 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+		<property name="location" value="classpath:config.properties"/>
+	</bean>
+	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+		<property name="basenames">
+			<list>
+ 				<value>Messages</value>
+			</list>
+		</property>
+	</bean>
+<!-- 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+		<property name="location" value="classpath:config.properties"/>
+	</bean>
 
     <bean id="metadata2" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
         <property name="package" value="nz.co.senanque.workflow.instances"/>
@@ -61,7 +79,7 @@ limitations under the License.
         </property>
         <property name="choicesDocument" value="classpath:choices.xml"/>
     </bean>
-    
+ -->    
     <!-- End Madura configuration -->
 
 </beans>

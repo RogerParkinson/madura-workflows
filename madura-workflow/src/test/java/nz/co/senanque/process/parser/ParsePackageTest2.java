@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.annotation.ExpectedException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -57,8 +56,7 @@ public class ParsePackageTest2 {
 	@Resource(name="processes")
 	org.springframework.core.io.Resource m_processes;
 
-	@Test
-	@ExpectedException(value = ParserException.class)
+	@Test(expected = ParserException.class)
 	public void testParse2() throws Exception {
 
 		SAXBuilder builder = new SAXBuilder();

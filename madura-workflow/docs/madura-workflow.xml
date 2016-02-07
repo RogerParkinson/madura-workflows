@@ -450,7 +450,7 @@ message=orderMessageSender;
    <int-ws:header-enricher>
       <int-ws:soap-action value="http://tempuri.org/FahrenheitToCelsius" />
    </int-ws:header-enricher>
-   <int-ws:outbound-gateway uri="http://www.w3schools.com/webservices/tempconvert.asmx" />            
+   <int-ws:outbound-gateway uri="http://www.w3schools.com/xml/tempconvert.asmx" />            
 </int:chain>
         ]]></code>
         <p>In this example we are using Spring Integration to do the following:</p>
@@ -526,7 +526,7 @@ message=orderMessageSender;
         <p>To use this template in our earlier messages we need to add an advice handler to the outbound gateway and the service activator
         respectively like this:</p>
         <code><![CDATA[
-<int-ws:outbound-gateway uri="http://www.w3schools.com/webservices/tempconvert.asmx" >            
+<int-ws:outbound-gateway uri="http://www.w3schools.com/xml/tempconvert.asmx" >            
    <int-ws:request-handler-advice-chain>
       <bean class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
          <property name="recoveryCallback">

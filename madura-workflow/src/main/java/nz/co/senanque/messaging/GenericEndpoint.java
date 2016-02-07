@@ -18,6 +18,7 @@ package nz.co.senanque.messaging;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
 import javax.annotation.PostConstruct;
@@ -46,8 +47,9 @@ import org.jdom.input.DOMBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
+import org.springframework.integration.IntegrationMessageHeaderAccessor;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
@@ -84,7 +86,7 @@ public class GenericEndpoint implements MessageMapper {
 
 	public void issueResponseFor(final Message<?> message) {
 		MessageHeaders messageHeaders = message.getHeaders();
-		Long correlationId = (Long)message.getHeaders().getCorrelationId();
+		Long correlationId = message.getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class);
 		log.debug("ProcessInstance: correlationId {}", correlationId);
 		if (correlationId == null) {
 			log.error("correlation Id is null");

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package nz.co.senanque.messaging;
 
-import org.springframework.integration.MessageChannel;
+import org.springframework.messaging.MessageChannel;
 
 
 

@@ -33,7 +33,7 @@ import nz.co.senanque.workflow.instances.Audit;
 import nz.co.senanque.workflow.instances.DeferredEvent;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 public interface WorkflowManager {
 

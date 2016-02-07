@@ -25,8 +25,8 @@ import nz.co.senanque.workflow.instances.ProcessInstance;
 import nz.co.senanque.workflowtest.instances.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.MessagingException;
 import org.springframework.integration.xml.result.DomResultFactory;
+import org.springframework.messaging.MessagingException;
 import org.springframework.oxm.GenericMarshaller;
 import org.springframework.transaction.annotation.Transactional;
 

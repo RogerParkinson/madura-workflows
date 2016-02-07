@@ -25,7 +25,6 @@ import javax.annotation.PreDestroy;
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.messaging.MessageMapper;
 import nz.co.senanque.messaging.MessageSender;
-import nz.co.senanque.messaging.MessageSenderImpl;
 import nz.co.senanque.process.instances.ComputeType;
 import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.process.instances.TaskBase;
@@ -38,7 +37,7 @@ import nz.co.senanque.workflow.instances.TaskStatus;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 /**
  * Used as a mock for the workflow manager. It is used in tests but it is also used by the plugin parser which

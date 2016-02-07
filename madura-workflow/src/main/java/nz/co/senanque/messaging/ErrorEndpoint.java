@@ -16,6 +16,7 @@
 package nz.co.senanque.messaging;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
 import nz.co.senanque.locking.LockAction;
@@ -32,9 +33,10 @@ import nz.co.senanque.workflow.instances.TaskStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.Message;
-import org.springframework.integration.MessageHeaders;
-import org.springframework.integration.MessagingException;
+import org.springframework.integration.IntegrationMessageHeaderAccessor;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.MessagingException;
 
 /**
  * We land here if there is some kind of error so the goal here is to pull the error from the
@@ -61,7 +63,7 @@ public class ErrorEndpoint implements MessageMapper {
 	public void processErrorMessage(final Message<MessagingException> message) {
 		MessageHeaders messageHeaders = message.getHeaders();
 		final MessagingException messagingException = (MessagingException)message.getPayload();
-		Long correlationId = (Long) messagingException.getFailedMessage().getHeaders().getCorrelationId();
+		Long correlationId = message.getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class);
 		log.debug("ProcessInstance: correlationId {}", correlationId);
 		if (correlationId == null) {
 			log.error("correlation Id is null");

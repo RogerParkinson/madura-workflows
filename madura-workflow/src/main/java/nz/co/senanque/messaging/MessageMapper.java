@@ -15,7 +15,7 @@
  *******************************************************************************/
 package nz.co.senanque.messaging;
 
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 /**
  * Implementations of this interface should unpack the message into the context object.

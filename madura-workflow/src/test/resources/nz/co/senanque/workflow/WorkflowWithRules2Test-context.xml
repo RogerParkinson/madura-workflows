@@ -49,7 +49,10 @@ limitations under the License.
     <import resource="SI-context.xml"/>
 
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+		<property name="location" value="classpath:config.properties"/>
+	</bean>
 
     <!-- client code uses this to launch processes -->
     <bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient">
@@ -67,15 +70,6 @@ limitations under the License.
         <property name="metadata">
 		    <bean class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
 		        <property name="package" value="nz.co.senanque.workflowtest.instances"/>
-		        <property name="fieldValidators">
-		            <list>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-		            </list>
-		        </property>
 		        <property name="choicesDocument" value="classpath:choices.xml"/>
 		    </bean>
 
@@ -133,17 +127,9 @@ limitations under the License.
     </bean>
     <bean id="metadata2" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory" autowire="no">
         <property name="package" value="nz.co.senanque.workflow.instances"/>
-        <property name="fieldValidators">
-            <list>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-            </list>
-        </property>
         <property name="choicesDocument" value="classpath:choices.xml"/>
     </bean>
+    <bean id="localeAwareExceptionFactory" class="nz.co.senanque.validationengine.LocaleAwareExceptionFactory"/>
     
     <!-- End Madura configuration -->
 

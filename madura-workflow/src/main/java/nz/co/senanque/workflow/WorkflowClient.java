@@ -15,6 +15,7 @@
  *******************************************************************************/
 package nz.co.senanque.workflow;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import nz.co.senanque.forms.WorkflowForm;
@@ -28,8 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  *
  */
-public class WorkflowClient {
+public class WorkflowClient implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	@Autowired 
 	private WorkflowManager m_workflowManager;
 	@Autowired

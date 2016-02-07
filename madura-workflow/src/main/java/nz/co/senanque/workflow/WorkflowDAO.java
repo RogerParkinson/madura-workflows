@@ -16,6 +16,7 @@
 package nz.co.senanque.workflow;
 
 import java.util.List;
+import java.util.UUID;
 
 import nz.co.senanque.process.instances.TaskBase;
 import nz.co.senanque.workflow.instances.Attachment;

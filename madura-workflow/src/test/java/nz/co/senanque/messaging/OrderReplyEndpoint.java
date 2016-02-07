@@ -29,7 +29,8 @@ import org.jdom.filter.ContentFilter;
 import org.jdom.input.DOMBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
+import org.springframework.integration.IntegrationMessageHeaderAccessor;
+import org.springframework.messaging.Message;
 
 /**
  * @author Roger Parkinson
@@ -42,7 +43,7 @@ public class OrderReplyEndpoint {
 
 	public void issueResponseFor(Message<org.w3c.dom.Document> orderResponse) {
 		log.debug("processed orderResponse: correlationId {}", orderResponse
-				.getHeaders().getCorrelationId());
+				.getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class));
 		org.w3c.dom.Document doc = orderResponse.getPayload();
 		Document document = new DOMBuilder().build(doc);
 		Element root = document.getRootElement();

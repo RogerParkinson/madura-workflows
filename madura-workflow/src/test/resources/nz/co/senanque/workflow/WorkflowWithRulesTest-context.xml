@@ -93,15 +93,6 @@ limitations under the License.
     </bean>
     <bean id="metadata" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
         <property name="package" value="nz.co.senanque.workflowtest.instances"/>
-        <property name="fieldValidators">
-            <list>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-            </list>
-        </property>
         <property name="choicesDocument" value="classpath:choices.xml"/>
     </bean>
     <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />

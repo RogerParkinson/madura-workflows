@@ -40,6 +40,7 @@ limitations under the License.
                     xmlType="xsd:date" 
                     parseMethod="nz.co.senanque.validationengine.ConvertUtils.parseDate"
                     printMethod="nz.co.senanque.validationengine.ConvertUtils.printDate" />
+				<jaxb:serializable/>
  			</jaxb:globalBindings>
 			<jaxb:schemaBindings>
 				<jaxb:package name="nz.co.senanque.workflow.instances" />

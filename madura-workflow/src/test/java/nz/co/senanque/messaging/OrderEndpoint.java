@@ -21,8 +21,9 @@ import nz.co.senanque.workflowtest.instances.OrderItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.Message;
+import org.springframework.integration.IntegrationMessageHeaderAccessor;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 
 /**
  * @author Roger Parkinson
@@ -46,7 +47,7 @@ public class OrderEndpoint {
 		ret.setRejected(false);
 		ret.setOrderName("whatever");
 		ret.getOrderItems().add(orderItem);
-		log.debug("processed order: correlationId {}",order.getHeaders().getCorrelationId());
+		log.debug("processed order: correlationId {}",order.getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class));
 		MessageBuilder<Order> messageBuilder = MessageBuilder.withPayload(ret);
 		messageBuilder.copyHeaders(order.getHeaders());
 		return messageBuilder.build();

@@ -21,12 +21,13 @@ import javax.xml.transform.Result;
 import nz.co.senanque.workflow.WorkflowException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.MessageChannel;
-import org.springframework.integration.MessagingException;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.xml.result.DomResultFactory;
 import org.springframework.integration.xml.result.ResultFactory;
 import org.springframework.integration.xml.transformer.ResultToDocumentTransformer;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessagingException;
 import org.springframework.oxm.GenericMarshaller;
 import org.w3c.dom.Document;
 
@@ -83,6 +84,7 @@ public class MessageSenderImpl<T> implements MessageSender<T> {
         	messageBuilder.setPriority(getMessagePriority());
         }
         messageBuilder.setCorrelationId(correlationId);
+        Message<?> ret = messageBuilder.build();
 		return getChannel().send(messageBuilder.build());
 	}
 	

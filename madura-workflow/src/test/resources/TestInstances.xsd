@@ -43,6 +43,7 @@ limitations under the License.
 				<xjc:serializable />
              -->
              <xjc:simple/>
+				<jaxb:serializable/>
 			</jaxb:globalBindings>
 			<jaxb:schemaBindings>
 				<jaxb:package name="nz.co.senanque.workflowtest.instances" />
