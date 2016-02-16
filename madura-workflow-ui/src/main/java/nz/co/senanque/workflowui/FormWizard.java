@@ -37,9 +37,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.UI;
@@ -113,8 +111,9 @@ public class FormWizard extends Window implements MessageSourceAware {
     	setCaption(m_messageSourceAccessor.getMessage("form.wizard.caption", 
     			new Object[]{new Long(form.getProcessInstance().getId()),
     			ownerProcessDefinition.getName(),
-    			form.getProcessInstance().getReference()}));
-    	setDescription(ownerProcessDefinition.getDescription());
+    			form.getProcessInstance().getReference(),
+    			ownerProcessDefinition.getDescription()}));
+//    	setDescription(ownerProcessDefinition.getDescription());
     	formPanel.removeAllComponents();
 //    	formPanel.setSizeUndefined();
     	formPanel.addComponent((VerticalLayout)form);

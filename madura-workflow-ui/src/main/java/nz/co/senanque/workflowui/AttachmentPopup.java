@@ -56,7 +56,7 @@ public class AttachmentPopup extends Window implements MessageSourceAware {
 	private CheckBox checkbox;
 	private TextField comment;
 	private String m_windowWidth = "600px";
-	private String m_windowHeight = "200px";
+	private String m_windowHeight = "300px";
 	@Autowired WorkflowDAO m_workflowDAO;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
 	private AttachmentReceiver receiver = new AttachmentReceiver();
@@ -98,7 +98,9 @@ public class AttachmentPopup extends Window implements MessageSourceAware {
 	public void load(final long pid) {
 		panel.removeAllComponents();
 		Form form = new Form();
-		final Upload upload = new Upload("", receiver);
+		final Upload upload = new Upload(null, receiver);
+		upload.setImmediate(true);
+		upload.setButtonCaption(m_messageSourceAccessor.getMessage("upload.file", "Upload File"));
 		checkbox = new CheckBox(m_messageSourceAccessor.getMessage("upload.protected", "Protected"));
 		comment = new TextField(m_messageSourceAccessor.getMessage("upload.comment", "Comment"));
 		form.addField("comment", comment);

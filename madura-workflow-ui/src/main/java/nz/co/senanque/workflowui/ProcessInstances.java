@@ -66,7 +66,7 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 		private static final long serialVersionUID = 1L;
 		public ProcessTable(JPAContainer<ProcessInstance> container) {
 			super(m_messageSourceAccessor.getMessage("Processes","Processes"), container);
-			setVisibleColumns(new String[]{"id","queueName", "processDefinitionName","status","comment","reference","lastUpdated"});
+			setVisibleColumns(new Object[]{"id","queueName", "processDefinitionName","status","comment","reference","lastUpdated"});
 			setColumnHeaders(new String[]{
 					m_messageSourceAccessor.getMessage("id","Id"),
 					m_messageSourceAccessor.getMessage("queueName","Queue"),
@@ -79,7 +79,7 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 	    }
 
 		protected String formatPropertyValue(Object rowId, Object colId,
-	            Property property) {
+	            Property<?> property) {
 	        if (property == null) {
 	            return "";
 	        }
@@ -113,6 +113,7 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 
 	@PostConstruct
 	public void init() {
+		setWidth("100.0%");
 	}
 
 	public void setup() {

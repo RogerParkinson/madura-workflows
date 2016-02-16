@@ -205,7 +205,7 @@ public class MainLayout extends CustomComponent implements Serializable, Message
 		mainLayout.setMargin(false);
 		
 		// top-level component properties
-		setWidth("800px");
+		setWidth("900px");
 		setHeight("-1px");
 		
 		// headingLayout

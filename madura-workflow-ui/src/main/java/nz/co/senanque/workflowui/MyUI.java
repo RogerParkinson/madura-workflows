@@ -1,8 +1,6 @@
 package nz.co.senanque.workflowui;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
@@ -49,11 +47,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.server.SpringVaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
@@ -239,16 +237,16 @@ public class MyUI extends UI implements MessageSourceAware {
 		return file;
     }
 	private VerticalLayout buildMainLayout(MessageSourceAccessor messageSourceAccessor) {
+		// top-level component properties
+		setWidth("950px");
+		setHeight("-1px");
+		
 		// common part: create layout
 		mainLayout = new VerticalLayout();
 		mainLayout.setImmediate(false);
-		mainLayout.setWidth("800px");
+		mainLayout.setWidth("900px");
 		mainLayout.setHeight("-1px");
 		mainLayout.setMargin(false);
-		
-		// top-level component properties
-		setWidth("800px");
-		setHeight("-1px");
 		
 		// headingLayout
 		headingLayout = buildHeadingLayout(messageSourceAccessor);
@@ -371,7 +369,7 @@ public class MyUI extends UI implements MessageSourceAware {
 		// common part: create layout
 		panel_2 = new Panel();
 		panel_2.setImmediate(false);
-		panel_2.setWidth("100.0%");
+//		panel_2.setWidth("100.0%");
 		panel_2.setHeight("-1px");
 		
 		// ApplicationlBodyLayout
