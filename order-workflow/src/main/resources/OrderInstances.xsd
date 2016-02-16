@@ -113,6 +113,7 @@ limitations under the License.
                     <xsd:appinfo>
                         <annox:annotate>
                             <md:Label labelName="Fahrenheit" />
+                            <md:Digits integerDigits="8" fractionalDigits="2"/>
                         </annox:annotate>
                     </xsd:appinfo>
                 </xsd:annotation>
@@ -149,6 +150,7 @@ limitations under the License.
                     <xsd:appinfo>
                         <annox:annotate>
                             <md:Label labelName="Celsius" />
+                            <md:Digits integerDigits="8" fractionalDigits="2"/>
                             <md:ReadOnly/>
                         </annox:annotate>
                     </xsd:appinfo>

@@ -99,6 +99,7 @@
                     <xsd:appinfo>
                         <annox:annotate>
                             <md:Label labelName="requestedAmount" />
+                            <md:Digits integerDigits="8" fractionalDigits="2"/>
                         </annox:annotate>
                     </xsd:appinfo>
                 </xsd:annotation>
