@@ -16,8 +16,6 @@
 package nz.co.senanque.workflowui.bundles;
 
 import nz.co.senanque.madura.bundle.BundleManager;
-import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.BundleSelector;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
@@ -29,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  *
  */
+@org.springframework.stereotype.Component
 public class BundleSelectorImpl implements BundleSelector {
 
 	private static final Logger log = LoggerFactory

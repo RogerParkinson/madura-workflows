@@ -48,19 +48,17 @@ limitations under the License.
     <import resource="classpath:/database-orderinstances-context.xml"/>
     <import resource="classpath:/SI-context.xml"/>
 
-	<context:component-scan base-package="nz.co.senanque.workflow.orderrules"/>
+	<context:component-scan base-package="nz.co.senanque.workflow.orderrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin"/>
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
-
+	<context:property-placeholder location="classpath:/config.properties" />
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
 	</bean>
-	<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="bundle">
+	<bean id="maduraSessionManager" class="nz.co.senanque.vaadin.MaduraSessionManager" scope="bundle">
     	<property name="formFieldFactory" ref="fieldFactory"/>
     </bean>
-    <bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl" scope="session"/>
 
-    <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="bundle"/>
+    <bean id="fieldFactory" class="nz.co.senanque.vaadin.FieldFactory" scope="bundle"/>
 
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/OrderInstances.xsd" />
@@ -73,13 +71,15 @@ limitations under the License.
 	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 		<property name="name" value="Vaadin"/>
 	</bean>
+    
+    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl">
+    	<property name="environment" ref="environment"/>
+    </bean>
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
     	<property name="referenceName" value="orderName"/>
     </bean>
     <bean id="VaadinFirstForm" class="nz.co.senanque.workflow.VaadinFirstForm" scope="prototype"/>
     
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
-
     <!-- message sender(s) and compute(s) used by the processes -->
     <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
         <property name="channel" ref="orderChannel" />
@@ -107,42 +107,14 @@ limitations under the License.
     <bean id="temperatureCompute" class="nz.co.senanque.workflow.TemperatureComputeClass" />    
     <!-- end of demo process definitions -->
 
-    <bean id="validationEngine" class="nz.co.senanque.validationengine.ValidationEngineImpl">
-    	<property name="identifier" value="orderinstances"/>
-        <property name="metadata" ref="metadata"/>
-        <property name="plugins">
-            <list>
-                <ref bean="MaduraRulesPlugin"/>
-            </list>
-        </property>
-    </bean>
-    <bean id="metadata" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
-        <property name="package" value="nz.co.senanque.workflow.orderinstances"/>
-        <property name="fieldValidators">
-            <list>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-            </list>
-        </property>
-        <property name="choicesDocument" value="classpath:choices.xml"/>
-    </bean>
-    <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />
-
     <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
         <property name="resource" value="classpath:/Messages.xml" />
         <property name="parentMessageSource">
             <bean
-                class="org.springframework.context.support.ResourceBundleMessageSource">
+                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
                 <property name="basenames">
                     <list>
                         <value>localmessages</value>
-                        <value>messages</value>
-                        <value>ValidationMessages</value>
-                        <value>org/springframework/security/messages</value>
-                        <value>/nz/co/senanque/workflow/orderrules/messages</value>
                     </list>
                 </property>
             </bean>

@@ -17,9 +17,8 @@ package nz.co.senanque.workflowui;
 
 import javax.annotation.PostConstruct;
 
-import nz.co.senanque.vaadinsupport.MaduraForm;
-import nz.co.senanque.vaadinsupport.application.MaduraSessionManager;
-import nz.co.senanque.vaadinsupport.viewmanager.ViewManager;
+import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraSessionManager;
 import nz.co.senanque.validationengine.ValidationObject;
 import nz.co.senanque.workflow.instances.Audit;
 
@@ -29,6 +28,7 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
 
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -36,6 +36,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -45,17 +46,18 @@ import com.vaadin.ui.Window;
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class AuditPopup extends Window implements MessageSourceAware {
 
 	private static final long serialVersionUID = 1L;
 	private Layout main;
-	private Panel panel;
+	private Layout panel;
 	private String m_windowWidth = "800px";
 	private String m_windowHeight = "400px";
 	private transient MessageSourceAccessor m_messageSourceAccessor;
     private MaduraForm m_auditForm;
 	@Autowired private MaduraSessionManager m_maduraSessionManager;
-    @Autowired private ViewManager m_viewManager;
 
 	@Override
 	public void setMessageSource(MessageSource messageSource) {
@@ -63,12 +65,10 @@ public class AuditPopup extends Window implements MessageSourceAware {
 	}
     public void close() {
     	getMaduraSessionManager().getValidationSession().unbind((ValidationObject) m_auditForm.getData());
-    	if (getParent() != null) {
-    		getParent().removeWindow(this);
-    	}
+    	UI.getCurrent().removeWindow(this);
     }
     public void load(Audit audit) {
-		panel.removeAllComponents();
+    	panel.removeAllComponents();
 		getMaduraSessionManager().getValidationSession().bind(audit);
     	BeanItem<Audit> beanItem = new BeanItem<Audit>(audit);
 
@@ -80,7 +80,7 @@ public class AuditPopup extends Window implements MessageSourceAware {
 		panel.addComponent(getInitialLayout());
     	panel.requestRepaint();
     	if (getParent() == null) {
-        	m_viewManager.getMainWindow().addWindow(this);
+    		UI.getCurrent().addWindow(this);
         	this.center();
         }
     }
@@ -89,12 +89,12 @@ public class AuditPopup extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-        main.setStyleName(Panel.STYLE_LIGHT);
+//        main.setStyleName(Panel.STYLE_LIGHT);
         main.setWidth(getWindowWidth());
         main.setHeight(getWindowHeight());
         
-        panel = new Panel();
-        main.setMargin(true);
+        panel = new VerticalLayout();
+//        main.setMargin(true);
         main.addComponent(panel);
         
         setCaption(m_messageSourceAccessor.getMessage("audit", "Audit"));
@@ -108,7 +108,7 @@ public class AuditPopup extends Window implements MessageSourceAware {
         actions.setMargin(true);
         actions.setSpacing(true);
         actions.addComponent(close);
-        close.addListener(new ClickListener(){
+        close.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -138,11 +138,5 @@ public class AuditPopup extends Window implements MessageSourceAware {
 	}
 	public void setMaduraSessionManager(MaduraSessionManager maduraSessionManager) {
 		m_maduraSessionManager = maduraSessionManager;
-	}
-	public ViewManager getViewManager() {
-		return m_viewManager;
-	}
-	public void setViewManager(ViewManager viewManager) {
-		m_viewManager = viewManager;
 	}
 }

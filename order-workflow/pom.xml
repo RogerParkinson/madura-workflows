@@ -11,11 +11,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<pdf>target/${project.artifactId}-${project.version}.pdf</pdf>
-		<spring.framework.version>3.2.6.RELEASE</spring.framework.version>
-		<vaadin.version>6.8.8</vaadin.version>
-		<gwt.version>2.3.0</gwt.version>
-		<jaxb22.version>2.2.4-1</jaxb22.version>
-		<hibernate-version>4.1.4.Final</hibernate-version>
 	</properties>
 	<organization>
 		<name>Prometheus Consulting</name>
@@ -51,7 +46,6 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
 			<exclusions>
 				<!-- Needs to be excluded because it pulls the wrong version -->
 				<exclusion>
@@ -66,6 +60,7 @@
 			<version>1.0.2.Final</version>
 			<scope>provided</scope>
 		</dependency>
+<!--  
 		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics</artifactId>
@@ -77,6 +72,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+-->
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-bundle</artifactId>
@@ -92,7 +88,6 @@
 		<dependency>
 			<groupId>org.jvnet.hyperjaxb3</groupId>
 			<artifactId>hyperjaxb3-ejb-runtime</artifactId>
-			<version>${hyperjaxb-version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -115,7 +110,6 @@
 		<dependency>
 			<groupId>org.jvnet.hyperjaxb3</groupId>
 			<artifactId>hyperjaxb3-ejb-plugin</artifactId>
-			<version>${hyperjaxb-version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -163,13 +157,10 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.8.0</version>
+				<groupId>nz.co.senanque</groupId>
+				<artifactId>madura-objects-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>base</id>
-						<phase>generate-sources</phase>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -177,96 +168,9 @@
 							<schemaIncludes>
 								<include>OrderInstances.xsd</include>
 							</schemaIncludes>
-							<schemaDirectory>src/main/resources/</schemaDirectory>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<generateDirectory>generated-sources/xjc</generateDirectory>
 						</configuration>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>nz.co.senanque</groupId>
-						<artifactId>madura-objects</artifactId>
-						<version>${madura.objects.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.jvnet.hyperjaxb3</groupId>
-						<artifactId>hyperjaxb3-ejb-runtime</artifactId>
-						<version>${hyperjaxb-version}</version>
-						<exclusions>
-							<exclusion>
-								<groupId>commons-logging</groupId>
-								<artifactId>commons-logging</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.jvnet.hyperjaxb3</groupId>
-								<artifactId>hyperjaxb3-ejb-roundtrip</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.springframework</groupId>
-								<artifactId>spring</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.slf4j</groupId>
-								<artifactId>slf4j-log4j12</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-					<dependency>
-						<groupId>org.jvnet.hyperjaxb3</groupId>
-						<artifactId>hyperjaxb3-ejb-plugin</artifactId>
-						<version>${hyperjaxb-version}</version>
-						<exclusions>
-							<exclusion>
-								<groupId>commons-logging</groupId>
-								<artifactId>commons-logging</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.jvnet.hyperjaxb3</groupId>
-								<artifactId>hyperjaxb3-ejb-roundtrip</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.springframework</groupId>
-								<artifactId>spring</artifactId>
-							</exclusion>
-							<exclusion>
-								<groupId>org.slf4j</groupId>
-								<artifactId>slf4j-log4j12</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-					<dependency>
-						<groupId>com.sun.xml.bind</groupId>
-						<artifactId>jaxb-xjc</artifactId>
-						<version>${jaxb22.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.pyx4j</groupId>
-						<artifactId>maven-plugin-log4j</artifactId>
-						<version>1.0.1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-						<version>${slf4j.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<cleanPackageDirectories>false</cleanPackageDirectories>
-					<forceRegenerate>true</forceRegenerate>
-					<removeOldOutput>false</removeOldOutput>
-					<extension>true</extension>
-					<args>
-						<arg>-extension</arg>
-						<arg>-Xequals</arg>
-						<arg>-XtoString</arg>
-						<arg>-Xannotate</arg>
-						<arg>-XhashCode</arg>
-						<arg>-Xhyperjaxb3-ejb</arg>
-						<arg>-Xmadura-objects</arg>
-						<arg>-Xvalidator</arg>
-					</args>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -311,7 +215,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -321,7 +224,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -334,7 +236,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -365,7 +266,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
 				<executions>
 					<execution>
 						<id>default-jar</id>
@@ -443,6 +343,25 @@
 									</pluginExecutionFilter>
 									<action>
 										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											nz.co.senanque
+										</groupId>
+										<artifactId>
+											madura-objects-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.0.0-SNAPSHOT,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

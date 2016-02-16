@@ -17,7 +17,7 @@ limitations under the License.
 <xsl:stylesheet version="1.0"
 	xmlns:pizza="http://www.senanque.co.nz/pizzaorder"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:temp="http://www.w3schools.com/webservices/">
+	xmlns:temp="http://www.w3schools.com/xml/">
 	<xsl:template  match="/" >
 		<xsl:apply-templates select="pizza:Order"/>
 	</xsl:template>

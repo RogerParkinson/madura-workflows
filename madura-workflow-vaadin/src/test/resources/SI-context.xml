@@ -74,10 +74,10 @@ Key:				http://www.springframework.org/schema/integration/spring-integration-1.0
 	    <int-xml:xslt-transformer
             xsl-resource="classpath:/Transformer.xsl"/>
         <int-ws:header-enricher>
-            <int-ws:soap-action value="http://www.w3schools.com/webservices/FahrenheitToCelsius" />
+            <int-ws:soap-action value="http://www.w3schools.com/xml/FahrenheitToCelsius" />
         </int-ws:header-enricher>
 
-        <int-ws:outbound-gateway uri="http://www.w3schools.com/webservices/tempconvert.asmx" >            
+        <int-ws:outbound-gateway uri="http://www.w3schools.com/xml/tempconvert.asmx" >            
             <int-ws:request-handler-advice-chain>
                 <bean class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
                     <property name="recoveryCallback">

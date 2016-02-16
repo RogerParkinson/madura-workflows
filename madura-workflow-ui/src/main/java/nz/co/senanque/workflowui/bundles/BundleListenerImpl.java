@@ -32,7 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  * @version $Revision:$
  */
-public class BundleListenerImpl extends nz.co.senanque.perspectivemanager.BundleListenerImpl implements Serializable
+@org.springframework.stereotype.Component
+public class BundleListenerImpl extends nz.co.senanque.perspectiveslibrary.BundleListenerImpl implements Serializable
 {
 	private static final long serialVersionUID = 921936781648787811L;
 

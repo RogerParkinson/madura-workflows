@@ -11,11 +11,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<pdf>target/${project.artifactId}-${project.version}.pdf</pdf>
-		<spring.framework.version>3.2.6.RELEASE</spring.framework.version>
-		<vaadin.version>6.8.8</vaadin.version>
-		<gwt.version>2.3.0</gwt.version>
-		<jaxb22.version>2.2.4-1</jaxb22.version>
-		<hibernate-version>4.1.4.Final</hibernate-version>
 	</properties>
 	<organization>
 		<name>Prometheus Consulting</name>
@@ -34,8 +29,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-vaadinsupport</artifactId>
-			<version>${madura.vaadinsupport.version}</version>
+			<artifactId>madura-vaadin</artifactId>
 			<exclusions>
 				<!-- Needs to be excluded because it pulls the wrong version -->
 				<exclusion>
@@ -71,7 +65,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -81,7 +74,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -94,7 +86,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>

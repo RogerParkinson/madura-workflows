@@ -44,26 +44,6 @@ limitations under the License.
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
-    <bean id="application" class="nz.co.senanque.workflowui.WorkflowUI" factory-bean="springContextLoader" factory-method="get">
-    	<property name="theme" value="pizza"/>
-    </bean>
-	<bean id="viewManager" class="nz.co.senanque.vaadinsupport.viewmanager.ViewManagerImpl">
-		<property name="mainWindow">
-			<bean class="com.vaadin.ui.Window"/>
-		</property>
-		<property name="initialLayouts">
-			<list>
-				<bean class="nz.co.senanque.vaadinsupport.viewmanager.LoginLayout"/>
-			</list>
-		</property>
-		<property name="applicationLayouts">
-			<list>
-				<bean id="mainLayout" class="nz.co.senanque.workflowui.MainLayout"/>
-			</list>
-		</property>
-		<property name="adjustCaptions" value="false"/>
-	</bean>
-	
 	<bean id="processInstances" class="nz.co.senanque.workflowui.ProcessInstances"/>
 	<bean id="launchWizard" class="nz.co.senanque.workflowui.LaunchWizard"/>
 	<bean id="formWizard" class="nz.co.senanque.workflowui.FormWizard"/>
@@ -75,9 +55,6 @@ limitations under the License.
 	<bean id="initialBundleSelector" class="nz.co.senanque.workflowui.bundles.InitialBundleSelectorImpl">
 		<property name="permissionManager" ref="permissionManager"/>
 	</bean>
-
-	<!-- This is a demo login listener. Replace it with a your own production login listener for production systems  -->
-  	<bean id="loginListener" class="nz.co.senanque.vaadinsupport.viewmanager.SpringLoginListener"/>
 
     <bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory"/>
     <bean id="audits" class="nz.co.senanque.workflowui.Audits"/>

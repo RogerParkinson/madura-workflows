@@ -19,10 +19,9 @@ import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadinsupport.MaduraForm;
-import nz.co.senanque.vaadinsupport.application.MaduraSessionManager;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
-import nz.co.senanque.vaadinsupport.viewmanager.ViewManager;
+import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraSessionManager;
+import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
@@ -34,20 +33,26 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
 
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 
 /**
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class FormWizard extends Window implements MessageSourceAware {
 	
 	private static final Logger log = LoggerFactory
@@ -55,15 +60,14 @@ public class FormWizard extends Window implements MessageSourceAware {
 	
 	private static final long serialVersionUID = 1L;
 	private Layout main;
-	private Panel auditPanel;
-	private Panel formPanel;
-	private Panel processPanel;
+	private VerticalLayout auditPanel;
+	private VerticalLayout formPanel;
+	private VerticalLayout processPanel;
 	private TabSheet tabSheet;
     private String m_windowWidth = "800px";
     private String m_windowHeight = "600px";
     private MaduraForm m_processForm;
 
-    @Autowired private ViewManager m_viewManager;
 	@Autowired private MaduraSessionManager m_maduraSessionManager;
 	@Autowired private transient Audits m_audits;
 	@Autowired private transient WorkflowClient m_workflowClient;
@@ -78,19 +82,19 @@ public class FormWizard extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-        main.setStyleName(Panel.STYLE_LIGHT);
+//        main.setStyleName(Panel.STYLE_LIGHT);
         this.setWidth(getWindowWidth());
         this.setHeight(getWindowHeight());
         
         tabSheet = new TabSheet();
         
-        formPanel = new Panel();
+        formPanel = new VerticalLayout();
         tabSheet.addTab(formPanel,m_messageSourceAccessor.getMessage("formwizard.form"));
-        processPanel = new Panel();
+        processPanel = new VerticalLayout();
         tabSheet.addTab(processPanel,m_messageSourceAccessor.getMessage("formwizard.process"));
-        auditPanel = new Panel();
+        auditPanel = new VerticalLayout();
         tabSheet.addTab(auditPanel,m_messageSourceAccessor.getMessage("formwizard.audit"));
-        main.setMargin(true);
+//        main.setMargin(true);
         main.addComponent(tabSheet);
 	}
 
@@ -121,8 +125,9 @@ public class FormWizard extends Window implements MessageSourceAware {
 	    	processInstance = getWorkflowClient().lockProcessInstance(form.getProcessInstance(), 
 	    			pm.hasPermission(FixedPermissions.TECHSUPPORT), pm.getCurrentUser());
 	     	if (processInstance == null) {
-				String message = m_messageSourceAccessor.getMessage("failed.to.get.lock");
-				m_viewManager.getMainWindow().showNotification(message);
+	     		com.vaadin.ui.Notification.show(m_messageSourceAccessor.getMessage("failed.to.get.lock"),
+						m_messageSourceAccessor.getMessage("message.noop"),
+						com.vaadin.ui.Notification.Type.HUMANIZED_MESSAGE);
 	    		return;
 	    	}
     	}
@@ -138,7 +143,7 @@ public class FormWizard extends Window implements MessageSourceAware {
 				fireEvent(event);
 			}});
 
-    	formPanel.requestRepaint();
+    	formPanel.markAsDirty();
 
     	BeanItem<ProcessInstance> beanItem = new BeanItem<ProcessInstance>(form.getProcessInstance());
 
@@ -157,21 +162,21 @@ public class FormWizard extends Window implements MessageSourceAware {
      	processPanel.removeAllComponents();
     	processPanel.addComponent(m_processForm);
     	Button attachments = new Button(m_messageSourceAccessor.getMessage("attachments", "Attachments"));
-		attachments.addListener(new ClickListener(){
+		attachments.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
 				m_attachmentsPopup.load(form.getProcessInstance().getId());				
 			}});
 		processPanel.addComponent(attachments);
-    	processPanel.requestRepaint();
+    	processPanel.markAsDirty();
     	
     	auditPanel.removeAllComponents();
     	m_audits.setup(form.getProcessInstance());
     	auditPanel.addComponent(m_audits);
 
     	if (getParent() == null) {
-        	m_viewManager.getMainWindow().addWindow(this);
+    		UI.getCurrent().addWindow(this);
         	this.center();
         }
     }
@@ -180,18 +185,8 @@ public class FormWizard extends Window implements MessageSourceAware {
     	m_processForm.destroy();
     	getMaduraSessionManager().getValidationSession().unbindAll();
     	getMaduraSessionManager().close();
-    	if (getParent() != null) {
-    		getParent().removeWindow(this);
-    	}
+    	super.close();
     }
-
-	public ViewManager getViewManager() {
-		return m_viewManager;
-	}
-
-	public void setViewManager(ViewManager viewManager) {
-		m_viewManager = viewManager;
-	}
 
 	public String getWindowWidth() {
 		return m_windowWidth;

@@ -48,47 +48,22 @@ limitations under the License.
     <import resource="classpath:/database-context.xml"/>
 
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+    <context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules"/>
+    <context:property-placeholder location="classpath:/config.properties" />
     <!-- client code uses this to launch processes -->
     <bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient" />
     <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/NMCInstances.xsd" />
         <property name="processes" value="classpath:/NMCWorkflow.wrk" />
-        <property name="validationEngine" ref="validationEngine1"/>
+        <property name="validationEngine" ref="validationEngine"/>
     </bean>
 
-    <bean id="validationEngine1" class="nz.co.senanque.validationengine.ValidationEngineImpl">
-    	<qualifier type="validationEngine1"/>
-        <property name="metadata">
-		    <bean class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
-		        <property name="package" value="nz.co.senanque.workflow.nmcinstances"/>
-		        <property name="fieldValidators">
-		            <list>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-		                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-		            </list>
-		        </property>
-		        <property name="choicesDocument" value="classpath:choices.xml"/>
-		    </bean>
-
-        </property>
-        <property name="plugins">
-            <list>
-                <ref bean="MaduraRulesPlugin"/>
-            </list>
-        </property>
-    </bean>
     <bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
     <bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
     <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
     <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />
-    
-    <bean id="ReviewClaim" class="nz.co.senanque.forms.WorkflowFormImpl">
-    </bean>    
+    <bean id="ReviewClaim" class="nz.co.senanque.forms.WorkflowFormImpl"/>
 
     <bean id="bundleSelector" class="nz.co.senanque.workflow.BundleSelectorDefaultImpl"/>
     <bean id="initialBundleSelector" class="nz.co.senanque.workflow.InitialBundleSelectorDefaultImpl"/>
@@ -98,22 +73,14 @@ limitations under the License.
     <!-- This lock factory is useful for testing but not for production -->
     <bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory" />
 
-    <!-- Madura configuration (not session dependent)-->
-    <context:component-scan base-package="nz.co.senanque.workflow.nmcrules"/>
-    <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />
-    
     <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
         <property name="resource" value="classpath:/Messages.xml" />
         <property name="parentMessageSource">
             <bean
-                class="org.springframework.context.support.ResourceBundleMessageSource">
+                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
                 <property name="basenames">
                     <list>
                         <value>localmessages</value>
-                        <value>messages</value>
-                        <value>ValidationMessages</value>
-                        <value>org/springframework/security/messages</value>
-                        <value>/nz/co/senanque/workflow/nmcrules/messages</value>
                     </list>
                 </property>
             </bean>

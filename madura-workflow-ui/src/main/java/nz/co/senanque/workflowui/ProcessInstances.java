@@ -19,8 +19,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import nz.co.senanque.vaadinsupport.formatting.FormattingTable;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
+import nz.co.senanque.vaadin.format.FormattingTable;
+import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 import nz.co.senanque.workflowui.bundles.QueueProcessManager;
 
@@ -37,6 +37,7 @@ import com.vaadin.addon.jpacontainer.JPAContainerItem;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -47,6 +48,8 @@ import com.vaadin.ui.VerticalLayout;
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class ProcessInstances extends VerticalLayout implements MessageSourceAware {
 	
     Logger logger = LoggerFactory.getLogger(ProcessInstances.class);
@@ -120,11 +123,12 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 		}
 		logger.debug("setting up ProcessInstances for {}",getPermissionManager().getCurrentUser());
 		final Filter filter = getQueueProcessManager().getQueueFilter(getPermissionManager());
+		this.setMargin(false);
 	
 		m_processTable = getProcessTable(filter);
 		addComponent(m_processTable);
 		Button refresh = new Button(m_messageSourceAccessor.getMessage("refresh"));
-		refresh.addListener(new ClickListener() {
+		refresh.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -145,7 +149,7 @@ public class ProcessInstances extends VerticalLayout implements MessageSourceAwa
 	
 	private ProcessTable getProcessTable(Filter filter) {
 		ProcessTable processTable = new ProcessTable(getContainer(filter));
-		processTable.addListener(new ItemClickEvent.ItemClickListener() {
+		processTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
 
 			private static final long serialVersionUID = 1L;
             @SuppressWarnings("unchecked")

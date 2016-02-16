@@ -15,20 +15,28 @@
  *******************************************************************************/
 package nz.co.senanque.workflowui.bundles;
 
+import java.io.Serializable;
+
 import nz.co.senanque.madura.bundle.BundleManager;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
+import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.InitialBundleSelector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.spring.annotation.UIScope;
+
 /**
  * @author Roger Parkinson
  *
  */
-public class InitialBundleSelectorImpl implements InitialBundleSelector {
+@UIScope
+@org.springframework.stereotype.Component
+public class InitialBundleSelectorImpl implements InitialBundleSelector, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(InitialBundleSelectorImpl.class);

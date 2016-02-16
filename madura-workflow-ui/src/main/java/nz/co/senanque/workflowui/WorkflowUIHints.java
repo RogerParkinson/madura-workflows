@@ -15,8 +15,8 @@
  *******************************************************************************/
 package nz.co.senanque.workflowui;
 
-import nz.co.senanque.vaadinsupport.HintsImpl;
-import nz.co.senanque.vaadinsupport.MaduraPropertyWrapper;
+import nz.co.senanque.vaadin.HintsImpl;
+import nz.co.senanque.vaadin.MaduraPropertyWrapper;
 
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
@@ -31,7 +31,7 @@ import com.vaadin.ui.TextField;
 public class WorkflowUIHints extends HintsImpl {
 
 	private static final long serialVersionUID = 1L;
-	public AbstractField getDateField(MaduraPropertyWrapper property) {
+	public AbstractField<?> getDateField(MaduraPropertyWrapper property) {
 		if (property.getName().equals("lastUpdated")) {
 			TextField tf = new TextField();
 			tf.setReadOnly(true);
@@ -44,7 +44,7 @@ public class WorkflowUIHints extends HintsImpl {
 		}
 		return super.getDateField(property);
 	}
-    public AbstractField getTextField(MaduraPropertyWrapper property) {
+	public AbstractField<?> getTextField(MaduraPropertyWrapper property) {
     	AbstractTextField ret = null;
         if (property.isSecret())
         {

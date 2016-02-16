@@ -48,7 +48,7 @@ limitations under the License.
     <import resource="classpath:/database-orderinstances-context.xml"/>
 
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+ 	<bean id="PropertySourcesPlaceholderConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"/>
 
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
@@ -70,7 +70,6 @@ limitations under the License.
                 class="org.springframework.context.support.ResourceBundleMessageSource">
                 <property name="basenames">
                     <list>
-                        <value>org/springframework/security/messages</value>
                         <value>ValidationMessages</value>
                     </list>
                 </property>

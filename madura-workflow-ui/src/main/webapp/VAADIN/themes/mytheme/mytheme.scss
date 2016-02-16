@@ -1,0 +1,103 @@
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 300;
+//$v-font-family: "Open Sans", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 0%, 98%);
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 8%;
+//$v-bevel-depth: 30%;
+//$v-shadow-opacity: 5%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
+$v-component-group-spacing: 12px;
+$v-unit-size: 40px;
+$v-animations-enabled: false;
+
+@import "../valo/valo.scss";
+
+@mixin mytheme {
+  @include valo;
+
+ // Insert your own theme rules here
+.v-window-contents {
+	margin-left:30px;
+}
+ .v-button {
+ 	margin-right:10px;
+ }
+ .v-form-footer {
+ 	margin-top:0px !important; // needed to add space between the main form and the buttons on the footer
+ }
+.v-captiontext, legend {
+	font-style: italic;
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: bold;
+	color: $v-text-color;
+	text-decoration: none;
+}
+.heading {
+	background-color: white;
+	background-image: url("images/heading-background.gif");
+	background-repeat:	repeat-y;
+	background-position:	right center;
+	opacity:	1;
+	margin: 0;
+	padding: 0;
+	}
+.heading-words {
+    color: white;
+    font-size: 16pt;
+    font-weight: bold;
+    line-height: inherit;
+    text-shadow: -1px 1px 0px #000;
+    padding-top: 5px;
+    padding-right: 6px;
+    font-family:	verdana,sans-serif;
+	background-color: transparent;
+	opacity:	1;
+	}
+.heading-buttons {
+	background-color: white;
+	margin: 0;
+	padding: 0;
+	padding-left: 5px;
+	}
+.heading-buttons .v-button-link .v-button-caption, .v-nativebutton-link .v-nativebutton-caption {
+    color: #0000ce;
+    font-size: 12pt;
+    font-weight: normal;
+    line-height: inherit;
+    text-shadow: none;
+    padding-right: 16px;
+}
+.v-window-wrap {
+	padding: 10px;
+}
+.v-menubar {
+	line-height: 26px;
+	height: 26px;
+	vertical-align:top;
+}
+.v-verticallayout {
+	margin-left:5px;
+}
+}
+

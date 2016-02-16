@@ -24,8 +24,7 @@ import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
-import nz.co.senanque.vaadinsupport.viewmanager.ViewManager;
+import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 import nz.co.senanque.workflowui.bundles.QueueProcessManager;
@@ -40,6 +39,7 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -49,6 +49,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -59,18 +60,19 @@ import com.vaadin.ui.Window;
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class LaunchWizard extends Window implements MessageSourceAware {
 	
 	private static final long serialVersionUID = 1L;
 	@Autowired PermissionManager m_permissionManager;
 	private Layout main;
-	private Panel panel;
+	private VerticalLayout panel;
     private String m_windowWidth = "800px";
     private String m_windowHeight = "400px";
 
     ListSelect select = new ListSelect();
 	@Autowired transient QueueProcessManager m_queueProcessManager;
-    @Autowired private ViewManager m_viewManager;
     @Autowired transient WorkflowClient m_workflowClient;
     @Autowired transient AttachmentsPopup m_attachmentsPopup;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
@@ -123,12 +125,12 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-        main.setStyleName(Panel.STYLE_LIGHT);
         this.setWidth(getWindowWidth());
         this.setHeight(getWindowHeight());
         
-        panel = new Panel();
-        main.setMargin(true);
+        panel = new VerticalLayout();
+        panel.setMargin(true);
+//        main.setStyleName(Panel.STYLE_LIGHT);
         main.addComponent(panel);
         
         panel.addComponent(getInitialLayout());
@@ -143,14 +145,14 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         actions.setMargin(true);
         actions.setSpacing(true);
         actions.addComponent(cancel);
-        cancel.addListener(new ClickListener(){
+        cancel.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
 				close();
 			}});
         select.setImmediate(true);
-        select.addListener(new ValueChangeListener(){
+        select.addValueChangeListener(new ValueChangeListener(){
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
@@ -172,7 +174,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 								} else if (s.startsWith(WorkflowForm.OK)) {
 									panel.removeAllComponents();
 									panel.addComponent(getFinalLayout(processDefinition.getName(),Long.parseLong(s.substring(WorkflowForm.OK.length())),form.isLauncher()));
-									panel.requestRepaint();
+									panel.markAsDirty();;
 								}
 							} catch (Exception e) {
 								// ignore null pointer exceptions etc
@@ -181,7 +183,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 					panel.removeAllComponents();
 					panel.setSizeUndefined();
 					panel.addComponent((VerticalLayout)form);
-					panel.requestRepaint();
+					panel.markAsDirty();
 				}
 			}});
         ret.addComponent(select);
@@ -199,7 +201,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         actions.setMargin(true);
         actions.setSpacing(true);
         actions.addComponent(okay);
-        okay.addListener(new ClickListener(){
+        okay.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -211,7 +213,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         ret.addComponent(actions);
 		Button attachments = new Button(m_messageSourceAccessor.getMessage("attachments", "Attachments"));
 		actions.addComponent(attachments);
-		attachments.addListener(new ClickListener(){
+		attachments.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -248,14 +250,9 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 		}
 		panel.addComponent(getInitialLayout());
         if (getParent() == null) {
-        	m_viewManager.getMainWindow().addWindow(this);
+        	UI.getCurrent().addWindow(this);
         	this.center();
         }
-    }
-    public void close() {
-    	if (getParent() != null) {
-    		getParent().removeWindow(this);
-    	}
     }
 
     public PermissionManager getPermissionManager() {
@@ -264,14 +261,6 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 
 	public void setPermissionManager(PermissionManager permissionManager) {
 		m_permissionManager = permissionManager;
-	}
-
-	public ViewManager getViewManager() {
-		return m_viewManager;
-	}
-
-	public void setViewManager(ViewManager viewManager) {
-		m_viewManager = viewManager;
 	}
 
 	@Override

@@ -46,45 +46,17 @@ limitations under the License.
     <description>Main Configuration</description>
     
     <context:annotation-config />
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
-    <!-- client code uses this to launch processes -->
-
-    <context:component-scan base-package="nz.co.senanque.workflow.nmcrules"/>
-    <bean id="validationEngine" class="nz.co.senanque.validationengine.ValidationEngineImpl">
-        <property name="metadata" ref="metadata"/>
-        <property name="plugins">
-            <list>
-                <ref bean="MaduraRulesPlugin"/>
-            </list>
-        </property>
-    </bean>
-    <bean id="metadata" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
-        <property name="package" value="nz.co.senanque.workflow.nmcinstances"/>
-        <property name="fieldValidators">
-            <list>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-            </list>
-        </property>
-        <property name="choicesDocument" value="classpath:choices.xml"/>
-    </bean>
-    <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />
+    <context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules"/>
+    <context:property-placeholder location="classpath:/config.properties" />
 
     <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
         <property name="resource" value="classpath:/Messages.xml" />
         <property name="parentMessageSource">
             <bean
-                class="org.springframework.context.support.ResourceBundleMessageSource">
+                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
                 <property name="basenames">
                     <list>
                         <value>localmessages</value>
-                        <value>messages</value>
-                        <value>ValidationMessages</value>
-                        <value>org/springframework/security/messages</value>
-                        <value>/nz/co/senanque/workflow/nmcrules/messages</value>
                     </list>
                 </property>
             </bean>

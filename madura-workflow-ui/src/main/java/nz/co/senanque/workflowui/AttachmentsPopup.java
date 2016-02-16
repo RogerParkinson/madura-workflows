@@ -23,9 +23,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import nz.co.senanque.vaadinsupport.formatting.FormattingTable;
-import nz.co.senanque.vaadinsupport.permissionmanager.PermissionManager;
-import nz.co.senanque.vaadinsupport.viewmanager.ViewManager;
+import nz.co.senanque.vaadin.format.FormattingTable;
+import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowDAO;
 import nz.co.senanque.workflow.instances.Attachment;
 import nz.co.senanque.workflowui.AttachmentPopup.AttachmentEvent;
@@ -42,14 +41,17 @@ import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.And;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.terminal.DownloadStream;
-import com.vaadin.terminal.FileResource;
+import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.server.DownloadStream;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -57,19 +59,20 @@ import com.vaadin.ui.Window;
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class AttachmentsPopup extends Window implements MessageSourceAware {
 	
 	private static final long serialVersionUID = 1L;
 	private String[] columns = new String[]{"fileName", "comment", "created"};
 	private Layout main;
-	private Panel panel;
+	private Layout panel;
 	private String m_windowWidth = "800px";
 	private String m_windowHeight = "600px";
 	@PersistenceContext(unitName="em-workflow")
 	private EntityManager m_entityManager;
 	@Autowired PermissionManager m_permissionManager;
 	@Autowired WorkflowDAO m_workflowDAO;
-	@Autowired private ViewManager m_viewManager;
 	private transient MessageSource m_messageSource;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
 	private AttachmentsTable m_attachmentsTable;
@@ -82,9 +85,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 		m_messageSourceAccessor = new MessageSourceAccessor(m_messageSource);
 	}
     public void close() {
-    	if (getParent() != null) {
-    		getParent().removeWindow(this);
-    	}
+    	UI.getCurrent().removeWindow(this);
     }
 	
 	public class AttachmentsTable extends FormattingTable {
@@ -100,12 +101,12 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-        main.setStyleName(Panel.STYLE_LIGHT);
+//        main.setStyleName(Panel.STYLE_LIGHT);
         main.setWidth(getWindowWidth());
         main.setHeight(getWindowHeight());
         
-        panel = new Panel();
-        main.setMargin(true);
+        panel = new VerticalLayout();
+//        main.setMargin(true);
         main.addComponent(panel);
         
         setCaption(m_messageSourceAccessor.getMessage("attachments", "Attachments"));
@@ -117,7 +118,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 		hl.setMargin(true);
 		hl.setSpacing(true);
 		Button done = new Button(m_messageSourceAccessor.getMessage("done", "Close"));
-		done.addListener(new ClickListener(){
+		done.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -125,7 +126,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 			}});
 
 		Button newAttachment = new Button(m_messageSourceAccessor.getMessage("new", "New"));
-		newAttachment.addListener(new ClickListener(){
+		newAttachment.addClickListener(new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -139,7 +140,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 		m_attachmentPopup.addListener(AttachmentEvent.class, this, "refresh");
 
     	if (getParent() == null) {
-        	m_viewManager.getMainWindow().addWindow(this);
+    		UI.getCurrent().addWindow(this);
         	this.center();
         }
 	}
@@ -156,7 +157,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 
 	private AttachmentsTable getAttachmentsTable(Filter filter) {
 		AttachmentsTable attachmentsTable = new AttachmentsTable(getContainer(filter));
-		attachmentsTable.addListener(new ItemClickEvent.ItemClickListener() {
+		attachmentsTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
 
 			private static final long serialVersionUID = 1L;
             @SuppressWarnings("unchecked")
@@ -172,7 +173,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 	}
 	
 	private void makeStream(final Attachment attachment) {
-        final FileResource stream = new FileResource(new File(""),m_viewManager.getApplication()) {
+        final FileResource stream = new FileResource(new File("")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -188,7 +189,7 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
             }
         };
         stream.setCacheTime(0);
-        this.open(stream, "_blank", true);
+        Page.getCurrent().open(stream, "_blank", true);
 //        panel.requestRepaint();
 	}
 	
@@ -230,12 +231,6 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 	}
 	public void setWindowHeight(String windowHeight) {
 		m_windowHeight = windowHeight;
-	}
-	public ViewManager getViewManager() {
-		return m_viewManager;
-	}
-	public void setViewManager(ViewManager viewManager) {
-		m_viewManager = viewManager;
 	}
 	public AttachmentPopup getAttachmentPopup() {
 		return m_attachmentPopup;

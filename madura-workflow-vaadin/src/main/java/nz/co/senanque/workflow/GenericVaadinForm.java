@@ -22,10 +22,10 @@ import javax.persistence.OptimisticLockException;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadinsupport.MaduraForm;
-import nz.co.senanque.vaadinsupport.SimpleButtonPainter;
-import nz.co.senanque.vaadinsupport.SubmitButtonPainter;
-import nz.co.senanque.vaadinsupport.application.MaduraSessionManager;
+import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraSessionManager;
+import nz.co.senanque.vaadin.SimpleButtonPainter;
+import nz.co.senanque.vaadin.SubmitButtonPainter;
 import nz.co.senanque.validationengine.ValidationObject;
 import nz.co.senanque.validationengine.ValidationSession;
 import nz.co.senanque.workflow.instances.ProcessInstance;
@@ -45,6 +45,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -105,18 +106,18 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	
 	protected void createButtons() {
-        okay = m_form.createButton("okay",new SubmitButtonPainter(m_maduraSessionManager),this);
-        okay.setData("OK");
-        cancel = m_form.createButton("cancel",new SimpleButtonPainter(m_maduraSessionManager),this);
-        cancel.setData("cancel");
+        okay = m_form.createSubmitButton("okay", this);
+//        okay.setData("OK");
+        cancel = m_form.createButton("cancel",this);
+//        cancel.setData("cancel");
         HorizontalLayout actions = new HorizontalLayout();
         actions.setMargin(true);
         actions.setSpacing(true);
         actions.addComponent(okay);
         cancel.addListener(this);
         actions.addComponent(cancel);
-		park = m_form.createButton("park",new SubmitButtonPainter(m_maduraSessionManager),this);
-		park.setData("park");
+		park = m_form.createSubmitButton("park",this);
+//		park.setData("park");
         actions.addComponent(park);
         park.addListener(this);
         park.setVisible(false);
@@ -174,7 +175,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 		} catch (OptimisticLockException e) {
 			String message = m_messageSourceAccessor.getMessage(
 					"lock.out", "Locked out");
-			getApplication().getMainWindow().showNotification(message);
+			Notification.show(message);
 			return processId;
 			}
 		return processId;

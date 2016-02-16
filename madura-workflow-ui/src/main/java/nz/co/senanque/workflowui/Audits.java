@@ -33,6 +33,7 @@ import com.vaadin.addon.jpacontainer.JPAContainerItem;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -41,6 +42,8 @@ import com.vaadin.ui.VerticalLayout;
  * @author Roger Parkinson
  *
  */
+@UIScope
+@org.springframework.stereotype.Component
 public class Audits extends VerticalLayout implements MessageSourceAware {
 	
 	private static final long serialVersionUID = 1L;
