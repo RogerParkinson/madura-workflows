@@ -15,9 +15,11 @@
  *******************************************************************************/
 package nz.co.senanque.forms;
 
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * This provides a way to specify the environment for the form factory.
- * It is just a wrapper for a string but since it needs to be autowired it
+ * It is just a wrapper for a configured string but since it needs to be autowired it
  * needs to be its own class.
  * 
  * @author Roger Parkinson
@@ -25,6 +27,7 @@ package nz.co.senanque.forms;
  */
 public class FormEnvironment {
 	
+    @Value("${nz.co.senanque.forms.FormEnvironment.name:Vaadin}")
 	private String m_name;
 
 	public String getName() {

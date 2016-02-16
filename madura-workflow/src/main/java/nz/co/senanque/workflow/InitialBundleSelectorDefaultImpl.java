@@ -15,7 +15,6 @@
  *******************************************************************************/
 package nz.co.senanque.workflow;
 
-import nz.co.senanque.workflow.instances.ProcessInstance;
 
 /**
  * This is a dummy bundle selector that actually does nothing at all.

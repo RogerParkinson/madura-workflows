@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 
+import nz.co.senanque.forms.FormEnvironment;
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.locking.LockFactory;
 import nz.co.senanque.locking.simple.SimpleLockFactory;
@@ -140,6 +141,11 @@ public class MyUI extends UI implements MessageSourceAware {
     	@UIScope
     	public WorkflowClient getWorkflowClient() {
     		return new WorkflowClient();
+    	}
+    	@Bean(name="formEnvironment")
+    	@BundleExport
+    	public FormEnvironment getFormEnvironment() {
+    		return new FormEnvironment();
     	}
     	@Bean(name="workflowDAO")
     	@BundleExport

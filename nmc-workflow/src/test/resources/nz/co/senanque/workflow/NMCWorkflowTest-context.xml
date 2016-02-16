@@ -73,17 +73,11 @@ limitations under the License.
     <!-- This lock factory is useful for testing but not for production -->
     <bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory" />
 
-    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
-        <property name="resource" value="classpath:/Messages.xml" />
-        <property name="parentMessageSource">
-            <bean
-                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
-                <property name="basenames">
-                    <list>
-                        <value>localmessages</value>
-                    </list>
-                </property>
-            </bean>
+    <bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+        <property name="basenames">
+            <list>
+                <value>localmessages</value>
+            </list>
         </property>
     </bean>
 

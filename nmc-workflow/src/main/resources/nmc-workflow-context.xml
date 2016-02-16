@@ -48,7 +48,7 @@ limitations under the License.
     <import resource="classpath:/database-nmcinstances-context.xml"/>
 
     <context:annotation-config />
-	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin" />
+	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.forms,nz.co.senanque.workflow.nmc,nz.co.senanque.vaadin" />
 	<context:property-placeholder location="classpath:/config.properties" />
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
@@ -64,17 +64,6 @@ limitations under the License.
         <property name="processes" value="classpath:/NMCWorkflow.wrk" />
         <property name="validationEngine" ref="validationEngine" />
     </bean>
-
-    <bean id="contextDAO" class="nz.co.senanque.workflow.nmc.ContextJPA"/>
-
-	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
-		<property name="name" value="Vaadin"/>
-	</bean>
-    
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl">
-    	<property name="environment" ref="environment"/>
-    </bean>
-
     <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
     <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />    
 
@@ -148,17 +137,11 @@ limitations under the License.
     	</property>
     </bean>
 
-    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
-        <property name="resource" value="classpath:/Messages.xml" />
-        <property name="parentMessageSource">
-            <bean
-                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
-                <property name="basenames">
-                    <list>
-                        <value>localmessages</value>
-                    </list>
-                </property>
-            </bean>
+    <bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+        <property name="basenames">
+            <list>
+                <value>localmessages</value>
+            </list>
         </property>
     </bean>
     <!-- End Madura configuration -->

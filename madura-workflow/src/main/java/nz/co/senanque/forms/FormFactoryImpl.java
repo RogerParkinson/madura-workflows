@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roger Parkinson
  *
  */
+@org.springframework.stereotype.Component("formFactory")
 public class FormFactoryImpl implements BeanFactoryAware, FormFactory {
 	
 	private static final Logger log = LoggerFactory

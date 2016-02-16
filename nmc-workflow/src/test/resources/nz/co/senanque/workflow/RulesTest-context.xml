@@ -49,17 +49,11 @@ limitations under the License.
     <context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules"/>
     <context:property-placeholder location="classpath:/config.properties" />
 
-    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
-        <property name="resource" value="classpath:/Messages.xml" />
-        <property name="parentMessageSource">
-            <bean
-                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
-                <property name="basenames">
-                    <list>
-                        <value>localmessages</value>
-                    </list>
-                </property>
-            </bean>
+    <bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+        <property name="basenames">
+            <list>
+                <value>localmessages</value>
+            </list>
         </property>
     </bean>
     <!-- End Madura configuration -->

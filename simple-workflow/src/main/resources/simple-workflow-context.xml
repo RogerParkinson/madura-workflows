@@ -46,9 +46,9 @@ limitations under the License.
     <description>Main Configuration</description>
     
     <import resource="classpath:/database-orderinstances-context.xml"/>
-
+	<context:component-scan base-package="nz.co.senanque.forms,nz.co.senanque.workflow.simple,nz.co.senanque.vaadin"/>
     <context:annotation-config />
- 	<bean id="PropertySourcesPlaceholderConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"/>
+	<context:property-placeholder location="classpath:/config.properties" />
 
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
@@ -58,11 +58,6 @@ limitations under the License.
         <property name="processes" value="classpath:/OrderWorkflow.wrk" />
     </bean>
     <bean id="contextTester" class="nz.co.senanque.workflow.ContextTesterImpl"/>
-    <bean id="contextDAO" class="nz.co.senanque.workflow.simple.ContextJPA"/>
-    <bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory" />
-	
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
-
     <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
         <property name="resource" value="classpath:/Messages.xml" />
         <property name="parentMessageSource">

@@ -18,7 +18,6 @@ package nz.co.senanque.messaging;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
 import javax.annotation.PostConstruct;

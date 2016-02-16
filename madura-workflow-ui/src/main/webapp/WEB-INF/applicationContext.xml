@@ -41,7 +41,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <import resource="database-context.xml"/>
     
     <context:component-scan base-package="nz.co.senanque.workflowui, nz.co.senanque.login" />
-    <bean id="permissionManager" class="nz.co.senanque.vaadin.permissionmanager.PermissionManagerImpl" scope="vaadin-ui"/>
    
 	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
 		<property name="basenames">
@@ -50,11 +49,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 			</list>
 		</property>
 	</bean>
-
-	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
-		<property name="name" value="Vaadin"/>
-	</bean>
-
  	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
  		<property name="directory" ref="bundlesDir"/>
@@ -67,13 +61,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				<entry key="atomikosUserTransaction" value-ref="atomikosUserTransaction"/>
 				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
 				<entry key="genericEndpoint" value-ref="genericEndpoint"/>
-				<entry key="environment" value-ref="environment"/>
+<!-- 				<entry key="environment" value-ref="formEnvironment"/> -->
 			</map>
 		</property>
-<!-- 		<property name="time" value="5000"/>  Let the scheduler handle this -->
 	</bean>
-
-	<bundle:bean id="workflowManager" interface="nz.co.senanque.workflow.WorkflowManager"/>
 
     <!-- endpoints needed by SI -->
     <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint" />

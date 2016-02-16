@@ -17,7 +17,6 @@ package nz.co.senanque.workflow;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;

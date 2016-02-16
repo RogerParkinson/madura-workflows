@@ -48,7 +48,7 @@ limitations under the License.
     <import resource="classpath:/database-orderinstances-context.xml"/>
     <import resource="classpath:/SI-context.xml"/>
 
-	<context:component-scan base-package="nz.co.senanque.workflow.orderrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin"/>
+	<context:component-scan base-package="nz.co.senanque.workflow.orderrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.forms,nz.co.senanque.workflow.order,nz.co.senanque.vaadin"/>
     <context:annotation-config />
 	<context:property-placeholder location="classpath:/config.properties" />
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
@@ -64,16 +64,6 @@ limitations under the License.
         <property name="schema" value="classpath:/OrderInstances.xsd" />
         <property name="processes" value="classpath:/OrderWorkflow.wrk" />
         <property name="validationEngine" ref="validationEngine" />
-    </bean>
-
-    <bean id="contextDAO" class="nz.co.senanque.workflow.order.ContextJPA"/>
-
-	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
-		<property name="name" value="Vaadin"/>
-	</bean>
-    
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl">
-    	<property name="environment" ref="environment"/>
     </bean>
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
     	<property name="referenceName" value="orderName"/>
@@ -107,17 +97,11 @@ limitations under the License.
     <bean id="temperatureCompute" class="nz.co.senanque.workflow.TemperatureComputeClass" />    
     <!-- end of demo process definitions -->
 
-    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
-        <property name="resource" value="classpath:/Messages.xml" />
-        <property name="parentMessageSource">
-            <bean
-                class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
-                <property name="basenames">
-                    <list>
-                        <value>localmessages</value>
-                    </list>
-                </property>
-            </bean>
+    <bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+        <property name="basenames">
+            <list>
+                <value>localmessages</value>
+            </list>
         </property>
     </bean>
     <!-- End Madura configuration -->

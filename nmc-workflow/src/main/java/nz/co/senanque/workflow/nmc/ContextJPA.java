@@ -23,6 +23,7 @@ import nz.co.senanque.workflow.ContextUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -33,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Roger Parkinson
  *
  */
+@Component("contextDAO")
 public class ContextJPA implements ContextDAO {
 
 	private static final Logger log = LoggerFactory
