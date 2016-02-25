@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package nz.co.senanque.workflowui.bundles;
+package nz.co.senanque.workflowui.conf;
 
 import java.util.Comparator;
 import java.util.HashSet;

@@ -19,7 +19,7 @@ import nz.co.senanque.workflow.WorkflowDAO;
 import nz.co.senanque.workflow.WorkflowJPA;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 import nz.co.senanque.workflowui.ProcessInstances.ProcessInstanceEvent;
-import nz.co.senanque.workflowui.bundles.QueueProcessManager;
+import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

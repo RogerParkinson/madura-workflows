@@ -83,8 +83,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	
 	<bundle:bean id="workflowManager" interface="nz.co.senanque.workflow.WorkflowManager"/>
 	<bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient"/>
-    <bean id="initialBundleSelector" class="nz.co.senanque.workflowui.bundles.InitialBundleSelectorImpl"/>
-    <bean id="bundleSelector" class="nz.co.senanque.workflowui.bundles.BundleSelectorImpl"/>
+    <bean id="initialBundleSelector" class="nz.co.senanque.workflowui.conf.InitialBundleSelectorImpl"/>
+    <bean id="bundleSelector" class="nz.co.senanque.workflowui.conf.BundleSelectorImpl"/>
     <!-- endpoints needed by SI -->
     <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint" />
     <bean id="genericEndpoint" class="nz.co.senanque.messaging.GenericEndpoint" />

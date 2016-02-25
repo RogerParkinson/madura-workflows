@@ -26,7 +26,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package nz.co.senanque.workflowui.bundles;
+package nz.co.senanque.workflowui.conf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,6 +42,7 @@ import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.InitialBundleSelector;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
+import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.junit.AfterClass;
 import org.junit.Test;

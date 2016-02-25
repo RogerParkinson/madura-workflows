@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 import nz.co.senanque.vaadin.format.FormattingTable;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.instances.ProcessInstance;
-import nz.co.senanque.workflowui.bundles.QueueProcessManager;
+import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

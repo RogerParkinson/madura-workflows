@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.senanque.workflowconf;
+package nz.co.senanque.workflow.conf;
 
 import javax.annotation.PostConstruct;
 

@@ -27,7 +27,7 @@ import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
-import nz.co.senanque.workflowui.bundles.QueueProcessManager;
+import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

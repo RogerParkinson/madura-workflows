@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.senanque.workflowui.bundles;
+package nz.co.senanque.workflowui.conf;
 
 import nz.co.senanque.madura.bundle.BundleInterface;
 
