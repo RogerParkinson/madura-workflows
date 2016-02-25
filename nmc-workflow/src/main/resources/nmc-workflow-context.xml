@@ -48,24 +48,11 @@ limitations under the License.
     <import resource="classpath:/database-nmcinstances-context.xml"/>
 
     <context:annotation-config />
-	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.forms,nz.co.senanque.workflow.nmc,nz.co.senanque.vaadin" />
+	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.forms,nz.co.senanque.workflow.nmc,nz.co.senanque.vaadin,nz.co.senanque.workflowconf" />
 	<context:property-placeholder location="classpath:/config.properties" />
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
 	</bean>
-	<bean id="maduraSessionManager" class="nz.co.senanque.vaadin.MaduraSessionManager" scope="bundle">
-    	<property name="formFieldFactory" ref="fieldFactory"/>
-    </bean>
-
-    <bean id="fieldFactory" class="nz.co.senanque.vaadin.FieldFactory" scope="bundle"/>
-
-    <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
-        <property name="schema" value="classpath:/NMCInstances.xsd" />
-        <property name="processes" value="classpath:/NMCWorkflow.wrk" />
-        <property name="validationEngine" ref="validationEngine" />
-    </bean>
-    <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
-    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />    
 
 	<!-- These are used by the demo process -->
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">

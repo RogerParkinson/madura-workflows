@@ -30,6 +30,7 @@ import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.locking.LockAction;
 import nz.co.senanque.locking.LockFactory;
 import nz.co.senanque.locking.LockTemplate;
+import nz.co.senanque.logging.HashIdLogger;
 import nz.co.senanque.messaging.MessageMapper;
 import nz.co.senanque.parser.InputStreamParserSource;
 import nz.co.senanque.parser.ParserSource;
@@ -85,6 +86,10 @@ public class WorkflowManagerImpl extends WorkflowManagerAbstract {
     private transient ValidationEngine m_validationEngine;
 	@Autowired 
 	private FormFactory m_formFactory;
+	
+	public WorkflowManagerImpl() {
+		HashIdLogger.log(this,"constructor");
+	}
 
 	/* (non-Javadoc)
 	 * @see nz.co.senanque.workflow.WorkflowManager#createContextDescriptor(java.lang.Object)
@@ -450,6 +455,7 @@ public class WorkflowManagerImpl extends WorkflowManagerAbstract {
 		} catch (Exception e) {
 			throw new WorkflowException(e);
 		}
+		HashIdLogger.log(this,"postconstruct");
 	}
 	/* (non-Javadoc)
 	 * @see nz.co.senanque.workflow.WorkflowManager#shutdown()

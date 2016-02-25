@@ -61,8 +61,8 @@ limitations under the License.
 
     <bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
     <bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
-    <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
-    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />
+    <bean id="HCAReserve" class="nz.co.senanque.workflow.nmc.HCAReserve" />    
+    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.nmc.HCAUnreserve" />
     <bean id="ReviewClaim" class="nz.co.senanque.forms.WorkflowFormImpl"/>
 
     <bean id="bundleSelector" class="nz.co.senanque.workflow.BundleSelectorDefaultImpl"/>

@@ -1,4 +1,4 @@
-package nz.co.senanque.workflow;
+package nz.co.senanque.workflow.nmc;
 
 import java.util.Map;
 
@@ -8,11 +8,13 @@ import nz.co.senanque.workflow.nmcinstances.NMC;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Roger Parkinson
  *
  */
+@Component("HCAUnreserve")
 public class HCAUnreserve implements ComputeType<NMC> {
 
 	private static final Logger log = LoggerFactory

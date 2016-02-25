@@ -78,8 +78,8 @@ limitations under the License.
     
     <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
 
-    <bean id="HCAReserve" class="nz.co.senanque.workflow.HCAReserve" />    
-    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.HCAUnreserve" />    
+    <bean id="HCAReserve" class="nz.co.senanque.workflow.nmc.HCAReserve" />    
+    <bean id="HCAUnreserve" class="nz.co.senanque.workflow.nmc.HCAUnreserve" />    
 
 	<!-- These are used by the demo process -->
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">

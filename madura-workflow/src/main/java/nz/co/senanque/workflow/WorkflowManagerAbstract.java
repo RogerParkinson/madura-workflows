@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import nz.co.senanque.logging.HashIdLogger;
 import nz.co.senanque.messaging.MessageMapper;
 import nz.co.senanque.messaging.MessageSender;
 import nz.co.senanque.process.instances.ComputeType;
@@ -44,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.messaging.Message;
@@ -247,6 +249,7 @@ public abstract class WorkflowManagerAbstract implements WorkflowManager, BeanFa
 	 */
 	@Transactional
 	public void execute(ProcessInstance processInstance) {
+		HashIdLogger.log(this,"execute");
 		TaskBase task = getCurrentTask(processInstance);
 		if (processInstance.getStatus() == TaskStatus.DONE) {
 			return;

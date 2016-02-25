@@ -38,8 +38,6 @@ import org.springframework.web.context.ContextLoaderListener;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.external.org.slf4j.Logger;
-import com.vaadin.external.org.slf4j.LoggerFactory;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.EnableVaadin;
@@ -66,11 +64,10 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI implements MessageSourceAware {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger m_logger = LoggerFactory.getLogger(MyUI.class);
+//	private static Logger m_logger = LoggerFactory.getLogger(MyUI.class);
 	
 	@Autowired private PermissionManager m_permissionManager;
 	@Autowired private AboutWindow m_aboutWindow;
-//	@Autowired private MainLayout m_mainLayout;
 	@Autowired private transient LaunchWizard m_launchWizard;
 	@Autowired private transient FormWizard m_formWizard;
 	@Autowired transient WorkflowClient m_workflowClient;
@@ -116,7 +113,6 @@ public class MyUI extends UI implements MessageSourceAware {
     	@Autowired MessageSource messageSource;
     	
     	public MyConfiguration() {
-    		m_logger.info("MyConfiguration"); // this gets called at application startup, not session startup so this is an app bean.
     	}
 
     	// needed for @PropertySource
@@ -341,10 +337,6 @@ public class MyUI extends UI implements MessageSourceAware {
 		bodyLayout.setHeight("-1px");
 		bodyLayout.setMargin(false);
 		
-//		// panel_1
-//		panel_1 = buildPanel_1(messageSourceAccessor);
-//		bodyLayout.addComponent(panel_1);
-		
 		// panel_2
 		panel_2 = buildPanel_2(messageSourceAccessor);
 		bodyLayout.addComponent(panel_2);
@@ -352,24 +344,6 @@ public class MyUI extends UI implements MessageSourceAware {
 		
 		return bodyLayout;
 	}
-
-//	private Panel buildPanel_1(MessageSourceAccessor messageSourceAccessor) {
-//		// common part: create layout
-//		panel_1 = new Panel();
-//		panel_1.setImmediate(false);
-//		panel_1.setWidth("150px");
-//		panel_1.setHeight("-1px");
-//		
-//		// ApplicationIconContainer
-//		ApplicationIconContainer = new VerticalLayout();
-//		ApplicationIconContainer.setImmediate(false);
-//		ApplicationIconContainer.setWidth("100.0%");
-//		ApplicationIconContainer.setHeight("100.0%");
-//		ApplicationIconContainer.setMargin(false);
-//		panel_1.setContent(ApplicationIconContainer);
-//		
-//		return panel_1;
-//	}
 
 	private Panel buildPanel_2(MessageSourceAccessor messageSourceAccessor) {
 		// common part: create layout
