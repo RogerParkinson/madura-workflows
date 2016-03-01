@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package nz.co.senanque.forms;
+package nz.co.senanque.workflow.conf;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+
+import nz.co.senanque.forms.FormEnvironment;
+import nz.co.senanque.forms.FormFactory;
+import nz.co.senanque.forms.WorkflowForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

@@ -35,7 +35,7 @@ limitations under the License.
 	
 	<bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerMock"/>
 
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl" >
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl" >
      <property name="formsMap">
     	 <map>
     		 <entry key="JUnit">

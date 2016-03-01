@@ -57,7 +57,7 @@ limitations under the License.
     <!-- client code uses this to launch processes -->
     <bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient">
     </bean>
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
 
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:nz/co/senanque/workflow/TestInstances.xsd" />

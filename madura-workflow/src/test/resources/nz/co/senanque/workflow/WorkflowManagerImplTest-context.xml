@@ -39,7 +39,7 @@ limitations under the License.
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
     <bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient"/>
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:nz/co/senanque/workflow/TestInstances.xsd"/>
         <property name="processes" value="classpath:nz/co/senanque/workflow/WorkflowManagerTest.wrk"/>

@@ -75,7 +75,7 @@ limitations under the License.
     </bean>
     <bean id="VaadinFirstForm" class="nz.co.senanque.workflow.VaadinFirstForm" scope="prototype"/>
     
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
 
     <!-- message sender(s) and compute(s) used by the processes -->
     <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">

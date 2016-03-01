@@ -35,7 +35,7 @@ limitations under the License.
 	<bean id="VaadinLaunchForm" class="nz.co.senanque.forms.WorkflowFormMock" scope="prototype"/>
 	<bean id="VaadinFirstForm" class="nz.co.senanque.forms.WorkflowFormMock" scope="prototype"/>
 	
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl" />
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl" />
 
 	<bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerMock"/>
 

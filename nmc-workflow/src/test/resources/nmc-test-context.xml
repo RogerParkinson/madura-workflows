@@ -70,13 +70,13 @@ limitations under the License.
         <property name="processes" value="classpath:/NMCWorkflow.wrk" />
     </bean>
 
-    <bean id="contextDAO" class="nz.co.senanque.workflow.ContextJPA"/>
+    <bean id="contextDAO" class="nz.co.senanque.workflow.nmc.ContextJPA"/>
 
 	<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 		<property name="name" value="Vaadin"/>
 	</bean>
     
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
 
     <bean id="HCAReserve" class="nz.co.senanque.workflow.nmc.HCAReserve" />    
     <bean id="HCAUnreserve" class="nz.co.senanque.workflow.nmc.HCAUnreserve" />    

@@ -52,7 +52,7 @@ limitations under the License.
     <context:property-placeholder location="classpath:/config.properties" />
     <!-- client code uses this to launch processes -->
     <bean id="workflowClient" class="nz.co.senanque.workflow.WorkflowClient" />
-    <bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+    <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/NMCInstances.xsd" />
         <property name="processes" value="classpath:/NMCWorkflow.wrk" />

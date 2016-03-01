@@ -461,7 +461,7 @@ process: Order "Process2" "This is the second process" launchForm=LaunchForm {
 		</list>
 	</property>
 </bean>   
-<bean id="formFactory" class="nz.co.senanque.forms.FormFactoryImpl"/>
+<bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
 <bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
 	<property name="name" value="${myenvironment}"/>
 </bean>

@@ -106,7 +106,7 @@ public class MyUI extends UI implements MessageSourceAware {
     		"nz.co.senanque.vaadin",			// madura-vaadin
     		"nz.co.senanque.validationengine",	// madura-objects
     		"nz.co.senanque.workflowui",
-    		"nz.co.senanque.workflowui.bundles"})
+    		"nz.co.senanque.workflowui.conf"})
     @PropertySource("classpath:config.properties")
     public static class MyConfiguration {
     	
