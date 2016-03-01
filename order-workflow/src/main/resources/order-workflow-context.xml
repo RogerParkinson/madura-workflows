@@ -20,7 +20,6 @@ limitations under the License.
     xmlns:int="http://www.springframework.org/schema/integration"
     xmlns:tx="http://www.springframework.org/schema/tx" 
     xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:security="http://www.springframework.org/schema/security" 
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:int-stream="http://www.springframework.org/schema/integration/stream" 
     xmlns:int-xml="http://www.springframework.org/schema/integration/xml" 
@@ -36,7 +35,6 @@ limitations under the License.
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd
 	    http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
@@ -48,24 +46,12 @@ limitations under the License.
     <import resource="classpath:/database-orderinstances-context.xml"/>
     <import resource="classpath:/SI-context.xml"/>
 
-	<context:component-scan base-package="nz.co.senanque.workflow.orderrules,nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.forms,nz.co.senanque.workflow.order,nz.co.senanque.vaadin"/>
+	<context:component-scan base-package="nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin,nz.co.senanque.workflow.conf,nz.co.senanque.workflow.order,nz.co.senanque.workflow.orderrules"/>
     <context:annotation-config />
 	<context:property-placeholder location="classpath:/config.properties" />
 	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
 		<constructor-arg value="${bundle.name}"/>
 	</bean>
-<!-- 
-	<bean id="maduraSessionManager" class="nz.co.senanque.vaadin.MaduraSessionManager" scope="bundle">
-    	<property name="formFieldFactory" ref="fieldFactory"/>
-    </bean>
-
-    <bean id="fieldFactory" class="nz.co.senanque.vaadin.FieldFactory" scope="bundle"/>
- -->
-    <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
-        <property name="schema" value="classpath:/OrderInstances.xsd" />
-        <property name="processes" value="classpath:/OrderWorkflow.wrk" />
-        <property name="validationEngine" ref="validationEngine" />
-    </bean>
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
     	<property name="referenceName" value="orderName"/>
     </bean>

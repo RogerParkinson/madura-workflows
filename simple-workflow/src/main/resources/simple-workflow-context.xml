@@ -46,7 +46,7 @@ limitations under the License.
     <description>Main Configuration</description>
     
     <import resource="classpath:/database-orderinstances-context.xml"/>
-	<context:component-scan base-package="nz.co.senanque.forms,nz.co.senanque.workflow.simple,nz.co.senanque.vaadin"/>
+	<context:component-scan base-package="nz.co.senanque.workflow.conf,nz.co.senanque.workflow.simple,nz.co.senanque.vaadin"/>
     <context:annotation-config />
 	<context:property-placeholder location="classpath:/config.properties" />
 

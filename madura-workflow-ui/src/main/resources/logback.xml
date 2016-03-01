@@ -26,10 +26,10 @@
 	<logger name="nz.co.senanque.workflow.DisplayContext" level="debug"/>
 	<logger name="nz.co.senanque.madura.bundle" level="info"/>
 	<logger name="nz.co.senanque.process.instances" level="warn"/>
-	<logger name="nz.co.senanque.madura.bundle.spring.DumpBeanFactory" level="debug"/>
 	
 
 <!-- 
+	<logger name="nz.co.senanque.madura.bundle.spring.DumpBeanFactory" level="debug"/>
 	<logger name="nz.co.senanque.logging.HashIdLogger" level="debug"/>
 	<logger name="nz.co.senanque.workflow.WorkflowManagerImpl" level="debug"/>
 	<logger name="nz.co.senanque.workflow.WorkflowManagerAbstract" level="debug"/>
