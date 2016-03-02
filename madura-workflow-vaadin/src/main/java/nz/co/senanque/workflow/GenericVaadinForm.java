@@ -106,7 +106,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	
 	protected void createButtons() {
-        okay = m_form.createSubmitButton("okay", this);
+        okay = m_form.createSubmitButton("OK", this);
 //        okay.setData("OK");
         cancel = m_form.createButton("cancel",this);
 //        cancel.setData("cancel");

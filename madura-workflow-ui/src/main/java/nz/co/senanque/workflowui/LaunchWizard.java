@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
+import nz.co.senanque.vaadin.ButtonProperty;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
@@ -48,7 +49,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -140,7 +140,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 	private Component getInitialLayout() {
 		VerticalLayout ret = new VerticalLayout();
         // Buttons
-        Button cancel = new Button(m_messageSourceAccessor.getMessage("Cancel", "Cancel"));
+        final Button cancel = new Button(m_messageSourceAccessor.getMessage("Cancel", "Cancel"));
         HorizontalLayout actions = new HorizontalLayout();
         actions.setMargin(true);
         actions.setSpacing(true);
@@ -168,8 +168,9 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 						@Override
 						public void componentEvent(Event event) {
 							try {
-								String s = (String)(((Button)event.getComponent()).getData());
-								if ("cancel".equals(s)) {
+								Object o = ((Button)event.getComponent()).getData();
+								String s = (o == null)?"":o.toString();
+								if ("Cancel".equals(s)) {
 									close();
 								} else if (s.startsWith(WorkflowForm.OK)) {
 									panel.removeAllComponents();
@@ -178,6 +179,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
 								}
 							} catch (Exception e) {
 								// ignore null pointer exceptions etc
+								e.printStackTrace();
 							}
 						}});
 					panel.removeAllComponents();
