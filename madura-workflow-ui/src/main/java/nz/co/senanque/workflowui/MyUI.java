@@ -77,7 +77,7 @@ public class MyUI extends UI implements MessageSourceAware {
 	private VerticalLayout mainLayout;
 	private HorizontalLayout bodyLayout;
 	private Panel panel_2;
-	private VerticalLayout ApplicationlBodyLayout;
+	private VerticalLayout m_applicationlBodyLayout;
 	private HorizontalLayout headingButtonslLayout;
 	private Label loggedInAs;
 	private MenuBar menuBar;
@@ -191,7 +191,7 @@ public class MyUI extends UI implements MessageSourceAware {
 			launch.setEnabled(false);
 		}
 		m_processInstances.setup();
-		ApplicationlBodyLayout.addComponent(m_processInstances);
+		m_applicationlBodyLayout.addComponent(m_processInstances);
     }
 	public void processInstanceClick(ProcessInstanceEvent processInstanceEvent) {
 		ProcessInstance processInstance = processInstanceEvent.getProcessInstance();
@@ -335,7 +335,7 @@ public class MyUI extends UI implements MessageSourceAware {
 		bodyLayout.setWidth("100.0%");
 		bodyLayout.setHeight("-1px");
 		bodyLayout.setMargin(false);
-		
+
 		// panel_2
 		panel_2 = buildPanel_2(messageSourceAccessor);
 		bodyLayout.addComponent(panel_2);
@@ -352,12 +352,13 @@ public class MyUI extends UI implements MessageSourceAware {
 		panel_2.setHeight("-1px");
 		
 		// ApplicationlBodyLayout
-		ApplicationlBodyLayout = new VerticalLayout();
-		ApplicationlBodyLayout.setImmediate(false);
-		ApplicationlBodyLayout.setWidth("100.0%");
-		ApplicationlBodyLayout.setHeight("100.0%");
-		ApplicationlBodyLayout.setMargin(false);
-		panel_2.setContent(ApplicationlBodyLayout);
+		m_applicationlBodyLayout = new VerticalLayout();
+		m_applicationlBodyLayout.setImmediate(false);
+		m_applicationlBodyLayout.setWidth("100.0%");
+		m_applicationlBodyLayout.setHeight("100.0%");
+		m_applicationlBodyLayout.setMargin(false);
+
+		panel_2.setContent(m_applicationlBodyLayout);
 		
 		return panel_2;
 	}
