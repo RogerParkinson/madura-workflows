@@ -28,7 +28,7 @@ limitations under the License.
             <xsl:otherwise>
                 <pizza:Order>
                     <pizza:celsius>
-                        <xsl:value-of select="temp:FahrenheitToCelsiusResult" />
+                        <xsl:value-of select="format-number(temp:FahrenheitToCelsiusResult, '####.00')" />
                     </pizza:celsius>
                 </pizza:Order>
             </xsl:otherwise>

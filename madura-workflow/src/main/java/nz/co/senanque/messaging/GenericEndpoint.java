@@ -138,7 +138,6 @@ public class GenericEndpoint implements MessageMapper {
 	    return lsSerializer.writeToString(doc);   
 	}
 	private void unpackRoot(Element element, Object context) {
-		
 		ValidationSessionHolder validationSessonHolder = new ValidationSessionHolderImpl(getValidationEngine());
 		validationSessonHolder.bind(context);
 		try {
@@ -163,7 +162,7 @@ public class GenericEndpoint implements MessageMapper {
 					log.debug("{} {}",name,e.getMessage());
 				} catch (InvocationTargetException e) {
 					// Ignore these and move on
-					log.debug("{} {}",name,e.getMessage());
+					log.debug("{} {}",name,e.getTargetException().toString());					
 				} catch (NoSuchMethodException e) {
 					// Ignore these and move on
 					log.debug("{} {}",name,e.getMessage());
