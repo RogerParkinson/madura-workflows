@@ -35,7 +35,7 @@
         <le>Process state is saved between tasks for data integrity. If servers go off line while processes are active their state is retained.</le>
         <le>Multiple servers can service the process queues to ensure good throughput.</le>
         <le>Some stages of the process require messages to be exchanged with external systems, for example sending stocking requests to the warehouse system. These
-        messages are handled by a messaging bus provided by Spring Integration<referenceLink t="Spring Integration"/>. The messages are defined outside the process so the process does not have to
+        messages are handled by a messaging bus such as Spring Integration<referenceLink t="Spring Integration"/>. The messages are defined outside the process so the process does not have to
         be concerned with the transport details, nor with the retry issues. This keeps the processes simpler to understand.</le>
         <le>Processes can define sections that are monitored for elapsed time. A section is one or more tasks. So a process might enter a section that will, 
         after a time, escalate and send a message to a supervisor alerting them to a hold up. If the task is finished within the time defined the escalation 
@@ -337,7 +337,7 @@ compute=orderItemCompute log="final" abort="false";
 <bean id="orderCompute" class="mydomain.OrderComputeClass" />    
         ]]></code>
         <p>That's all you need. Workflow will find the configured bean and use it in the process definition. Because it is a bean you don't necessarily
-        need to use the argument list because, of course, you can inject values. But if you want to use the <emph>same</emph> bean in different places
+        need to use the argument list because, of course, you can inject values. But if you want to use the same class for different beans
         in your process you might then find the argument list useful.</p>
         </h1>
         <h1 t="Forms">
@@ -416,18 +416,19 @@ process: Order "Process1" "my description" launchForm=MyLaunchForm queue="Q1" {
         <h1 t="Messaging">
         <p>In simple terms a message task forms a message of some kind, typically a web services message. All of our examples here assume Spring Integration<referenceLink t="Spring Integration"/>
         because that is what we have tested with. Other similar products might be used because the integration points with Madura Workflow
-        are few. For now, however, we are quite happy with Spring Integration.</p>
+        are few. All that is necessary is to provide an implementation of the <courier>nz.co.senanque.messaging.MessageSender</courier> interface
+        suitable for your chosen product, as well as configuration for that product. For now, however, we are quite happy with Spring Integration.</p>
         <code><![CDATA[
 message=orderMessageSender;
         ]]></code>
-        <p>This is an example of the message task. The message is formed from the context (eg the Order). Details of how the message is formed and how it is 
+        <p>This is an example of the message task in a process. The message is formed from the context (eg the Order). Details of how the message is formed and how it is 
         unpacked are of no concern to the process designer who only wants
         to know that a message is sent at this point in the process and a response of some kind came back and was unpacked appropriately. Of course that means a lot has to happen
         in between.</p>
         <p>The first thing to understand is that the <courier>orderMessageSender</courier> is a Spring bean, defined in the beans file. It is some class
         that implements <courier>nz.co.senanque.messaging.MessageSender</courier>. Here is an example:</p>
         <code><![CDATA[
-<bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+<bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
    <property name="channel" ref="orderChannel" />
    <property name="replyChannel" ref="orderReplyChannel" />
 </bean>
