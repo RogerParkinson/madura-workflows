@@ -138,7 +138,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>Using the <courier>fieldList</courier> property we show only the fields we are interested in.</p>
 			<p>The message definition looks like this:</p>
 				<code><![CDATA[
-<bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+<bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
     <property name="channel" ref="orderChannel" />
     <property name="replyChannel" ref="orderReplyChannel" />
 </bean>

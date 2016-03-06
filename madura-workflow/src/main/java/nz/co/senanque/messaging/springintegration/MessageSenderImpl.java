@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package nz.co.senanque.messaging;
+package nz.co.senanque.messaging.springintegration;
 
 import javax.annotation.PostConstruct;
 import javax.xml.transform.Result;
 
+import nz.co.senanque.messaging.MessageSender;
 import nz.co.senanque.workflow.WorkflowException;
 
 import org.springframework.beans.factory.annotation.Autowired;

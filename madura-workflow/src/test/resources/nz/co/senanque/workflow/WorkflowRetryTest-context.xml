@@ -51,7 +51,7 @@ limitations under the License.
     <context:annotation-config />
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
-    <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+    <bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
         <property name="channel" ref="orderChannel" />
         <property name="replyChannel" ref="orderReplyChannel" />
     </bean>

@@ -55,12 +55,14 @@ limitations under the License.
     </bean>
     <bean id="VaadinFirstForm" class="nz.co.senanque.workflow.VaadinFirstForm" scope="prototype"/>
     
-    <!-- message sender(s) and compute(s) used by the processes -->
-    <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+    <!-- 
+    message sender(s) and compute(s) used by the processes
+    This is the Spring Integration message sender. Other messages busses need a different class here.  
+    -->
+    <bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
         <property name="channel" ref="orderChannel" />
         <property name="replyChannel" ref="orderReplyChannel" />
     </bean>
-    <bean id="orderCompute" class="nz.co.senanque.workflow.OrderComputeClass" />    
 
 	<!-- These are used by the demo process -->
     <bean id="VaadinLaunchDemo" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
@@ -80,7 +82,7 @@ limitations under the License.
     	</property>
     </bean>
     <bean id="temperatureCompute" class="nz.co.senanque.workflow.TemperatureComputeClass" />    
-    <!-- end of demo process definitions -->
+    <bean id="orderCompute" class="nz.co.senanque.workflow.OrderComputeClass" />    
 
     <bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
         <property name="basenames">
@@ -89,6 +91,5 @@ limitations under the License.
             </list>
         </property>
     </bean>
-    <!-- End Madura configuration -->
 
 </beans>

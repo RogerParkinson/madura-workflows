@@ -48,7 +48,7 @@ limitations under the License.
     <import resource="classpath:/database-orderinstances-context.xml"/>
     <import resource="classpath:/SI-context.xml"/>
 
-	<context:component-scan base-package="nz.co.senanque.workflow.orderrules"/>
+	<context:component-scan base-package="nz.co.senanque.workflow.orderrules,nz.co.senanque.vaadin,nz.co.senanque.validationengine,nz.co.senanque.rules"/>
     <context:annotation-config />
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
 
@@ -78,7 +78,7 @@ limitations under the License.
     <bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
 
     <!-- message sender(s) and compute(s) used by the processes -->
-    <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+    <bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
         <property name="channel" ref="orderChannel" />
         <property name="replyChannel" ref="orderReplyChannel" />
     </bean>
@@ -104,47 +104,14 @@ limitations under the License.
     <bean id="temperatureCompute" class="nz.co.senanque.workflow.TemperatureComputeClass" />    
     <!-- end of demo process definitions -->
 
-    <bean id="validationEngine" class="nz.co.senanque.validationengine.ValidationEngineImpl">
-    	<property name="identifier" value="orderinstances"/>
-        <property name="metadata" ref="metadata"/>
-        <property name="plugins">
-            <list>
-                <ref bean="MaduraRulesPlugin"/>
-            </list>
-        </property>
-    </bean>
-    <bean id="metadata" class="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory">
-        <property name="package" value="nz.co.senanque.workflow.orderinstances"/>
-        <property name="fieldValidators">
-            <list>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RegexValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.LengthValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.RangeValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.EmailValidator</value>
-                <value>nz.co.senanque.validationengine.fieldvalidators.DigitsValidator</value>
-            </list>
-        </property>
-        <property name="choicesDocument" value="classpath:choices.xml"/>
-    </bean>
-    <bean id="MaduraRulesPlugin" class="nz.co.senanque.rules.RulesPlugin" />
-
-    <bean id="messageSource" class="nz.co.senanque.localemanagement.XMLMessageSource">
-        <property name="resource" value="classpath:/Messages.xml" />
-        <property name="parentMessageSource">
-            <bean
-                class="org.springframework.context.support.ResourceBundleMessageSource">
-                <property name="basenames">
-                    <list>
-                        <value>localmessages</value>
-                        <value>messages</value>
-                        <value>ValidationMessages</value>
-                        <value>org/springframework/security/messages</value>
-                        <value>/nz/co/senanque/workflow/orderrules/messages</value>
-                    </list>
-                </property>
-            </bean>
-        </property>
-    </bean>
+	<bean id="messageSource"
+		class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+		<property name="basenames">
+			<list>
+				<value>localmessages</value>
+			</list>
+		</property>
+	</bean>
     <!-- End Madura configuration -->
 
 </beans>

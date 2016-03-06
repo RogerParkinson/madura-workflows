@@ -63,7 +63,7 @@ limitations under the License.
     <bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
 
     <!-- message sender(s) and compute(s) used by the processes -->
-    <bean id="orderMessageSender" class="nz.co.senanque.messaging.MessageSenderImpl">
+    <bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
         <property name="channel" ref="orderChannel" />
         <property name="replyChannel" ref="orderReplyChannel" />
     </bean>
