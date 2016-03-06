@@ -16,7 +16,6 @@
 package nz.co.senanque.messaging;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
 import nz.co.senanque.locking.LockAction;

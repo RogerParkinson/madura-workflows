@@ -28,7 +28,9 @@ limitations under the License.
     xmlns:ws="http://www.springframework.org/schema/web-services" 
     xmlns:task="http://www.springframework.org/schema/task"
     xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:bundle="http://www.madurasoftware.com/madura-bundle"
     xsi:schemaLocation=" 
+		http://www.madurasoftware.com/madura-bundle http://www.madurasoftware.com/madura-bundle.xsd
         http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
@@ -47,7 +49,7 @@ limitations under the License.
     <tx:annotation-driven proxy-target-class="true" />
 
 	<bean id="em-workflow"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter">
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter" bundle:export="true">
 		<property name="persistenceXmlLocation" value="classpath:META-INF/persistence-workflow.xml" />
 		<property name="persistenceUnitName" value="pu-workflow" />
 		<property name="dataSource" ref="dataSourceWorkflow" />
@@ -77,7 +79,7 @@ limitations under the License.
 	</bean>
 
 	<bean id="jpaVendorAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
 		<property name="showSql" value="false" />
 		<!-- ensures new db is auto created if needed -->
 		<property name="generateDdl" value="true" />
@@ -88,14 +90,14 @@ limitations under the License.
         <property name="jtaTransactionManager" ref="transactionManager" />
     </bean>
     <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
-		init-method="init" destroy-method="close">
+		init-method="init" destroy-method="close" bundle:export="true">
 		<property name="forceShutdown" value="false" />
 	</bean>
-    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
         <property name="transactionTimeout" value="300" />
     </bean>
 	<bean id="transactionManager"
-		class="org.springframework.transaction.jta.JtaTransactionManager">
+		class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">
 		<property name="transactionManager" ref="atomikosTransactionManager" />
 		<property name="userTransaction" ref="atomikosUserTransaction" />
 		<property name="allowCustomIsolationLevels" value="true" />

@@ -50,10 +50,7 @@ limitations under the License.
     <context:annotation-config />
 	<context:property-placeholder location="classpath:/config.properties" />
 
-	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
-		<constructor-arg value="${bundle.name}"/>
-	</bean>
-    <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
+     <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/OrderInstances.xsd" />
         <property name="processes" value="classpath:/OrderWorkflow.wrk" />
     </bean>

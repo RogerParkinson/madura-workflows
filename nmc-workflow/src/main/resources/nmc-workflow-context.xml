@@ -50,9 +50,6 @@ limitations under the License.
     <context:annotation-config />
 	<context:component-scan base-package="nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin,nz.co.senanque.workflow.conf,nz.co.senanque.workflow.nmc,nz.co.senanque.workflow.nmcrules" />
 	<context:property-placeholder location="classpath:/config.properties" />
-	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
-		<constructor-arg value="${bundle.name}"/>
-	</bean>
 
 	<!-- These are used by the demo process -->
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">

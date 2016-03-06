@@ -49,10 +49,8 @@ limitations under the License.
 	<context:component-scan base-package="nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin,nz.co.senanque.workflow.conf,nz.co.senanque.workflow.order,nz.co.senanque.workflow.orderrules"/>
     <context:annotation-config />
 	<context:property-placeholder location="classpath:/config.properties" />
-	<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
-		<constructor-arg value="${bundle.name}"/>
-	</bean>
-    <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
+
+     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
     	<property name="referenceName" value="orderName"/>
     </bean>
     <bean id="VaadinFirstForm" class="nz.co.senanque.workflow.VaadinFirstForm" scope="prototype"/>
