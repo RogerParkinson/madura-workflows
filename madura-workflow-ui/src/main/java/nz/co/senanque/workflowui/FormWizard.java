@@ -147,13 +147,16 @@ public class FormWizard extends Window implements MessageSourceAware {
     	BeanItem<ProcessInstance> beanItem = new BeanItem<ProcessInstance>(form.getProcessInstance());
 
     	m_processForm = new MaduraForm(getMaduraSessionManager());
-    	String[] fieldList = new String[]{"queueName","bundleName","status","comment","reference", "lastUpdated", "lockedBy"};
+    	String[] fieldList = new String[]{"queueName","bundleName","status","reference", "lastUpdated", "lockedBy","comment"};
     	m_processForm.setFieldList(fieldList);
     	m_processForm.setReadOnly(form.isReadOnly());
     	m_processForm.setItemDataSource(beanItem);
+    	TextArea comment = (TextArea)m_processForm.getField("comment");
     	TextArea taskField = new TextArea(m_messageSourceAccessor.getMessage("task"));
     	taskField.setRows(3);
     	taskField.setWordwrap(true);
+    	taskField.setWidth("700px");
+    	comment.setWidth("700px");
     	m_processForm.addField("Task", taskField);
     	taskField.setValue(task);
     	taskField.setReadOnly(true);

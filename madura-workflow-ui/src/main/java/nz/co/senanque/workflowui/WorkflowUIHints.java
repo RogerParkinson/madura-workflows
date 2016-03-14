@@ -56,6 +56,7 @@ public class WorkflowUIHints extends HintsImpl {
         		TextArea textArea = new TextArea();
         		textArea.setRows(5);
         		textArea.setWordwrap(true);
+        		textArea.setWidth("400px");
         		ret = textArea;
         	} else {
         		ret = new TextField();

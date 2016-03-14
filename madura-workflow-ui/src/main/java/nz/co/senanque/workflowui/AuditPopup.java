@@ -36,6 +36,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -73,9 +74,11 @@ public class AuditPopup extends Window implements MessageSourceAware {
     	BeanItem<Audit> beanItem = new BeanItem<Audit>(audit);
 
     	m_auditForm = new MaduraForm(getMaduraSessionManager());
-    	String[] fieldList = new String[]{"created","lockedBy","comment","status"};
+    	String[] fieldList = new String[]{"created","lockedBy","status","comment"};
     	m_auditForm.setFieldList(fieldList);
     	m_auditForm.setItemDataSource(beanItem);
+    	TextArea comment = (TextArea)m_auditForm.getField("comment");
+    	comment.setWidth("700px");
     	panel.addComponent(m_auditForm);
 		panel.addComponent(getInitialLayout());
     	panel.requestRepaint();
