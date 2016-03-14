@@ -9,7 +9,6 @@
 		<image>logo.jpg</image>
 		<references>
 			<reference url="https://code.google.com/p/weblogic-jndi-startup/" t="Weblogic JNDI" />
-			<reference url="http://projects.spring.io/spring-security/" t="Spring Security" />
 			<reference url="http://www.atomikos.com/" t="Atomikos" />
 			<reference url="http://tomcat.apache.org/" t="Tomcat" />
 			<reference url="http://www.h2database.com" t="H2" />
@@ -45,7 +44,7 @@
 			<p>Over and above the workflow engine this application provides the following:</p>
 			<list>
 			<le>A full UI implemented in Vaadin which allows users to launch and manage process instances.</le>
-			<le>Security, based on Spring Security<referenceLink t="Spring Security"/> which provides a login and associated permissions. The permissions
+			<le>Security which provides a login and associated permissions. The permissions
 			are used to restrict users' access to certain queues and process instances.</le>
 			<le>A way to deploy new process definitions on the fly using Madura Bundles<referenceLink t="Madura Bundles"/>. The bundles also contain all associated
 			resources, such as forms, messages, object definitions and custom code.</le>
@@ -61,7 +60,8 @@
 			</list>
 			<p>Each of these is discussed in more detail below, as well as some ways to extend the application or invoke Madura Workflow in other ways.</p>
 			</h2>
-			<h2 t="Running the application">
+			</h1>
+			<h1 t="Running the application">
 			<p>The README.md file in <referenceLink t="Madura Workflow"/> gives information about deploying this, including some minor but necessary
 			configuration.</p>
 			<p>You will need an application server. We tested this with Tomcat V7, but any application server you are comfortable with
@@ -69,15 +69,19 @@
 			Java 7 or later.</p>
 			<p>When you start your application server the console log will show some warnings:</p>
 			<code><![CDATA[
-WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 No properties path set - looking for transactions.properties in classpath...
-WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 Using init file: /home/roger/madura4/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/MaduraWorkflowUI/WEB-INF/classes/transactions.properties
-WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'pu__workflow': poolSize equals default - this may cause performance problems!
-WARN  org.hibernate.ejb.Ejb3Configuration - Ejb3Configuration.java:1132 HHH000144: hibernate.connection.autocommit = false breaks the EJB3 specification
-WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'Workflow1-0.0.2': poolSize equals default - this may cause performance problems!
-WARN  org.hibernate.ejb.Ejb3Configuration - Ejb3Configuration.java:1132 HHH000144: hibernate.connection.autocommit = false breaks the EJB3 specification
-INFO  n.c.s.m.bundle.BundleManagerImpl - BundleManagerImpl.java:224 Added bundle: workflow1-0.0.2
+14:14:07.813 [localhost-startStop-1] WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 No properties path set - looking for transactions.properties in classpath...
+14:14:07.816 [localhost-startStop-1] WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 Using init file: /home/roger/madura-workflows/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/madura-workflow-ui/WEB-INF/classes/transactions.properties
+14:14:08.064 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'pu__workflow': poolSize equals default - this may cause performance problems!
+14:14:09.460 [localhost-startStop-1] WARN  o.s.b.f.s.DefaultListableBeanFactory - AbstractBeanFactory.java:1480 Bean creation exception on FactoryBean type check: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'workflowManager': Cannot resolve reference to bean 'bundleManager' while setting bean property 'bundleManager'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'bundleManager' defined in ServletContext resource [/WEB-INF/applicationContext.xml]: Cannot resolve reference to bean 'errorEndpoint' while setting bean property 'exportedBeans' with key [TypedStringValue: value [errorEndpoint], target type [null]]; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'errorEndpoint': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private nz.co.senanque.workflow.WorkflowManager nz.co.senanque.messaging.ErrorEndpoint.m_workflowManager; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [nz.co.senanque.workflow.WorkflowManager] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+14:14:10.015 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'nmc-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
+14:14:10.504 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: nmc-workflow-1.0.2-SNAPSHOT.jar
+14:14:12.278 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'order-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
+14:14:13.042 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: order-workflow-1.0.2-SNAPSHOT.jar
+14:14:13.131 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'simple-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
+14:14:13.344 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: simple-workflow-1.0.2-SNAPSHOT.jar
+14:14:13.420 [localhost-startStop-1] WARN  c.v.s.navigator.SpringViewProvider - SpringViewProvider.java:165 No SpringViews found
 				]]></code>
-			<p>These are all normal and do not cause problems, though the poolsize should be reviewed before going into production.</p>
+			<p>These are all normal and do not cause problems, though the poolSize should be reviewed before going into production.</p>
 			<p>Browse to <courier>http://localhost:8080/madura-workflow-ui/</courier>
 			(your server name and port may vary if you are not running a default configured Tomcat on your local machine). You should see a
 			login page.</p>
@@ -96,8 +100,9 @@ INFO  n.c.s.m.bundle.BundleManagerImpl - BundleManagerImpl.java:224 Added bundle
 			not the full list of process definitions anyway. There might be multiple versions of each of these processes and only the
 			latest versions are presented because we cannot launch old versions. Also some process definitions are not directly launchable,
 			they can only be launched by another process so they are not included either.</p>
-			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process.</p>
-			<p>Before going any further we should look at what this process does.</p>
+			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process which is really called <courier>order-workflow</courier>.</p>
+			<p>Before going any further we should look at what this process does. The definition of the process is in the <courier>order-workflow</courier>
+			sub project in the file <courier>src/main/resources/OrderWorkflow.wrk</courier>:</p>
 				<code><![CDATA[
 process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q1"{
 	try {
@@ -116,7 +121,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>Finally the process shows a form that displays the converted temperature.</p>
 			<p>The two forms could be custom written in Java using Vaadin, but this takes the lazy approach and just generates the Vaadin form from
 			the underlying object. The underlying object is, of course, a Madura Object and includes rich metadata, so this is more functional that you
-			might suppose.</p>
+			might suppose. The following form definitions can be found in <courier>src/main/resources/order-workflow-context.xml</courier></p>
 				<code><![CDATA[
 <bean id="VaadinLaunchDemo" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
 	<property name="referenceName" value="orderName"/>
@@ -136,7 +141,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 </bean>
 				]]></code>
 			<p>Using the <courier>fieldList</courier> property we show only the fields we are interested in.</p>
-			<p>The message definition looks like this:</p>
+			<p>The message definition (in the same file) looks like this:</p>
 				<code><![CDATA[
 <bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
     <property name="channel" ref="orderChannel" />
@@ -158,7 +163,12 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>The home page has an entry, which is the process instance you just launched. Yours might not have a queue name yet, so give it a few seconds and click
 			refresh until it does. Notice that the Reference column contains 'Order#1' which is what you typed on the launch form. You can also see that it is
 			in queue Q1 (when it appears) and that it is running process definition Demo, the definition you launched.</p>
-			<p>The process instance we launched has a queue name and that means it is waiting for a human to do something. Click on that process instance.</p>
+			<p>Meanwhile if you look at the application server log you should see something like this:</p>
+			<img width="12cm" href="images/log-1.png">log-1</img>
+			<p>That shows a web service message being sent and a reply received and unpacked. We have converted 20F to -6.67C. These debug
+			logging settings ought to be turned off for production, of course. There is a <courier>logback.xml</courier> file in the usual
+			place that controls this.</p>
+			<p>The process instance we launched now has a queue name and is in a WAIT state. That means it is waiting for a human to do something. Click on that process instance.</p>
 			<img width="12cm" href="images/P1A.png">Process1-Form</img>
 			<p>This is the form associated with this stage of the process. It is displaying information about the object associated with this process instance,
 			in this case an Order object. It is showing the converted temperature in Celsius. You can click Okay for it to go on to the next step, but before you do click on the
@@ -180,7 +190,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>As a demo this perhaps looks a little trivial. But note what happened carefully. A process instance was launched with a launch form which accepted some
 			initial data. That process was then managed through multiple stages, including sending a message, operating a form, and running a custom
 			compute bean.</p>
-			<p>What we did not see yet is handling of errors. Let's go around again, but this time turn off your internet connection.</p>
+			<p>What we did not see yet is handling of errors. Let's go around again, but this time turn off your internet connection and cal it
+			Order#2.</p>
 			<img width="12cm" href="images/Home4.png">Home-4</img>
 			<p>The new process is id 3 and, if you give it time to try the message and then refresh you will see this. Notice the error message, that is
 			because it could not get to the web service. So what happened then? Well, take a look at the process definition again:</p>
@@ -221,9 +232,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>Now the attachment just added is visible in the table. To examine it you just click on it and the browser will
 			attempt to download it or open it, depending on your browser setting. There is no way to remove or modify attachments,
 			that allows them to be used as a kind of audit trail.</p>
-			</h2>
+			</h1>
 			
-		</h1>
 		<h1 t="The UI">
 			<h2 t="Vaadin and Madura Vaadin Support">
 			<p>There seem to be endless ways of implementing a UI in Java so eventually you just have to pick one you like. In this application the choice
@@ -237,30 +247,26 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>So the choice here is Vaadin with a little help from Madura Vaadin Support.</p>
 			</h2>
 			<h2 t="Security">
-			<p>The security implemented in the application uses Spring Security and the configuration for that is defined in the file <courier>security-context.xml</courier>.</p>
-			<p>It is kept simple here: the users, passwords and permissions are hard coded in the xml file. In production you would use more elaborate Spring Security
-			options such as fetching user profiles from a database etc. But this is sufficient to implement the login and permissions the application actually needs to run.
-			There is further integration in Madura Vaadin Support because this provides the login form which then verifies the user against Spring Security and
-			fetches the permissions. The permissions for the current user are then held in the PermissionManager, another class supplied by Madura Vaadin Support.</p>
-			<p>Madura Objects provides a way to attach permissions to object properties and Madura Vaadin Support honours those when the forms are displayed. That
-			means you can say the XYZ permission only has read-only access to this property, and when it is displayed on a form it will be read-only etc. Since all
-			forms in the application use Madura Objects in this way then any/every property may have a permission attached.</p>
+			<p>Security is implemented using the same login filter/interceptor used in the Madura Vaadin Support demos.
+			That, by default, uses a simple hard coded list of users an permissions, and the permissions for the logged in user are passed to
+			the <courier>PermissionManager</courier> so that all the forms etc honour the permissions for this user.</p>
+			<p>In an enterprise environment, and typically workflow would run in an enterprise environment, there is often an external login procedure which adds a security
+			token to the request. Madura Vaadin Support's login form supports this, allowing a pre-logged-in user to bypass the login form.</p>
 			<p>Queues also have permissions attached to them. That means that user have limited access to view or operate that queue, depending on their permission.
 			If the current user has only read access to the queue then items in the queue cannot be opened. If they have no read access to the queue then
 			no items from that queue will be displayed.</p>
-			<p>In an enterprise environment, and typically workflow would run in an enterprise environment, there is often an external login procedure which adds a security
-			token to the request. Madura Vaadin Support's login form supports this, allowing a pre-logged-in user to bypass the login form.</p>
 			<p>There is also one 'super permission' called TECHSUPPORT. Users with this permission can always modify any process instance in any queue, including
 			ones that are being worked on by another user. Naturally that capability ought to be used sparingly. The ADMIN permission allows users to view, but
-			not necessarily change, anything. The specific names associated with these permissions are defined in the file <courier>FixedPermissions.java</courier>.</p>
+			not necessarily change, anything. The specific names associated with these permissions are defined in the file <courier>FixedPermissions.java</courier> so they
+			can be customised where necessary.</p>
 			</h2>
 			<h2 t="Spring Framework">
-			<p>When using Spring with Vaadin it is not normally possible to use XML to wire the display components because Spring makes most sense when wired beans
-			are singletons and Vaadin's display objects need to be session objects. Madura Vaadin Support simplifies this by using two basic xml files, in this
-			case <courier>applicationcontext.xml</courier> and <courier>WorkflowUI.xml</courier>. The first of these is just a normal Spring context file and most of the beans defined
-			there are singletons as you expect with Spring. The second looks like a lot of singelton beans but they are, in fact, all session beans. This entire context
-			is created when a new session starts and remains associated with the session until it ends. This makes it easy to define Vaadin display objects
-			as beans and it nicely separates the singletons from the session beans.</p>
+			<p>As with other applications that use Maura Vaadin Support, which depends on the Vaadin-Spring Addon<referenceLink t="Vaadin-Spring Addon"/>, we have
+			some generic bean defined in the <courier>application-context.xml</courier>, others defined in a <courier>@Configuration</courier> class and the rest
+			defined using Spring's ability to scan packages looking for <courier>@Component</courier> annotations. The objective here is to simplify the configuration
+			such that as much as possible happens automatically so, in general, you don't need to follow up and understand all the <courier>@Component</courier> and <courier>@Configuration</courier> annotations
+			unless you really like that sort of thing. To configure this to your production requirements you will need to adjust <courier>application-context.xml</courier>
+			which you will find in the <courier>WEB-INF</courier> directory.</p>
 			</h2>
 			<h2 t="Scheduler">
 			<p>The scheduler is configured using Spring in <courier>applicationContext.xml</courier> like this:</p>
@@ -313,77 +319,66 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			we need to look at the bundle configuration in the main application.</p>
 			<h2 t="Bundle Configuration">
         <code><![CDATA[
-<!-- <jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" /> -->
+<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 <bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
-<!-- 	<property name="directory" ref="bundlesDir"/> -->
-	<property name="inheritableBeans">
-		<map>
-				<entry key="jpaVendorAdapter" value-ref="jpaVendorAdapter"/>
-				<entry key="transactionManager" value-ref="transactionManager"/>
-				<entry key="lockFactory" value-ref="lockFactory"/>
-				<entry key="em-workflow" value-ref="em-workflow"/>
-				<entry key="atomikosTransactionManager" value-ref="atomikosTransactionManager"/>
-				<entry key="atomikosUserTransaction" value-ref="atomikosUserTransaction"/>
-				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
-				<entry key="genericEndpoint" value-ref="genericEndpoint"/>
-				<entry key="environment" value-ref="environment"/>
-				<entry key="workflowDAO" value-ref="workflowDAO"/>
-				<entry key="bundleManager" value-ref="bundleManager"/>
-				<entry key="hints" value-ref="hints"/>
-		</map>
-	</property>
-</bean>
-
-<bean id="bundleListener" class="nz.co.senanque.workflowui.bundles.BundleListenerImpl">
-	<property name="messageSource" ref="messageSource"/>
+  <property name="directory" ref="bundlesDir"/>
+    <property name="exportedBeans">
+      <map>
+        <entry key="errorEndpoint" value-ref="errorEndpoint"/>
+        <entry key="genericEndpoint" value-ref="genericEndpoint"/> 
+      </map>
+    </property>
 </bean>
         ]]></code>
-        <p>This is from the <courier>applicationcontext.xml</courier> file. It defines a JNDI variable which holds the location of the directory the bundles
-        are held in. This directory will be scanned every few (configurable) seconds for new files, and the inheritable beans map contains beans that are defined
-        in this file that must be visible from the bundles. The bundles actually see all these beans as if they defined them themselves.</p>
-        <p>Finally the <courier>bundleListener</courier> bean is called by the bundle manager whenever a new bundle is added. The listener peers inside the new bundle
-        for new process definitions and new queues and it places these into an internal map so that when the user opens the list of available processes they
-        are already there for display. The alternative would be to scan all the bundles for this information every time it is asked for which would be inefficient.</p>
-        <p>Inside a bundle we always have a Spring context file and a bean defining the workflow manager like this:</p>
+        <p>This is from the <courier>application-context.xml</courier> file. It defines a JNDI variable which holds the location of the directory the bundles
+        are held in. This directory will be scanned every few (configurable) seconds for new files.</p>
+        <p>Notice that we explicitly export the two endpoint beans. Most of the time we can annotate the beans
+        for export and leave this list empty but these two beans have the bundle proxy <courier>workflowManager</courier>
+        injected into them. Spring gets confused when handling that case but explicitly adding them to the list works just fine.</p>
+        <p>Now, inside a bundle we always have a bean defining the workflow manager from the config.properties file which contains something this:</p>
         <code><![CDATA[
-<bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
-    <property name="schema" value="classpath:/OrderInstances.xsd" />
-    <property name="processes" value="classpath:/OrderWorkflow.wrk" />
-</bean>
+nz.co.senanque.workflow.WorkflowManager.schema=classpath:/OrderInstances.xsd
+nz.co.senanque.workflow.WorkflowManager.processes=classpath:/OrderWorkflow.wrk
         ]]></code>
         <p>This refers to the xsd file that defines the objects used by the workflow, and the wrk file that contains the workflow process definitions.</p>
         <p>As well as this the bundle needs a JPA database, yes another one, see <sectionLink t="Database"/> for details as to why.</p>
         <p>All the beans defined in the bundle context file are singletons unless scoped otherwise, and one or two are. Here are the
         rest of the essential beans:</p>
         <code><![CDATA[
-<import resource="classpath:/database-nmcinstances-context.xml"/>
+<import resource="classpath:/database-orderinstances-context.xml"/>
+<import resource="classpath:/SI-context.xml"/>
 
 <context:annotation-config />
-<context:component-scan base-package="nz.co.senanque.workflow.nmcrules" />
-<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+<context:component-scan base-package="nz.co.senanque.validationengine,nz.co.senanque.rules,
+		nz.co.senanque.vaadin,nz.co.senanque.workflow.conf,nz.co.senanque.workflow.order,
+		nz.co.senanque.workflow.orderrules" />
+<context:property-placeholder location="classpath:/config.properties" />
 
-<bean id="bundleName" class="nz.co.senanque.madura.bundle.StringWrapperImpl">
-	<constructor-arg value="${bundle.name}"/>
-</bean>
-<bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl" scope="session"/>
-<bean id="maduraSessionManager" class="nz.co.senanque.vaadinsupport.application.MaduraSessionManager" scope="bundle">
-   	<property name="formFieldFactory" ref="fieldFactory"/>
-</bean>
-
-<bean id="fieldFactory" class="nz.co.senanque.vaadinsupport.FieldFactory" scope="bundle"/>
-
-<bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
-	<property name="schema" value="classpath:/NMCInstances.xsd" />
-	<property name="processes" value="classpath:/NMCWorkflow.wrk" />
-	<property name="validationEngine" ref="validationEngine" />
+<!-- 
+message sender(s) and compute(s) used by the processes
+This is the Spring Integration message sender. Other messages busses need a different class here.  
+-->
+<bean id="orderMessageSender" class="nz.co.senanque.messaging.springintegration.MessageSenderImpl">
+    <property name="channel" ref="orderChannel" />
+    <property name="replyChannel" ref="orderReplyChannel" />
 </bean>
 
-<bean id="contextDAO" class="nz.co.senanque.workflow.nmc.ContextJPA"/>
+<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
+    <property name="basenames">
+        <list>
+            <value>localmessages</value>
+        </list>
+    </property>
+</bean>
         ]]></code>
-		<p>This file imports a database configuration which will be discussed in detail in <sectionLink t="Database"/>. There is
-		some necessary housekeeping beans and then three session scoped beans: <courier>maduraSessionManager, fieldFactory</courier> and <courier>hints</courier>. These
-		are all used by Madura Vaadin Support. The two DAO beans are used to access the two different databases, then there are
-		two forms both with prototype scope.</p>
+		<p>This file imports a database configuration which will be discussed in detail in <sectionLink t="Database"/>. Most of the configuration is automated by using
+		the right scan list and property placeholder. This workflow bundle needs the rules engine, but if you are not using rules that can
+		be left out. It also uses messaging and delegates that to Spring Integration, hence the import of <courier>SI-context.xml</courier>
+		and the <courier>orderMessageSender</courier> bean.</p>
+		<p>The <courier>orderMessageSender</courier> bean injects two Spring Integration Channels into the <courier>nz.co.senanque.messaging.springintegration.MessageSenderImpl</courier> class.
+		This is the only dependency on Spring Integration. To use a different message bus you would supply your own implementation of 
+		<courier>nz.co.senanque.messaging.springintegration.MessageSender</courier> and configure as needed.</p>
+		<p>Finally we should include a <courier>messageSource</courier> bean to load the relevant resource bundles.</p>
 		</h2>
 		<h2 t="Bundled Forms">
 		<p>If the workflow definition includes <courier>form</courier> tasks or launch forms then those forms
@@ -401,8 +396,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<value>celsius</value>
 		</list>
 	</property>
-</bean>
-   
+</bean>  
         ]]></code>
 		<p>The two forms are referred to by the workflow definition. It has an entry like this:</p>
         <code><![CDATA[
@@ -416,16 +410,14 @@ process: Order "Process2" "This is the second process" launchForm=LaunchForm {
 		<p>There they are! LaunchForm and FirstForm. The name of the form in the definition is just the
 		name of the bean in the bundle... except the beans have 'Vaadin' on the front of it so them is
 		a little more complicated. The forms are actually delivered using the <courier>formFactory</courier>
-		bean and that is auto-injected with the <courier>environment</courier> bean which contains
-		the string 'Vaadin'. If it is injected with an environment <courier>formFactory</courier> prepends the
-		string to the bean name. If there is no environment then it prepends nothing.</p>
-		<p>The form beans need to be scoped as prototype so that whenever they are requested by the <courier>formFactory</courier>
-		a new copy is created.</p>
+		bean in the main application and that is auto-injected with the <courier>formEnvironment</courier> bean which contains
+		the string 'Vaadin' by default. The value can be overidden by adding an entry for <courier>nz.co.senanque.forms.FormEnvironment.name</courier>
+		to <courier>config.properties</courier>. Remember these beans are all in the <emph>application</emph> context. The workflow
+		bundles all use those application level beans to know about their environment.</p>
 		<p>Why would you ever need that extra complication? Well sometimes you might have multiple UI technologies going on at once.
-		Some users, perhaps, are using Vaadin and others for whatever reason are using Swing and others are using Camel.
-		Assuming you know which user is using which technology you can change the hard coded 'Vaadin' there for something like <courier>${myenvironment}</courier>
-		and arrange for the correct value for that symbol to be defined for each user. Then you would define <emph>six</emph> beans to cover all the cases
-		like this:</p>
+		Some users, perhaps, are using Vaadin and others for whatever reason are using Swing and others are using Camel. You only need
+		to ensure the <courier>formEnvironment</courier>bean for each user has the right value and then you would define <emph>six</emph> beans 
+		to cover all the cases like this:</p>
         <code><![CDATA[
 ...
 <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">
@@ -461,10 +453,6 @@ process: Order "Process2" "This is the second process" launchForm=LaunchForm {
 		</list>
 	</property>
 </bean>   
-<bean id="formFactory" class="nz.co.senanque.workflow.conf.FormFactoryImpl"/>
-<bean name="environment" class="nz.co.senanque.forms.FormEnvironment">
-	<property name="name" value="${myenvironment}"/>
-</bean>
         ]]></code>
 		<p>With that in place the right form will be delivered to the right user. However, so far only Vaadin forms have been fully implemented so if you do
 		want Swing or Camel you will have more work to do than for Vaadin. It is probably fairly easy to build a simple form in another technology (depending
@@ -503,31 +491,34 @@ process: Order "Process2" "This is the second process" launchForm=LaunchForm {
 		get the order total you would write a rule and the total would be updated as OrderItems are added, deleted or their details changed.</p>
 		</h2>
 		<h2 t="Bundle contents">
-		<p>There are two working bundles supplied with the application: Workflow1 and tbundle, the most interesting one is Workflow1.
-		They are both maven projects under the <courier>bundles</courier> directory. The resulting jar files are copied to that directory
+		<p>There are three working bundles supplied with the application: nmc-workflow, order-workflow and simple-workflow, the most interesting one is order-workflow.
+		They are all maven projects under the <courier>madura-workflow</courier> directory. The resulting jar files are copied to <courier>madura-workflow-ui/bundles</courier> directory
 		as well so this is where <courier>bundlesDir</courier> ought to point to.</p>
-		<p>The Workflow1 bundle looks like this:</p>
-		<img width="12cm" href="images/Workflow1Contents.gif">Workflow1 Bundle</img>
+		<p>The order-workflow bundle looks like this:</p>
+		<img width="12cm" href="images/Workflow1Contents.gif">order-workflow Bundle</img>
 		<p>There are two subdirectories at the top, the <courier>nz</courier> is the beginning of the <courier>nz.co.senanque.workflow</courier>
 		structure which is detailed later. <courier>META-INF</courier>, as usual, contains the <courier>MANIFEST.MF</courier> file which
 		in this case looks like this:</p>
         <code><![CDATA[
 Manifest-Version: 1.0
-Archiver-Version: Plexus Archiver
-Created-By: Apache Maven
-Build-Jdk: 1.7.0_21
-Built-By: Roger Parkinson
+Implementation-Title: Order Workflow
+Implementation-Version: 1.0.2
+Built-By: roger
+Bundle-Name: order-workflow
+Created-By: Apache Maven 3.2.1
+Implementation-Vendor: Prometheus Consulting
+Implementation-Vendor-Id: nz.co.senanque
+Bundle-Version: 1.0.2
+Build-Jdk: 1.7.0_67
+Bundle-Context: order-workflow-context.xml
 Bundle-Activator: nz.co.senanque.madura.bundle.BundleRootImpl
-Bundle-Context: workflow-context.xml
 Bundle-Description: A sample bundle containing a workflow.
-Bundle-Name: Workflow1
-Bundle-Version: 0.0.2
         ]]></code>
         <p>This is normal for a Madura Bundle and the main thing to note is that the <courier>Bundle-Context</courier> specifies the
         <courier>workflow-context.xml</courier>, which is the Spring context that is to be loaded for this bundle.</p>
         <p>After the subdirectories there are a number of files in the top directory of the jar file.</p>
-        <p><courier>workflow-context.xml ,SI-context.xml</courier> and <courier>database-orderinstances-context.xml</courier> are all
-        Spring context files. <courier>workflow-context.xml</courier> is the main one that imports the other two. 
+        <p><courier>order-workflow-context.xml ,SI-context.xml</courier> and <courier>database-orderinstances-context.xml</courier> are all
+        Spring context files. <courier>order-workflow-context.xml</courier> is the main one that imports the other two. 
         <courier>database-orderinstances-context.xml</courier> contains the database definitions and <courier>SI-context.xml</courier>
         contains Spring Integration configuration, which means this bundle uses SI to send messages to external services, typically
         web services.</p>
@@ -536,7 +527,7 @@ Bundle-Version: 0.0.2
         function as well.</p>
         <p>There are two xsl files which are used to generate and unpack web services messages. These are referred to by <courier>SI-context.xml</courier>,
         and there are several properties files used to provide I18n translation.</p>
-        <p>Finally the <courier>OrderRules.txt</courier> file contains the Madura Rules that monitor the objects defined in the xsd
+        <p>Finally the <courier>OrderRules.rul</courier> file contains the Madura Rules that monitor the objects defined in the xsd
         file. This file actually has no runtime function because the rules have been generated into Java classes and placed in 
         <courier>nz.co.senanque.workflow.orderinstances</courier>. <courier>choices.xml</courier> and <courier>Messages.xml</courier> are also used by Madura Rules.</p>
         <p>Which brings us to the contents of the <courier>nz.co.senanque.workflow</courier> structure.</p>
@@ -563,15 +554,8 @@ Bundle-Version: 0.0.2
 		the <courier>database-context.xml</courier> file:</p>
         <code><![CDATA[
 ...
-<bean id="JDBCPool" class="com.vaadin.data.util.sqlcontainer.connection.SimpleJDBCConnectionPool">
-	<constructor-arg index="0" value="org.h2.jdbcx.JdbcDataSource"/>
-	<constructor-arg index="1" value="jdbc:h2:mem:workflow;DB_CLOSE_ON_EXIT=FALSE;MVCC=true"/>
-	<constructor-arg index="2" value=""/>
-	<constructor-arg index="3" value=""/>
-</bean>
-
 <bean id="em-workflow"
-	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter">
+	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter" bundle:export="true">
 	<property name="persistenceXmlLocation" value="classpath:META-INF/persistence-workflow.xml" />
 	<property name="persistenceUnitName" value="pu-workflow" />
 	<property name="dataSource" ref="dataSourceWorkflow" />
@@ -601,31 +585,31 @@ Bundle-Version: 0.0.2
 </bean>
 
 <bean id="jpaVendorAdapter"
-	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
 	<property name="showSql" value="false" />
 	<!-- ensures new db is auto created if needed -->
 	<property name="generateDdl" value="true" />
 	<property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />
 </bean>
 
-<bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
-    <property name="jtaTransactionManager" ref="transactionManager" />
-</bean>
-<bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
-	init-method="init" destroy-method="close">
+   <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
+       <property name="jtaTransactionManager" ref="transactionManager" />
+   </bean>
+   <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
+	init-method="init" destroy-method="close" bundle:export="true">
 	<property name="forceShutdown" value="false" />
 </bean>
-   <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+   <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
        <property name="transactionTimeout" value="300" />
    </bean>
 <bean id="transactionManager"
-	class="org.springframework.transaction.jta.JtaTransactionManager">
+	class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">
 	<property name="transactionManager" ref="atomikosTransactionManager" />
 	<property name="userTransaction" ref="atomikosUserTransaction" />
 	<property name="allowCustomIsolationLevels" value="true" />
 </bean>
 
-<bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+   <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
         ]]></code>
         <p>The <courier>JDBCPool</courier> bean is used to display the table of relevant process instances
         to a user. It uses simple JDBC protocol rather than JPA because that is all the Vaadin table
@@ -644,6 +628,9 @@ Bundle-Version: 0.0.2
 		<p>The rest of the beans are all relating to transaction management. They ensure
 		that the Atomikos transaction manager is configured properly with Spring, including annotation
 		driven transactions.</p>
+		<p>You will notice several of these beans are tagged with <courier>bundle:export="true"</courier>. This
+		makes the bundle manager export those beans to the bundles so they can see them too. This is particularly important
+		in the case of the transaction beans because we want both databases to participate in the same transactions.</p>
 		</h2>
 		<h2 t="Bundled Databases">
 		<p>Meanwhile the bundles define their own database connections and it is vital that
@@ -654,8 +641,8 @@ Bundle-Version: 0.0.2
 ...
 <bean id="em-local"
 	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	<property name="persistenceXmlLocation" value="classpath:persistence-orderinstances.xml" />
-	<property name="persistenceUnitName" value="pu-local" />
+	<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-orderinstances.xml" />
+	<property name="persistenceUnitName" value="pu-orderinstances" />
 	<property name="dataSource" ref="dataSourceLocal" />
 	<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 	<property name="jpaDialect">
