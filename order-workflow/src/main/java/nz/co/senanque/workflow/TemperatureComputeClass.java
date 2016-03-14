@@ -38,7 +38,8 @@ public class TemperatureComputeClass implements ComputeType<Order> {
 	}
 	public void execute(ProcessInstance processInstance, Order context, Map<String, String> map) {
 		float fahrenheit = context.getFahrenheit();
-		float celsius = (fahrenheit - 32F)*5F/9F; 
+		float celsius = (fahrenheit - 32F)*5F/9F;
+		celsius = Math.round(celsius * 100F)/100F;
 		context.setCelsius(celsius);
 		log.debug("Computed temperature {}",celsius);
 	}

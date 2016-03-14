@@ -53,12 +53,18 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
  	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
  		<property name="directory" ref="bundlesDir"/>
+		<property name="exportedBeans">
+			<map>
+				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
+ 				<entry key="genericEndpoint" value-ref="genericEndpoint"/> 
+			</map>
+		</property>
 	</bean>
-
+	
     <!-- endpoints needed by SI -->
-    <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint" bundle:export="true"/>
-    <bean id="genericEndpoint" class="nz.co.senanque.messaging.GenericEndpoint" bundle:export="true"/>
-
+    <bean id="errorEndpoint" class="nz.co.senanque.messaging.ErrorEndpoint"/>
+    <bean id="genericEndpoint" class="nz.co.senanque.messaging.GenericEndpoint"/>
+    
     <!-- The executor is responsible for scanning for active processes etc -->
     <bean id="executor" class="nz.co.senanque.workflow.ExecutorImpl" />
 

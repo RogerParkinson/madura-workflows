@@ -92,17 +92,23 @@ public class ExecutorImpl implements Executor {
 	 */
 	@Override
 	public void activeProcesses() {
-		if (!m_shuttingDown && !m_freeze) {
-			List<ProcessInstance> activeProcesses;
-			try {
-				activeProcesses = getWorkflowDAO().getActiveProcesses();
-			} catch (RuntimeException e) {
-				return;
+		try {
+			log.debug("active processes {} {}",m_shuttingDown,m_freeze);
+			if (!m_shuttingDown && !m_freeze) {
+				List<ProcessInstance> activeProcesses;
+				try {
+					activeProcesses = getWorkflowDAO().getActiveProcesses();
+				} catch (RuntimeException e) {
+					return;
+				}
+				while (!activeProcesses.isEmpty()) {
+					execute(activeProcesses.get(0));
+					activeProcesses = getWorkflowDAO().getActiveProcesses();
+				}
+				log.debug("active processes: exit");
 			}
-			while (!activeProcesses.isEmpty()) {
-				execute(activeProcesses.get(0));
-				activeProcesses = getWorkflowDAO().getActiveProcesses();
-			}
+		} catch (Exception e) {
+			log.debug("activeProcesses", e);
 		}
 	}
 

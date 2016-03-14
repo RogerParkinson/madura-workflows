@@ -18,7 +18,6 @@
 	<logger name="org.springframework.jmx" level="info"/>
 	<logger name="org.springframework.context.support.ResourceBundleMessageSource" level="error"/>
 	<logger name="nz.co.senanque.messaging.GenericEndpoint" level="debug"/>
-	<logger name="nz.co.senanque.workflow.TemperatureComputeClass" level="debug"/>
  	<logger name="nz.co.senanque.workflow.ContextJPA" level="info"/>
  	<logger name="nz.co.senanque.workflow.WorkflowJPA" level="info"/>
 	<logger name="nz.co.senanque.workflowui.MainLayout" level="debug"/>
@@ -29,6 +28,10 @@
 	
 
 <!-- 
+	<logger name="nz.co.senanque.workflow.ExecutorImpl" level="debug"/>
+	<logger name="nz.co.senanque.workflow.TemperatureComputeClass" level="debug"/>
+ 	<logger name="nz.co.senanque.workflow.WorkflowManagerImpl" level="debug"/>
+
 	<logger name="nz.co.senanque.madura.bundle.spring.DumpBeanFactory" level="debug"/>
 	<logger name="nz.co.senanque.logging.HashIdLogger" level="debug"/>
 	<logger name="nz.co.senanque.workflow.WorkflowManagerImpl" level="debug"/>

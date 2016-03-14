@@ -83,16 +83,6 @@ public class WorkflowJPA implements WorkflowDAO {
 		log.debug("\n{}",displayProcess(ret, 0));
 		return ret;
 	}
-//	@Transactional
-//	public boolean testProcessInstance(
-//			long id, int expectedAuditCount) {
-//		log.debug("refreshProcessInstance");
-//		ProcessInstance ret =  m_entityManager.find(ProcessInstance.class, id);
-//		m_entityManager.refresh(ret);
-//		log.debug("\n{}",displayProcess(ret, 0));
-//		return expectedAuditCount == ret.getAudits().size();
-//	}
-
 	/* (non-Javadoc)
 	 * @see nz.co.senanque.workflow.WorkflowDAO#mergeProcessInstance(nz.co.senanque.workflow.instances.ProcessInstance)
 	 */
@@ -101,6 +91,9 @@ public class WorkflowJPA implements WorkflowDAO {
 		log.debug("mergeProcessInstance");
 		ProcessInstance ret =  m_entityManager.merge(processInstance);
 		m_entityManager.flush();
+		if (log.isDebugEnabled()) {
+			log.debug("updating processInstance {} to {}",processInstance.getId(),processInstance.getStatus());
+		}
 		return ret;
 	}
 
@@ -110,14 +103,7 @@ public class WorkflowJPA implements WorkflowDAO {
 	@Transactional
 	public List<ProcessInstance> getActiveProcesses() {
 		if (log.isDebugEnabled()) {
-			Query query = m_entityManager.createQuery("SELECT c FROM nz.co.senanque.workflow.instances.ProcessInstance c", ProcessInstance.class);
-			@SuppressWarnings("unchecked")
-			List<ProcessInstance> result = query.getResultList();
-			log.debug("----------all processInstances ---------------");
-			for (ProcessInstance processInstance:result) {
-				log.debug("processInstanceId={} processName={} taskId={} status={}",processInstance.getId(),processInstance.getProcessDefinitionName(),processInstance.getTaskId(), processInstance.getStatus());
-			}
-			log.debug("----------------------------------------------");
+			getAllProcesses();
 		}
 		Query query = m_entityManager.createNamedQuery("ActiveProcesses");
 		@SuppressWarnings("unchecked")
@@ -138,10 +124,12 @@ public class WorkflowJPA implements WorkflowDAO {
 		@SuppressWarnings("unchecked")
 		List<ProcessInstance> result = query.getResultList();
 		if (log.isDebugEnabled()) {
+			log.debug("----------all processInstances ---------------");
 			for (ProcessInstance processInstance:result) {
 				log.debug("processInstanceId={} processName={} taskId={} status={}",processInstance.getId(),processInstance.getProcessDefinitionName(),processInstance.getTaskId(), processInstance.getStatus());
 			}
 			log.debug("found {} processes",result.size());
+			log.debug("----------------------------------------------");
 		}
 		return result;
 	}

@@ -145,14 +145,6 @@
 			<artifactId>madura-workflow-vaadin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-<!-- 
-		<dependency>
-			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-workflow-ui</artifactId>
-			<version>${project.version}</version>
-			<classifier>classes</classifier>
-		</dependency>
- -->
 	</dependencies>
 	<build>
 		<plugins>
@@ -168,6 +160,24 @@
 							<schemaIncludes>
 								<include>OrderInstances.xsd</include>
 							</schemaIncludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>nz.co.senanque</groupId>
+				<artifactId>madura-rules-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>xjr</goal>
+						</goals>
+						<configuration>
+							<rules>OrderRules.rul</rules>
+							<schema>OrderInstances.xsd</schema>
+							<bufferSize>2000</bufferSize>
+							<packageName>nz.co.senanque.workflow.orderrules</packageName>
+							<xsdpackageName>nz.co.senanque.workflow.orderinstances</xsdpackageName>
 						</configuration>
 					</execution>
 				</executions>
@@ -358,6 +368,25 @@
 										</versionRange>
 										<goals>
 											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											nz.co.senanque
+										</groupId>
+										<artifactId>
+											madura-rules-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.0.0-SNAPSHOT,)
+										</versionRange>
+										<goals>
+											<goal>xjr</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

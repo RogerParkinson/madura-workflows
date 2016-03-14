@@ -280,13 +280,13 @@ public class WorkflowManagerImpl extends WorkflowManagerAbstract {
 			processInstance.setStatus(TaskStatus.ABORTING);
 			processInstance.setComment(e.getMessage());
 		}
+		log.debug("set status to processInstance {} to {} {}",processInstance.getId(),processInstance.getStatus(),context);
 		getContextDAO().mergeContext(context);
 		getWorkflowDAO().mergeProcessInstance(processInstance);
 		getWorkflowDAO().flush();
 		if (log.isDebugEnabled()) {
 			getWorkflowDAO().getActiveProcesses();
 		}
-		log.debug("set status to processInstance {} to {} {}",processInstance.getId(),processInstance.getStatus(),context);
 	}
 
 	@Transactional

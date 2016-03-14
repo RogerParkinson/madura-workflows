@@ -63,6 +63,9 @@ public class ErrorEndpoint implements MessageMapper {
 		MessageHeaders messageHeaders = message.getHeaders();
 		final MessagingException messagingException = (MessagingException)message.getPayload();
 		Long correlationId = message.getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class);
+		if (correlationId == null) {
+			correlationId = messagingException.getFailedMessage().getHeaders().get(IntegrationMessageHeaderAccessor.CORRELATION_ID,Long.class);
+		}
 		log.debug("ProcessInstance: correlationId {}", correlationId);
 		if (correlationId == null) {
 			log.error("correlation Id is null");
