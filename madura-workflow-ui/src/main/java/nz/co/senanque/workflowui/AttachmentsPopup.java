@@ -18,6 +18,7 @@ package nz.co.senanque.workflowui;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.lang.reflect.Method;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -41,10 +42,10 @@ import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.And;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -137,7 +138,12 @@ public class AttachmentsPopup extends Window implements MessageSourceAware {
 		hl.addComponent(done);
 		panel.addComponent(hl);
 		refresh();
-		m_attachmentPopup.addListener(AttachmentEvent.class, this, "refresh");
+		try {
+			Method method = this.getClass().getMethod("refresh", new Class<?>[]{});
+			m_attachmentPopup.addListener(AttachmentEvent.class, this, method);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
 
     	if (getParent() == null) {
     		UI.getCurrent().addWindow(this);

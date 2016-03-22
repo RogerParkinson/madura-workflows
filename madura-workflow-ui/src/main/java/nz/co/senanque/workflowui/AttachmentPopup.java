@@ -31,7 +31,6 @@ import org.springframework.context.support.MessageSourceAccessor;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Form;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -78,12 +77,10 @@ public class AttachmentPopup extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-//        main.setStyleName(Panel.STYLE_LIGHT);
         main.setWidth(getWindowWidth());
         main.setHeight(getWindowHeight());
         
         panel = new VerticalLayout();
-//        main.setMargin(true);
         main.addComponent(panel);
         
         setCaption(m_messageSourceAccessor.getMessage("attachment", "Attachment"));
@@ -98,15 +95,13 @@ public class AttachmentPopup extends Window implements MessageSourceAware {
 	}
 	public void load(final long pid) {
 		panel.removeAllComponents();
-		Form form = new Form();
 		final Upload upload = new Upload(null, receiver);
 		upload.setImmediate(true);
 		upload.setButtonCaption(m_messageSourceAccessor.getMessage("upload.file", "Upload File"));
 		checkbox = new CheckBox(m_messageSourceAccessor.getMessage("upload.protected", "Protected"));
 		comment = new TextField(m_messageSourceAccessor.getMessage("upload.comment", "Comment"));
-		form.addField("comment", comment);
-		form.addField("protected", checkbox);
-		panel.addComponent(form);
+		panel.addComponent(comment);
+		panel.addComponent(checkbox);
 		panel.addComponent(upload);
 
         upload.addFinishedListener(new Upload.FinishedListener() {

@@ -15,11 +15,12 @@
  *******************************************************************************/
 package nz.co.senanque.workflowui;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
-import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraFieldGroup;
 import nz.co.senanque.vaadin.MaduraSessionManager;
-import nz.co.senanque.validationengine.ValidationObject;
 import nz.co.senanque.workflow.instances.Audit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextArea;
@@ -56,7 +58,7 @@ public class AuditPopup extends Window implements MessageSourceAware {
 	private String m_windowWidth = "800px";
 	private String m_windowHeight = "400px";
 	private transient MessageSourceAccessor m_messageSourceAccessor;
-    private MaduraForm m_auditForm;
+    private MaduraFieldGroup m_fieldGroup;
 	@Autowired private MaduraSessionManager m_maduraSessionManager;
 
 	@Override
@@ -64,23 +66,26 @@ public class AuditPopup extends Window implements MessageSourceAware {
 		m_messageSourceAccessor = new MessageSourceAccessor(messageSource);
 	}
     public void close() {
-    	getMaduraSessionManager().getValidationSession().unbind((ValidationObject) m_auditForm.getData());
+    	m_fieldGroup.unbind();
     	UI.getCurrent().removeWindow(this);
     }
     public void load(Audit audit) {
     	panel.removeAllComponents();
 		getMaduraSessionManager().getValidationSession().bind(audit);
     	BeanItem<Audit> beanItem = new BeanItem<Audit>(audit);
-
-    	m_auditForm = new MaduraForm(getMaduraSessionManager());
-    	String[] fieldList = new String[]{"created","lockedBy","status","comment"};
-    	m_auditForm.setFieldList(fieldList);
-    	m_auditForm.setItemDataSource(beanItem);
-    	TextArea comment = (TextArea)m_auditForm.getField("comment");
+    	m_fieldGroup =  m_maduraSessionManager.createMaduraFieldGroup();
+    	
+    	Map<String,Field<?>> fields = m_fieldGroup.buildAndBind(new String[]{"created","lockedBy","status","comment"},beanItem);
+//    	String[] fieldList = new String[]{"created","lockedBy","status","comment"};
+//    	m_fieldGroup.setFieldList(fieldList);
+//    	m_auditForm.setItemDataSource(beanItem);
+    	TextArea comment = (TextArea)fields.get("comment");
     	comment.setWidth("700px");
-    	panel.addComponent(m_auditForm);
+    	for (Field<?> f: fields.values()) {
+    		panel.addComponent(f);
+    	}
 		panel.addComponent(getInitialLayout());
-    	panel.requestRepaint();
+//    	panel.requestRepaint();
     	if (getParent() == null) {
     		UI.getCurrent().addWindow(this);
         	this.center();
@@ -102,6 +107,7 @@ public class AuditPopup extends Window implements MessageSourceAware {
         setCaption(m_messageSourceAccessor.getMessage("audit", "Audit"));
 	}
 
+	@SuppressWarnings("serial")
 	private Component getInitialLayout() {
 		VerticalLayout ret = new VerticalLayout();
         // Buttons
