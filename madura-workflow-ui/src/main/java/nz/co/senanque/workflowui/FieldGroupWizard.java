@@ -15,18 +15,18 @@
  *******************************************************************************/
 package nz.co.senanque.workflowui;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraFieldGroup;
 import nz.co.senanque.vaadin.MaduraSessionManager;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
@@ -37,6 +37,8 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Field;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
@@ -51,10 +53,10 @@ import com.vaadin.ui.Window;
  */
 @UIScope
 @org.springframework.stereotype.Component
-public class FormWizard extends Window implements MessageSourceAware {
+public class FieldGroupWizard extends Window implements MessageSourceAware {
 	
-	private static final Logger log = LoggerFactory
-			.getLogger(FormWizard.class);
+//	private static final Logger log = LoggerFactory
+//			.getLogger(FieldGroupWizard.class);
 	
 	private static final long serialVersionUID = 1L;
 	private Layout main;
@@ -64,15 +66,16 @@ public class FormWizard extends Window implements MessageSourceAware {
 	private TabSheet tabSheet;
     private String m_windowWidth = "800px";
     private String m_windowHeight = "600px";
-    private MaduraForm m_processForm;
-
+    private MaduraFieldGroup m_maduraFieldGroup;
+    
 	@Autowired private MaduraSessionManager m_maduraSessionManager;
 	@Autowired private transient Audits m_audits;
 	@Autowired private transient WorkflowClient m_workflowClient;
 	@Autowired private transient AttachmentsPopup m_attachmentsPopup;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
+	TextArea taskField = new TextArea();
 	
-	public FormWizard() {
+	public FieldGroupWizard() {
 	}
 
 	@PostConstruct
@@ -96,6 +99,7 @@ public class FormWizard extends Window implements MessageSourceAware {
         main.addComponent(tabSheet);
 	}
 
+	@SuppressWarnings("serial")
 	public void load(final WorkflowForm form) {
     	
 //     	log.debug("Loading form {}",form.getClass().getSimpleName());
@@ -145,31 +149,56 @@ public class FormWizard extends Window implements MessageSourceAware {
     	formPanel.markAsDirty();
 
     	BeanItem<ProcessInstance> beanItem = new BeanItem<ProcessInstance>(form.getProcessInstance());
-
-    	m_processForm = new MaduraForm(getMaduraSessionManager());
-    	String[] fieldList = new String[]{"queueName","bundleName","status","reference", "lastUpdated", "lockedBy","comment"};
-    	m_processForm.setFieldList(fieldList);
-    	m_processForm.setReadOnly(form.isReadOnly());
-    	m_processForm.setItemDataSource(beanItem);
-    	TextArea comment = (TextArea)m_processForm.getField("comment");
-    	TextArea taskField = new TextArea(m_messageSourceAccessor.getMessage("task"));
-    	taskField.setRows(3);
-    	taskField.setWordwrap(true);
-    	taskField.setWidth("700px");
-    	comment.setWidth("700px");
-    	m_processForm.addField("Task", taskField);
-    	taskField.setValue(task);
-    	taskField.setReadOnly(true);
-
-     	processPanel.removeAllComponents();
-    	processPanel.addComponent(m_processForm);
-    	Button attachments = new Button(m_messageSourceAccessor.getMessage("attachments", "Attachments"));
-		attachments.addClickListener(new ClickListener(){
+    	
+    	m_maduraFieldGroup = m_maduraSessionManager.createMaduraFieldGroup();
+		Button attachments = m_maduraFieldGroup.createButton("attachments", new ClickListener(){
 
 			@Override
 			public void buttonClick(ClickEvent event) {
 				m_attachmentsPopup.load(form.getProcessInstance().getId());				
 			}});
+//    	m_maduraFieldGroup.setItemDataSource(beanItem);
+    	Map<String,Field<?>> fields = m_maduraFieldGroup.buildAndBind(
+    			new String[]{"queueName","bundleName","status","reference","lastUpdated","lockedBy","comment"},
+    			beanItem);
+//    	m_maduraFieldGroup.buildAndBindMemberFields(this); // This discovers the fields on this object and binds them
+
+    	TextArea comment = (TextArea)fields.get("comment");
+    	comment.setRows(2);
+    	comment.setWordwrap(true);
+    	comment.setWidth("700px");
+    	
+    	taskField.setRows(2);
+    	taskField.setWordwrap(true);
+    	taskField.setWidth("700px");
+    	taskField.setValue(task);
+    	taskField.setReadOnly(true);
+
+     	processPanel.removeAllComponents();
+     	processPanel.setMargin(true);
+     	processPanel.setSpacing(true);
+     	HorizontalLayout processPanelHorizontal = new HorizontalLayout();
+     	processPanelHorizontal.setSpacing(true);
+    	processPanel.addComponent(processPanelHorizontal);
+    	VerticalLayout processPanelColumn1 = new VerticalLayout();
+    	VerticalLayout processPanelColumn2 = new VerticalLayout();
+    	VerticalLayout processPanelColumn3 = new VerticalLayout();
+    	processPanelHorizontal.addComponent(processPanelColumn1);
+    	processPanelHorizontal.addComponent(processPanelColumn2);
+    	processPanelHorizontal.addComponent(processPanelColumn3);
+    	processPanelColumn1.addComponent(fields.get("queueName"));
+    	processPanelColumn1.addComponent(fields.get("bundleName"));
+    	processPanelColumn2.addComponent(fields.get("reference"));
+    	processPanelColumn2.addComponent(fields.get("lastUpdated"));
+    	processPanelColumn3.addComponent(fields.get("lockedBy"));
+    	processPanelColumn3.addComponent(fields.get("status"));
+    	
+    	processPanel.addComponent(comment);
+    	processPanel.addComponent(taskField);
+    	m_maduraSessionManager.updateOtherFields(null);
+    	
+    	m_maduraFieldGroup.setReadOnly(form.isReadOnly());
+    	
 		processPanel.addComponent(attachments);
     	processPanel.markAsDirty();
     	
@@ -184,7 +213,7 @@ public class FormWizard extends Window implements MessageSourceAware {
     }
 
     public void close() {
-    	m_processForm.destroy();
+    	m_maduraFieldGroup.destroy();
     	getMaduraSessionManager().getValidationSession().unbindAll();
     	getMaduraSessionManager().close();
     	super.close();

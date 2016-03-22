@@ -19,8 +19,6 @@ import nz.co.senanque.madura.bundle.BundleManager;
 import nz.co.senanque.workflow.BundleSelector;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -30,8 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @org.springframework.stereotype.Component
 public class BundleSelectorImpl implements BundleSelector {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(BundleSelectorImpl.class);
+//	private static final Logger log = LoggerFactory
+//			.getLogger(BundleSelectorImpl.class);
 	@Autowired BundleManager m_bundleManager;
 
 	/* (non-Javadoc)

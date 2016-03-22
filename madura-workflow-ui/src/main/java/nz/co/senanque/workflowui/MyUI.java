@@ -69,7 +69,7 @@ public class MyUI extends UI implements MessageSourceAware {
 	@Autowired private PermissionManager m_permissionManager;
 	@Autowired private AboutWindow m_aboutWindow;
 	@Autowired private transient LaunchWizard m_launchWizard;
-	@Autowired private transient FormWizard m_formWizard;
+	@Autowired private transient FieldGroupWizard m_fieldGroupWizard;
 	@Autowired transient WorkflowClient m_workflowClient;
 	@Autowired private transient ProcessInstances m_processInstances;
 	@Autowired transient QueueProcessManager m_queueProcessManager;
@@ -182,7 +182,7 @@ public class MyUI extends UI implements MessageSourceAware {
 			Method processInstanceClickMethod = this.getClass().getMethod("processInstanceClick", new Class<?>[]{ProcessInstanceEvent.class});
 			m_processInstances.addListener(ProcessInstanceEvent.class, this, processInstanceClickMethod);
 			formWizardClickMethod = this.getClass().getMethod("formWizardClick", new Class<?>[]{ClickEvent.class});
-			m_formWizard.addListener(ClickEvent.class, this, formWizardClickMethod);
+			m_fieldGroupWizard.addListener(ClickEvent.class, this, formWizardClickMethod);
 			m_launchWizard.addListener(ClickEvent.class, this, formWizardClickMethod);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -199,7 +199,7 @@ public class MyUI extends UI implements MessageSourceAware {
 		if (!m_queueProcessManager.getWriteableQueues(m_permissionManager).contains(processInstance.getQueueName())) {
 			form.setReadOnly(true);
 		}
-		m_formWizard.load(form);
+		m_fieldGroupWizard.load(form);
 	}
 	public void formWizardClick(ClickEvent event) {
 		Button button = (com.vaadin.ui.Button)(event.getSource());

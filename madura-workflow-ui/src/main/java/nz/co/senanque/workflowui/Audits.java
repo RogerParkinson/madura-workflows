@@ -73,7 +73,7 @@ public class Audits extends VerticalLayout implements MessageSourceAware {
 		private static final long serialVersionUID = 1L;
 		public AuditTable() {
 			super(m_messageSourceAccessor.getMessage("Audit","Audit"), m_container);
-			setVisibleColumns(new String[]{"id","created","lockedBy","comment"});
+			setVisibleColumns(new Object[]{"id","created","lockedBy","comment"});
 			setColumnHeaders(new String[]{
 					m_messageSourceAccessor.getMessage("id","Id"),
 					m_messageSourceAccessor.getMessage("created","Created"),
@@ -82,7 +82,7 @@ public class Audits extends VerticalLayout implements MessageSourceAware {
 	    }
 
 		protected String formatPropertyValue(Object rowId, Object colId,
-	            Property property) {
+	            Property<?> property) {
 	        if (property == null) {
 	            return "";
 	        }
@@ -105,7 +105,7 @@ public class Audits extends VerticalLayout implements MessageSourceAware {
 		m_container.addContainerFilter(new Compare.Equal("parentId",processInstance.getId()));
 		m_container.sort(new String[]{"created"}, new boolean[]{true});
 		m_auditTable = new AuditTable();
-		m_auditTable.addListener(new ItemClickEvent.ItemClickListener() {
+		m_auditTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
 
 			private static final long serialVersionUID = 1L;
             @SuppressWarnings("unchecked")

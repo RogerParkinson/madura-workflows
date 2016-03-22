@@ -33,7 +33,6 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload;
@@ -89,6 +88,8 @@ public class AttachmentPopup extends Window implements MessageSourceAware {
         
         setCaption(m_messageSourceAccessor.getMessage("attachment", "Attachment"));
         this.addCloseListener(new CloseListener(){
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void windowClose(CloseEvent e) {

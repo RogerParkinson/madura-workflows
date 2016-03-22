@@ -24,7 +24,6 @@ import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadin.ButtonProperty;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
@@ -137,6 +136,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         setCaption(m_messageSourceAccessor.getMessage("launch.wizard", "Launch Wizard"));
 	}
 	
+	@SuppressWarnings("serial")
 	private Component getInitialLayout() {
 		VerticalLayout ret = new VerticalLayout();
         // Buttons
@@ -193,6 +193,7 @@ public class LaunchWizard extends Window implements MessageSourceAware {
         return ret;
 	}
 	
+	@SuppressWarnings("serial")
 	private Component getFinalLayout(String processName, final long processId, final boolean launcher) {
 		VerticalLayout ret = new VerticalLayout();
 		Button okay = new Button(m_messageSourceAccessor.getMessage("OK", "Okay"));
