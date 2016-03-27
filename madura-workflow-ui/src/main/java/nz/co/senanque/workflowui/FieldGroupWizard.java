@@ -73,8 +73,7 @@ public class FieldGroupWizard extends Window implements MessageSourceAware {
 	@Autowired private transient WorkflowClient m_workflowClient;
 	@Autowired private transient AttachmentsPopup m_attachmentsPopup;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
-	TextArea taskField = new TextArea();
-	
+		
 	public FieldGroupWizard() {
 	}
 
@@ -83,7 +82,6 @@ public class FieldGroupWizard extends Window implements MessageSourceAware {
         main = new VerticalLayout();
         setContent(main);
         setModal(true);
-//        main.setStyleName(Panel.STYLE_LIGHT);
         this.setWidth(getWindowWidth());
         this.setHeight(getWindowHeight());
         
@@ -95,15 +93,12 @@ public class FieldGroupWizard extends Window implements MessageSourceAware {
         tabSheet.addTab(processPanel,m_messageSourceAccessor.getMessage("formwizard.process"));
         auditPanel = new VerticalLayout();
         tabSheet.addTab(auditPanel,m_messageSourceAccessor.getMessage("formwizard.audit"));
-//        main.setMargin(true);
         main.addComponent(tabSheet);
 	}
 
 	@SuppressWarnings("serial")
 	public void load(final WorkflowForm form) {
     	
-//     	log.debug("Loading form {}",form.getClass().getSimpleName());
-
     	ProcessDefinition processDefinition = form.getProcessDefinition();
     	String task = processDefinition.getTask(form.getProcessInstance().getTaskId()).toString();
 
@@ -117,11 +112,8 @@ public class FieldGroupWizard extends Window implements MessageSourceAware {
     			ownerProcessDefinition.getName(),
     			form.getProcessInstance().getReference(),
     			ownerProcessDefinition.getDescription()}));
-//    	setDescription(ownerProcessDefinition.getDescription());
     	formPanel.removeAllComponents();
-//    	formPanel.setSizeUndefined();
     	formPanel.addComponent((VerticalLayout)form);
-//    	((VerticalLayout)form).setSizeFull();
     	ProcessInstance processInstance = form.getProcessInstance();
     	if (!form.isReadOnly()) {
 	    	PermissionManager pm = m_maduraSessionManager.getPermissionManager();
@@ -157,17 +149,15 @@ public class FieldGroupWizard extends Window implements MessageSourceAware {
 			public void buttonClick(ClickEvent event) {
 				m_attachmentsPopup.load(form.getProcessInstance().getId());				
 			}});
-//    	m_maduraFieldGroup.setItemDataSource(beanItem);
     	Map<String,Field<?>> fields = m_maduraFieldGroup.buildAndBind(
     			new String[]{"queueName","bundleName","status","reference","lastUpdated","lockedBy","comment"},
     			beanItem);
-//    	m_maduraFieldGroup.buildAndBindMemberFields(this); // This discovers the fields on this object and binds them
 
     	TextArea comment = (TextArea)fields.get("comment");
     	comment.setRows(2);
     	comment.setWordwrap(true);
     	comment.setWidth("700px");
-    	
+    	TextArea taskField = new TextArea();
     	taskField.setRows(2);
     	taskField.setWordwrap(true);
     	taskField.setWidth("700px");
