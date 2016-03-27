@@ -16,16 +16,15 @@
 package nz.co.senanque.workflow;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.OptimisticLockException;
 
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadin.MaduraForm;
+import nz.co.senanque.vaadin.MaduraFieldGroup;
 import nz.co.senanque.vaadin.MaduraSessionManager;
-import nz.co.senanque.vaadin.SimpleButtonPainter;
-import nz.co.senanque.vaadin.SubmitButtonPainter;
 import nz.co.senanque.validationengine.ValidationObject;
 import nz.co.senanque.validationengine.ValidationSession;
 import nz.co.senanque.workflow.instances.ProcessInstance;
@@ -43,8 +42,10 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
@@ -62,7 +63,8 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	private transient Object m_context;
 	private transient ProcessInstance m_processInstance;
 	@Autowired private transient MaduraSessionManager m_maduraSessionManager;
-	protected transient MaduraForm m_form;
+	protected transient MaduraFieldGroup fieldGroup;
+	protected transient Layout panel;
     protected transient Button okay;
     protected transient Button cancel;
     protected transient Button park;
@@ -72,6 +74,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	private transient ProcessDefinition m_processDefinition;
 	private transient MessageSourceAccessor m_messageSourceAccessor;
 	private String m_referenceName="reference";
+	private Field<?> m_referenceField;
 	private List<String> m_fieldList;
 	private boolean m_readOnlyForm;
 	private boolean m_launcher;
@@ -86,42 +89,33 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	@PostConstruct
 	public void init() {
-		m_form = new MaduraForm(m_maduraSessionManager);
-		m_form.setImmediate(true);
-        addComponent(m_form);
-        createButtons();
-        m_form.setSizeFull();
-		log.debug("Initialised MaduraSessionManager {} Validation Engine id {} {} Session id {}",
-				System.identityHashCode(getMaduraSessionManager()),
-				System.identityHashCode(getMaduraSessionManager().getValidationEngine()),
-				getMaduraSessionManager().getValidationEngine().getIdentifier(),
-				getMaduraSessionManager().getValidationSession().getValidationEngine().getIdentifier());
-		log.debug("The GenericVaadinForm id is {} ValidationEngine {}",
-				System.identityHashCode(this),
-				System.identityHashCode(getMaduraSessionManager().getValidationEngine()),
-				getCaption());
-		}
+        panel = new VerticalLayout();
+        panel.setSizeFull();
+        addComponent(panel);
+	}
 
 	public GenericVaadinForm() {
 	}
 	
-	protected void createButtons() {
-        okay = m_form.createSubmitButton("OK", this);
-//        okay.setData("OK");
-        cancel = m_form.createButton("cancel",this);
-//        cancel.setData("cancel");
+	protected HorizontalLayout createButtons() {
+		log.debug("isReadOnlyForm():{}",isReadOnlyForm());
+        okay = fieldGroup.createSubmitButton("OK", this);
+        okay.setReadOnly(isReadOnlyForm());
+        okay.setEnabled(!isReadOnlyForm());
+        cancel = fieldGroup.createButton("cancel",this);
         HorizontalLayout actions = new HorizontalLayout();
         actions.setMargin(true);
         actions.setSpacing(true);
         actions.addComponent(okay);
-        cancel.addListener(this);
+        cancel.addClickListener(this);
         actions.addComponent(cancel);
-		park = m_form.createSubmitButton("park",this);
-//		park.setData("park");
+		park = fieldGroup.createSubmitButton("park",this);
+		park.setReadOnly(this.isReadOnlyForm());
+		park.setEnabled(!isReadOnlyForm());
         actions.addComponent(park);
-        park.addListener(this);
+        park.addClickListener(this);
         park.setVisible(false);
-        addComponent(actions);
+        return actions;
 	}
 
 	public Object getContext() {
@@ -144,22 +138,32 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	@Override
 	public void bind() {
+		panel.removeAllComponents();
 		ValidationObject o = (ValidationObject)getContext();
-		BeanItem<?> newDataSource = new BeanItem<>(o);
+		BeanItem<ValidationObject> beanItem = new BeanItem<>(o);
 		m_maduraSessionManager.getValidationSession().bind(o);
-		if (m_fieldList != null) {
-			m_form.setFieldList(m_fieldList);
-		}
-        m_form.setItemDataSource(newDataSource);
-		if (m_fieldList != null) {
-			if (isReadOnlyForm()) {
-				for (String field: m_fieldList) {
-					m_form.getField(field).setReadOnly(true);
-				}
-			}
-		}
+		fieldGroup = m_maduraSessionManager.createMaduraFieldGroup();
+		Layout actions = createButtons();
+		log.debug("park:{}",(park.isEnabled()?"enabled":"disabled"));
+    	Map<String,Field<?>> fields = fieldGroup.buildAndBind(m_fieldList,beanItem);
+    	for (Field<?> f:fields.values()) {
+    		if (isReadOnlyForm()) {
+    			f.setReadOnly(true);
+    			f.setEnabled(false);
+    		}
+    		panel.addComponent(f);
+    	}
+    	m_referenceField = fields.get(m_referenceName);
 		m_launcher = (m_processInstance==null || m_processInstance.getId()== 0);
         park.setVisible(!isLauncher());
+        panel.addComponent(actions);
+        if (isReadOnlyForm()) {
+			park.setReadOnly(true);
+			park.setEnabled(false);
+	        okay.setReadOnly(true);
+	        okay.setEnabled(false);
+        }
+		log.debug("park:{}",(park.isEnabled()?"enabled":"disabled"));
 	}
 	@Override
 	public void close() {
@@ -185,7 +189,7 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 		if (event.getComponent().equals(okay)) {
 			if (StringUtils.hasText(m_referenceName) && m_processInstance.getId() == 0) {
 				try {
-					String reference = m_form.getField(m_referenceName).getValue().toString();
+					String reference = m_referenceField.getValue().toString();
 					m_processInstance.setReference(reference);
 				} catch (Exception e) {
 					// ignore errors
@@ -246,12 +250,8 @@ public class GenericVaadinForm extends VerticalLayout implements WorkflowForm, C
 	}
 	public void setReadOnly(boolean b) {
 		super.setReadOnly(b);
-		if (m_form == null) {
-			log.warn("Injection of readOnly into {} is a mistake. Should inject readOnlyForm instead");
-			return;
-		}
     	if (isReadOnly()) {
-        	m_form.setReadOnly(true);
+    		setReadOnlyForm(true);
         	if (readOnlyMessage == null) {
         		readOnlyMessage = new Label(m_messageSourceAccessor.getMessage("process.not.writable"));
         		addComponent(readOnlyMessage);
