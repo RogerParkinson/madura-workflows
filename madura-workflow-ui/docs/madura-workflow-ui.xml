@@ -13,11 +13,12 @@
 			<reference url="http://tomcat.apache.org/" t="Tomcat" />
 			<reference url="http://www.h2database.com" t="H2" />
 			<reference url="https://vaadin.com/home" t="Vaadin" />
-			<reference url="https://github.com/RogerParkinson/MaduraUtils" t="Madura Utils" />
-			<reference url="https://github.com/RogerParkinson/MaduraObjects" t="Madura Objects" />
-			<reference url="https://github.com/RogerParkinson/MaduraVaadinSupport" t="Madura Vaadin Support" />
-			<reference url="https://github.com/RogerParkinson/MaduraRules" t="Madura Rules" />
-			<reference url="https://github.com/RogerParkinson/MaduraBundles" t="Madura Bundles" />
+			<reference url="https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-login" t="Madura Login" />
+			<reference url="https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-utils" t="Madura Utils" />
+			<reference url="https://github.com/RogerParkinson/madura-objects-parent" t="Madura Objects" />
+			<reference url="https://github.com/RogerParkinson/madura-vaadin-support" t="Madura Vaadin Support" />
+			<reference url="https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-rules"  t="Madura Rules" />
+			<reference url="https://github.com/RogerParkinson/madura-bundles/tree/master/madura-bundle" t="Madura Bundles" />
 			<reference url="https://github.com/RogerParkinson/madura-workflows" t="Madura Workflow" />
 			<reference url="https://github.com/RogerParkinson/madura-workflows/tree/master/madura-workflow-ui" t="Madura Workflow UI" />
 			<reference url="http://www.apache.org/licenses/LICENSE-2.0" t="Apache Licence 2.0" />
@@ -81,7 +82,8 @@
 14:14:13.344 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: simple-workflow-1.0.2-SNAPSHOT.jar
 14:14:13.420 [localhost-startStop-1] WARN  c.v.s.navigator.SpringViewProvider - SpringViewProvider.java:165 No SpringViews found
 				]]></code>
-			<p>These are all normal and do not cause problems, though the poolSize should be reviewed before going into production.</p>
+			<p>These are all normal and do not cause problems, though the poolSize should be reviewed before going into production. The
+			<courier>DefaultListableBeanFactory</courier> looks a little alarming but it is benign.</p>
 			<p>Browse to <courier>http://localhost:8080/madura-workflow-ui/</courier>
 			(your server name and port may vary if you are not running a default configured Tomcat on your local machine). You should see a
 			login page.</p>
@@ -100,7 +102,7 @@
 			not the full list of process definitions anyway. There might be multiple versions of each of these processes and only the
 			latest versions are presented because we cannot launch old versions. Also some process definitions are not directly launchable,
 			they can only be launched by another process so they are not included either.</p>
-			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process which is really called <courier>order-workflow</courier>.</p>
+			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process.</p>
 			<p>Before going any further we should look at what this process does. The definition of the process is in the <courier>order-workflow</courier>
 			sub project in the file <courier>src/main/resources/OrderWorkflow.wrk</courier>:</p>
 				<code><![CDATA[
@@ -160,9 +162,11 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<img width="12cm" href="images/LaunchWizard2.png">LaunchWizard2</img>
 			<p>And the Okay button will return you to the home page.</p>
 			<img width="12cm" href="images/Home2.png">Home-2</img>
-			<p>The home page has an entry, which is the process instance you just launched. Yours might not have a queue name yet, so give it a few seconds and click
+			<p>The home page has an entry, which is the process instance you just launched. You won't initially have a queue name, so give it about 30 seconds and click
 			refresh until it does. Notice that the Reference column contains 'Order#1' which is what you typed on the launch form. You can also see that it is
-			in queue Q1 (when it appears) and that it is running process definition Demo, the definition you launched.</p>
+			in queue Q1 (when it appears) and that it is running process definition Demo, the definition you launched. This is what you should see
+			when the queue is there:</p>
+			<img width="12cm" href="images/Home2a.png">Home-2a</img>
 			<p>Meanwhile if you look at the application server log you should see something like this:</p>
 			<img width="12cm" href="images/log-1.png">log-1</img>
 			<p>That shows a web service message being sent and a reply received and unpacked. We have converted 20F to -6.67C. These debug
@@ -188,12 +192,12 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			finished.</p>
 			<img width="12cm" href="images/Home3.png">Home-3</img>
 			<p>As a demo this perhaps looks a little trivial. But note what happened carefully. A process instance was launched with a launch form which accepted some
-			initial data. That process was then managed through multiple stages, including sending a message, operating a form, and running a custom
+			initial data. That process was then managed through multiple stages, including sending a message, operating a form, and optionally running a custom
 			compute bean.</p>
-			<p>What we did not see yet is handling of errors. Let's go around again, but this time turn off your internet connection and cal it
-			Order#2.</p>
+			<p>What we did not see yet is handling of errors. Let's go around again, but this time turn off your internet connection and call it
+			Order#2. Again give it about 30 seconds to progress through the steps and refresh.</p>
 			<img width="12cm" href="images/Home4.png">Home-4</img>
-			<p>The new process is id 3 and, if you give it time to try the message and then refresh you will see this. Notice the error message, that is
+			<p>The new process is id 2. Notice the error message, that is
 			because it could not get to the web service. So what happened then? Well, take a look at the process definition again:</p>
 				<code><![CDATA[
 process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q1"{
@@ -214,7 +218,11 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			<p>Now you can see the details of the process, including the error. On the Audit tab you can see the trace of how the error was handled.</p>
 			<img width="12cm" href="images/P2C.png">Process2-Audit</img>
 			<p>This shows the error from the message and the fact that the compute task was executed. Naturally the form on the first tab looks much the same
-			with a computed value for the temperature.</p>
+			with a computed value for the temperature instead of one fetched from the web.</p>
+			<p>So you have now seen how a process can work through a sequence of steps that might include a web service call, a manual form and a compute task.
+			The process can handle errors an process them in much the same way Java handles exceptions. Do remember that when we say 'web service'
+			we really mean something handled by the external bus, inthis case Spring Integration. Such busses can support many kinds of communication
+			and web services are just one example.</p>
 			<p>The subject of attachments came up twice in that demo, once when the process was launched and once again when
 			operating a form. Attachments are documents of any kind attached to the process instance. There are limitations
 			on the size of the document you can attach which vary depending on the database product chosen. But any type of file
@@ -243,16 +251,16 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			over to a <emph>designer</emph> and they often know CSS better than a Java programmer. Typically programmers can do a rough cut of the application styling and get
 			the functionality in place, then get the designer to got to work on the CSS.</p>
 			<p>It is no coincidence that Madura Vaadin Support<referenceLink t="Madura Vaadin Support"/> handles the integration between Vaadin and Madura Objects<referenceLink t="Madura Objects"/>.
-			That provides dynamic validation on the forms, I18n, and a good way to use Vaadin with Spring, including Spring Security.</p>
+			That provides dynamic validation on the forms and good I18n support.</p>
 			<p>So the choice here is Vaadin with a little help from Madura Vaadin Support.</p>
 			</h2>
 			<h2 t="Security">
-			<p>Security is implemented using the same login filter/interceptor used in the Madura Vaadin Support demos.
+			<p>Security is implemented using Madura Login<referenceLink t="Madura Login"/>, the login filter/interceptor used in the Madura Vaadin Support demos.
 			That, by default, uses a simple hard coded list of users an permissions, and the permissions for the logged in user are passed to
 			the <courier>PermissionManager</courier> so that all the forms etc honour the permissions for this user.</p>
 			<p>In an enterprise environment, and typically workflow would run in an enterprise environment, there is often an external login procedure which adds a security
 			token to the request. Madura Vaadin Support's login form supports this, allowing a pre-logged-in user to bypass the login form.</p>
-			<p>Queues also have permissions attached to them. That means that user have limited access to view or operate that queue, depending on their permission.
+			<p>Queues also have permissions attached to them. That means that users have limited access to view or operate that queue, depending on their permission.
 			If the current user has only read access to the queue then items in the queue cannot be opened. If they have no read access to the queue then
 			no items from that queue will be displayed.</p>
 			<p>There is also one 'super permission' called TECHSUPPORT. Users with this permission can always modify any process instance in any queue, including
@@ -262,11 +270,12 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			</h2>
 			<h2 t="Spring Framework">
 			<p>As with other applications that use Maura Vaadin Support, which depends on the Vaadin-Spring Addon<referenceLink t="Vaadin-Spring Addon"/>, we have
-			some generic bean defined in the <courier>application-context.xml</courier>, others defined in a <courier>@Configuration</courier> class and the rest
+			some generic beans defined in the <courier>application-context.xml</courier>, others defined in a <courier>@Configuration</courier> class and the rest
 			defined using Spring's ability to scan packages looking for <courier>@Component</courier> annotations. The objective here is to simplify the configuration
 			such that as much as possible happens automatically so, in general, you don't need to follow up and understand all the <courier>@Component</courier> and <courier>@Configuration</courier> annotations
 			unless you really like that sort of thing. To configure this to your production requirements you will need to adjust <courier>application-context.xml</courier>
-			which you will find in the <courier>WEB-INF</courier> directory.</p>
+			which you will find in the <courier>WEB-INF</courier> directory. There are several references to the <courier>application-context.xml</courier> in the following
+			sections.</p>
 			</h2>
 			<h2 t="Scheduler">
 			<p>The scheduler is configured using Spring in <courier>applicationContext.xml</courier> like this:</p>
@@ -340,7 +349,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 nz.co.senanque.workflow.WorkflowManager.schema=classpath:/OrderInstances.xsd
 nz.co.senanque.workflow.WorkflowManager.processes=classpath:/OrderWorkflow.wrk
         ]]></code>
-        <p>This refers to the xsd file that defines the objects used by the workflow, and the wrk file that contains the workflow process definitions.</p>
+        <p>This refers to the xsd file that defines the objects used by the workflow, and the wrk file that contains the workflow process definitions.
+        The workflow manager bean itself is a component defined via the scanner.</p>
         <p>As well as this the bundle needs a JPA database, yes another one, see <sectionLink t="Database"/> for details as to why.</p>
         <p>All the beans defined in the bundle context file are singletons unless scoped otherwise, and one or two are. Here are the
         rest of the essential beans:</p>
@@ -549,6 +559,8 @@ Bundle-Description: A sample bundle containing a workflow.
 		is part of the process definition, not the core workflow. Process definitions are free to operate on any objects they want to so those objects cannot
 		be dictated by the core workflow. That means that the bundle containing the process definition must contain the object definitions as well, so there are
 		Java POJOs annotated with JPA included in the bundle, effectively defining the database tables needed for the bundle.</p>
+		<p>The database configuration is deliberately all in XML because it is likely a production system will need to adjust
+		it to local needs, so there is no point hiding it in components to make it simpler.</p>
 		<h2 t="Workflow Database">
 		<p>Now it is time to look at the workflow database configuration (as opposed to the one in the bundle). This is
 		the <courier>database-context.xml</courier> file:</p>
@@ -687,9 +699,10 @@ Bundle-Description: A sample bundle containing a workflow.
 	<h1 t="Locking">
 		<p>While it is common to rely on database for locking the workflow often needs to lock things across transactions so it uses
 		the locking facility from Madura Utils<referenceLink t="Madura Utils"/>. This has two variants, and it is easy to add more.</p>
-		<p>For this application the choice is <courier>SimpleLocking</courier> which relies on memory-based flags and only works if there
+		<p>For this demo the choice is <courier>SimpleLocking</courier> which relies on memory-based flags and only works if there
 		is only one instance of the application running, albeit supporting multiple users. A more likely choice for production is <courier>SQLLocking</courier>
-		which uses its own database connection to store the flags on a database table.</p>	
+		which uses its own database connection to store the flags on a database table. See the Madura Utils documentation for how to configure that.
+		You may also want to develop your own locking mechanism and Madura Utils has documentaiton for that too.</p>	
 	</h1>
 	<h1 t="JMX">
 		<p>The application supports JMX. Using JMX you can monitor the status of <courier>SimpleLocking</courier> and, if necessary, kill
@@ -724,14 +737,17 @@ Bundle-Description: A sample bundle containing a workflow.
 		problem is solved by <referenceLink t="Weblogic JNDI"/>. Your reconfigured application will likely make use of JNDI data sources instead
 		of the simpler ones configured here. There are also decisions to be made around how many instances of the application, particularly how many
 		copies of the scheduler are running.</le>
-		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. This usually
-		just means adjusting the security configuration file because Spring Security is very comprehensive.</le>
+		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation
+		for Madura Login<referenceLink t="Madura Login"/> for details.</le>
 		<le>The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or
 		you might just have different preferences in your enterprise.</le>
-		<le>Locking. You will almost certainly need to move from SimpleLock to SQLLock or perhaps something else you prefer.</le>
-		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS.</le>
+		<le>Locking. You will almost certainly need to move from SimpleLock to SQLLock or perhaps something else you prefer. This is
+		documented in Madura Utils<referenceLink t="Madura Utils"/></le>
+		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS 
+		and just a little about Vaadin<referenceLink t="Vaadin"/>. The CSS files are in <courier>src/main/webapp/VAADIN/themes/mytheme</courier>.</le>
 		<le>Language translations. The application is, we believe, fully i18n compliant. You will want to look at <courier>src/main/resources/messages.properties</courier>
-		and produce a translated version of that. There is already a French one there. You also need to check <courier>localmessages.properties</courier> in the bundles.</le>
+		and produce a translated version of that. There is already a French one there. You also need to check <courier>localmessages.properties</courier> in the bundles.
+		If you are using Madura Objects and Madura Rules you may want to translate their message files as well.</le>
 		<le>Writing your own workflow definitions, forms, objects and rules. The whole reason for doing this is to get the workflow you really want,
 		so this step is obvious. It is where, hopefully, most of the work will go to get the application where you want it.</le>
 		</list>
@@ -742,13 +758,13 @@ Bundle-Description: A sample bundle containing a workflow.
 		about using bundles to hold the forms. Maybe you want a very cut down app that someone can run on a tablet. In that case all you really need is a way for them to scan the PROCESSINSTANCE table for
 		records that are in WAIT state and whose Queue Name is the one they are to access. Once they find one they should do the following:</p>
 		<list>
-		<le>Lock the process instance using the chosen lock mechanism.</le>
-		<le>Change the status to BUSY and write their user name into the LockedBy field.</le>
+		<le>Lock the process instance using your chosen lock mechanism.</le>
+		<le>Change the status to BUSY and write the current user name into the LockedBy field.</le>
 		<le>Save the record.</le>
 		<le>Release the lock.</le>
 		<le>Fetch the context information eg the Order or whatever object structure is associated with this process definition.</le>
 		<le>Present a form or some kind of input facility for the user to complete and have them indicate when they are done.</le>
-		<le>Lock the process instance (again) using the chosen lock mechanism.</le>
+		<le>Lock the process instance (again).</le>
 		<le>Save the updated context and update the PROCESSINSTANCE status to GO and clear the lockedBy field. This should be a 2 phase commit.</le>
 		<le>Release the lock.</le>
 		</list>

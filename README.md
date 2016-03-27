@@ -1,5 +1,8 @@
-MaduraWorkflows
+Madura Workflows
 ===============
+
+(More detailed documentation (PDFs) can be found on the [core workflow](http://www.madurasoftware.com/madura-workflow.pdf) and
+the [workflow ui](http://www.madurasoftware.com/madura-workflow-ui.pdf)).
 
 This is yet another workflow package, but it is a little different from its competitors in that it is tightly integrated with [Madura Objects](https://github.com/RogerParkinson/MaduraObjects) and optionally [Madura Rules](https://github.com/RogerParkinson/MaduraRules). It also ignores BPEL formats in favour of an easy-to-learn Java like syntax on the basis that it is always programmers rather than business analysts who end up writing business processes. Consequently there are no efforts made to provide a diagramatic UI to define them in favour of a syntax-aware editor as an Eclipse plugin: [maduraeditors](https://github.com/RogerParkinson/maduraeditors).
 
@@ -43,13 +46,13 @@ This is the UI and it builds a war file you can deploy to an application server 
 The maven build copies the example processes into the PROJECT/bundles directory. 
 
 ### Demo Script
-There is a demo script and other documentation on the ui in the pdf in the madura-workflow-ui/target directory.
+There is a demo script and other documentation on the ui [here](http://www.madurasoftware.com/madura-workflow-ui.pdf).
 
 ### From Demo to Production
 The intention of this project is to provide a customisable template rather than a production application. Things you would want to review to turn it into production include:
 * Database. The in memory database used in this would obviously be replaced in a production system. You may want to review whether you want H2 or some other database product more widely used in enterprise applications. Hibernate and Atomikos are also only options that can be replaced by alternatives you may prefer.
 * Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities. The one area that might be a little tricky is if you want to use WebLogic because it has no easy way of defining a JNDI name to point to a simple string. That problem is solved by [weblogic-jndi-startup](https://github.com/RogerParkinson/weblogic-jndi-startup) . Your reconfigured application will likely make use of JNDI data sources instead of the simpler ones configured here. There are also decisions to be made around how many instances of the application, particularly how many copies of the scheduler are running.
-* Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. This usually just means adjusting the security configuration file because Spring Security is very comprehensive.
+* Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation for [Madura Login](https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-login) for details.
 * The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or you might just have different preferences in your enterprise.
 * Locking. You will almost certainly need to move from SimpleLock (which is memory based) to SQLLock or perhaps something else you prefer.
 * The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS.
