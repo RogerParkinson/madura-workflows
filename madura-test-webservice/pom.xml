@@ -19,43 +19,6 @@
     </dependencies>
     <build>
         <plugins>
-<!-- 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                    	<id>wsimport</id>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                    	<id>wsgen</id>
-                        <goals>
-                            <goal>wsgen</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <sei>nz.co.senanque.workflow.ws.client.MyServiceImpl</sei>
-                    <wsdlUrls>
-                        <wsdlUrl>http://localhost:8080/WS/MyService?wsdl</wsdlUrl>
-                    </wsdlUrls>
-                    <sourceDestDir>${project.build.directory}/generated</sourceDestDir>
-                    <verbose>true</verbose>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.sun.xml.ws</groupId>
-                        <artifactId>jaxws-tools</artifactId>
-                        <version>2.1.4</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
- -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>

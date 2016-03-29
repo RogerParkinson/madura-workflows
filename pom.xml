@@ -51,16 +51,13 @@
 		<spring.framework.version>4.2.3.RELEASE</spring.framework.version>
 		<spring.framework.integration.version>4.2.4.RELEASE</spring.framework.integration.version>
 		<spring.framework.data.version>1.4.2.RELEASE</spring.framework.data.version>
+		<vaadin.version>7.5.6</vaadin.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
 		<hibernate-version>4.3.10.Final</hibernate-version>
 		<hyperjaxb3-ejb-runtime.version>0.5.6</hyperjaxb3-ejb-runtime.version>
 		<hyperjaxb-version>0.5.6</hyperjaxb-version>
 		<jaxb2_commons-version>0.5.6</jaxb2_commons-version>
-		<madura.vaadin.version>3.0.0-SNAPSHOT</madura.vaadin.version>
-		<madura.rules.version>3.0.0-SNAPSHOT</madura.rules.version>
-		<madura.rules.maven.plugin.version>1.2.3-SNAPSHOT</madura.rules.maven.plugin.version>
-		<madura.objects.version>3.0.0-SNAPSHOT</madura.objects.version>
-		<madura.bundle.version>4.2.0-SNAPSHOT</madura.bundle.version>
    		<timestamp>${maven.build.timestamp}</timestamp>
    		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 		<jaxb22.version>2.2.4-1</jaxb22.version>
@@ -95,27 +92,27 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-login</artifactId>
-				<version>${madura.vaadin.version}</version>
+				<version>3.1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin</artifactId>
-	            <version>${madura.vaadin.version}</version>
+	            <version>3.1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin-tableeditor</artifactId>
-	            <version>${madura.vaadin.version}</version>
+	            <version>3.1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-objects</artifactId>
-				<version>${madura.objects.version}</version>
+				<version>3.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-rules</artifactId>
-				<version>${madura.objects.version}</version>
+				<version>3.0.0</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.logback-extensions</groupId>
@@ -378,12 +375,12 @@
 	    		<plugin>
 					<groupId>nz.co.senanque</groupId>
 					<artifactId>madura-rules-maven-plugin</artifactId>
-					<version>${madura.objects.version}</version>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>nz.co.senanque</groupId>
 					<artifactId>madura-objects-maven-plugin</artifactId>
-					<version>${madura.objects.version}</version>
+					<version>3.0.0</version>
 				</plugin>
 			      <plugin>
 			        <groupId>org.eclipse.m2e</groupId>

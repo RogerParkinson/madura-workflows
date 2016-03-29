@@ -56,23 +56,10 @@
 			<version>1.0.2.Final</version>
 			<scope>provided</scope>
 		</dependency>
-<!-- 
-		<dependency>
-			<groupId>org.jvnet.jaxb2_commons</groupId>
-			<artifactId>jaxb2-basics</artifactId>
-			<version>${jaxb2_commons.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
- -->
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-bundle</artifactId>
-			<version>${madura.bundle.version}</version>
+			<version>4.2.0</version>
 			<exclusions>
 				<!-- Needs to be excluded because it pulls the wrong version -->
 				<exclusion>

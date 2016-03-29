@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-bundle</artifactId>
-			<version>${madura.bundle.version}</version>
+			<version>4.2.0</version>
 			<exclusions>
 				<!-- Needs to be excluded because it pulls the wrong version -->
 				<exclusion>
@@ -364,7 +364,7 @@
 											madura-objects-maven-plugin
 										</artifactId>
 										<versionRange>
-											[3.0.0-SNAPSHOT,)
+											[3.0.0,)
 										</versionRange>
 										<goals>
 											<goal>generate</goal>
@@ -383,7 +383,7 @@
 											madura-rules-maven-plugin
 										</artifactId>
 										<versionRange>
-											[3.0.0-SNAPSHOT,)
+											[3.0.0,)
 										</versionRange>
 										<goals>
 											<goal>xjr</goal>

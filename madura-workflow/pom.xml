@@ -114,13 +114,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!-- 
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-acl</artifactId>
-			<version>${spring.framework.security.version}</version>
-		</dependency>
- -->
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-rules</artifactId>
@@ -237,7 +230,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<dependency>
 						<groupId>nz.co.senanque</groupId>
 						<artifactId>madura-objects</artifactId>
-						<version>${madura.objects.version}</version>
+						<version>3.0.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -436,7 +429,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 										madura-objects-maven-plugin
 									</artifactId>
 									<versionRange>
-										[3.0.0-SNAPSHOT,)
+										[3.0.0,)
 									</versionRange>
 									<goals>
 										<goal>generate</goal>

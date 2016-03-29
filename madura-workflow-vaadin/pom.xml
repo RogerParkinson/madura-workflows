@@ -47,14 +47,6 @@
 			<artifactId>madura-workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-<!-- 
-		<dependency>
-			<groupId>nz.co.senanque</groupId>
-			<artifactId>madura-workflow-ui</artifactId>
-			<version>${project.version}</version>
-			<classifier>classes</classifier>
-		</dependency>
- -->
 	</dependencies>
 	<build>
 		<plugins>
