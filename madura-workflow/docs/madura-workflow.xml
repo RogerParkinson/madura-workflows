@@ -810,6 +810,18 @@ process: Order "AcceptOrder" {
 		<table width="12cm">
 			<tw>12cm</tw>
 		<tr>
+			<th>2.0.0</th>
+		</tr>
+		<tr>
+			<td>Updated to use Madura Rules and Madura Objects 3.0.0.</td>
+		</tr>
+		<tr>
+			<td>Reworked configuration optios to simplify it.</td>
+		</tr>
+		<tr>
+			<td>Documented new usage.</td>
+		</tr>
+		<tr>
 			<th>1.0.1</th>
 		</tr>
 		<tr>
