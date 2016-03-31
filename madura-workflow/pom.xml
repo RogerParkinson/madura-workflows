@@ -233,6 +233,30 @@
 				</dependencies>
 			</plugin>
 			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-failsafe-plugin</artifactId>
+			  <version>2.19.1</version>
+				<configuration>
+					<includes>
+						<include>**/WorkflowWithRules2Test.java</include>
+					</includes>
+				</configuration>
+			  <executions>
+			    <execution>
+			      <id>integration-test</id>
+			      <goals>
+			        <goal>integration-test</goal>
+			      </goals>
+			    </execution>
+			    <execution>
+			      <id>verify</id>
+			      <goals>
+			        <goal>verify</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.7.1</version>
 				<executions>
@@ -250,6 +274,7 @@
 								<!--<exclude>**/WorkflowManagerImplTest.java</exclude> -->
 								<exclude>**/WorkflowRetryTest.java</exclude>
 								<exclude>**/WorkflowWithRulesTest.java</exclude>
+								<exclude>**/WorkflowWithRules2Test.java</exclude>
 							</excludes>
 							<includes>
 								<!-- this runs from Eclipse but not from maven -->
