@@ -62,6 +62,7 @@
    		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 		<jaxb22.version>2.2.4-1</jaxb22.version>
 		<skipITs>true</skipITs>
+		<maduradocs.version>6.2.1</maduradocs.version>
 	</properties>
 	<repositories>
 		<repository>
