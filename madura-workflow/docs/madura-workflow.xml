@@ -17,7 +17,7 @@
             <reference t="Spring Integration" url="http://projects.spring.io/spring-integration/" />
 			<reference t="Apache Commons Beanutils" url="http://commons.apache.org/proper/commons-beanutils/javadocs/v1.8.3/apidocs/org/apache/commons/beanutils/package-summary.html#package_description" />
 			<reference t="eclipse" url="http://www.eclipse.org"/>
-			<reference t="maduraeditors" url="https://github.com/RogerParkinson/maduraeditors"/>
+			<reference t="madura-plugin" url="http://www.madurasoftware.com/madura-plugin"/>
 		</references>
 	</title>
 	<body>
@@ -754,26 +754,34 @@ process: Order "AcceptOrder" {
         core workflow.</p>
         </h1>
 		<a1 t="Eclipse Plugin">
-		<p>The Eclipse<referenceLink t="eclipse"/> plugin<referenceLink t="maduraeditors"/> supports creating and editing workflow files. There is a Wizard that creates
-		new files under File&gt;New&gt;MaduraWizards. It populates the file with a template of example processes to help you get started
-		but this will show errors because these processes are not bound to an XSD file. The first thing you should do is tell
-		the plugin about your XSD file using the File Properties (right click on the file in Package Explorer, then PropertiesFile&gt;Madura)</p>
+		<p>The Eclipse<referenceLink t="eclipse"/> plugin<referenceLink t="madura-plugin"/> supports creating and editing rules files. There is a Wizard that creates
+		new files under File&gt;New&gt;Other&gt;MaduraWizards...Workflow File.</p>
+		<img width="250px" href="images/WorkflowWizard.png">Workflow Wizard</img>
+		<p>It asks for:</p>
+		<list>
+		<le>Container. This is just the folder where the new file will live.</le>
+		<le>File name is obvious.</le>
+		<le>XSD file is where the objects the workflow will use have been defined. This file should already exist (ie you should have already defined it).</le>
+		</list>
+		<p>It populates the new file with a template of example processes to help you get started. These may show errors because they probably don't refer to
+		objects in your own XSD file but they do demonstrate the syntax well enough.</p>
+		<p>If you want to change the XSD file reference later use the File Properties (right click on the file in Package Explorer, then Properties&gt;Madura).</p>
 		<img width="250px" href="images/fileproperties.png">File Properties</img>
-		<p>Just give the XSD file and then you can edit your own processes into the wrk file. The editor supports navigation by clicking
-		in the items in the outline and content assistance.</p>
-		<p>You need to tell the plugin about your messages and compute tasks and you do this with the 
-		project properties (right click on the project in Package Explorer, then PropertiesFile&gt;Madura)</p>
+		<p>If you are using messages or compute names in your workflows (most people do) then you need to tell the plugin about those in the 
+		project properties (right click on the project in Package Explorer, then Properties&gt;Madura). Just list the names separated by commas. They are needed so 
+		that the parser does not flag them as errors.</p>
 		<img width="250px" href="images/projectproperties.png">Project Properties</img>
-		<p>The fields you need to enter are the ones labelled 'Message Names' and 'Compute Names'. Just enter the names in there
-		with commas separating them. This will enable the validation code
-		in the plugin to correctly validate your references to the messages and computes without flagging them as errors.</p>
-		<p>The parser used to validate the workflow needs a buffer size setting, this defaults to 400 which is normally large enough but if you have <emph>very</emph>
+		<p>The Classes path field should hold the directory your compiled java classes are placed into. For maven projects this will default to target/classes/.
+		In the Class names field you just put a comma separated list of the classes that hold your custom functions. This will enable the validation code
+		in the plugin to correctly validate your references to the custom functions without flagging them as errors.</p>
+		<p>The parser used to validate the workflows needs a buffer size setting, this defaults to 400 which is normally large enough but if you have <emph>very</emph>
 		long comments in your wrk files you might need to make it larger. Use the preferences page (Window&gt;Preferences&gt;Madura) for this.</p>
 		<img width="250px" href="images/preferences.png">Preferences</img>
-		<p>When everything is in place you should be able to edit your workflow file with the plugin editor.</p>
+		<p>When everything is in place you should be able to edit your workflow file with the plugin editor. It supports context assistance and, from the outline, navigation.</p>
 		<img width="250px" href="images/editor.png">Editor</img>
-		<p>To use the plugin you need to be running Eclipse Kepler or later and Java 1.7 or later. To get the plugin use this update site:</p>
-		<p><courier>http://github.com/RogerParkinson/maduraeditors/raw/master/site/</courier></p>
+		<p>To get the plugin use this update site:</p>
+		<p><courier>http://www.madurasoftware.com/madura-plugin/</courier></p>
+		<p>To use the plugin you need to be running Eclipse Lunar or later and Java 1.8 or later.</p>
 		</a1>
 		<a1 t="License">
 		<p>The code specific to MaduraWorkflow is licenced under the Apache License 2.0 <referenceLink t="Apache Licence 2.0"/>.</p>
