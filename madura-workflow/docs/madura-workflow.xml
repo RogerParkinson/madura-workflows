@@ -818,6 +818,15 @@ process: Order "AcceptOrder" {
 		<table width="12cm">
 			<tw>12cm</tw>
 		<tr>
+			<th>2.1.0</th>
+		</tr>
+		<tr>
+			<td>Updated to use newer Madura libraries.</td>
+		</tr>
+		<tr>
+			<td>Java 1.8.</td>
+		</tr>
+		<tr>
 			<th>2.0.0</th>
 		</tr>
 		<tr>

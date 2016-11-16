@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="madura-workflow-vaadin-2.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/madura-workflow-vaadin/madura-workflow-vaadin">
+        <dependent-module archiveName="madura-workflow-vaadin-2.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/madura-workflow-vaadin/madura-workflow-vaadin">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="madura-workflow-2.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/madura-workflow/madura-workflow">
+        <dependent-module archiveName="madura-workflow-2.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/madura-workflow/madura-workflow">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="madura-workflow-ui"/>

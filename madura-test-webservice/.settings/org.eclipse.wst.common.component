@@ -2,5 +2,9 @@
     <wb-module deploy-name="madura-test-webservice">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <property name="context-root" value="madura-test-webservice"/>
+        <property name="java-output-path" value="/madura-test-webservice/target/classes"/>
     </wb-module>
 </project-modules>

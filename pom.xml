@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>madura-workflows</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.1.0-SNAPSHOT</version>
 	<name>madura-workflows</name>
 	<description>Parent project for madura workflows</description>
 	<url>www.madurasoftware.com/home/madura-workflow</url>
@@ -44,8 +44,8 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.source.version>1.7</project.source.version>
-		<project.target.version>1.7</project.target.version>
+		<project.source.version>1.8</project.source.version>
+		<project.target.version>1.8</project.target.version>
 		<project.scm.id>github</project.scm.id>
 		<pdf>target/${project.artifactId}-${project.version}.pdf</pdf>
 		<spring.framework.version>4.2.3.RELEASE</spring.framework.version>
@@ -94,27 +94,27 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-login</artifactId>
-				<version>3.1.0</version>
+				<version>3.2.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin</artifactId>
-	            <version>3.1.0</version>
+	            <version>3.2.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin-tableeditor</artifactId>
-	            <version>3.1.0</version>
+	            <version>3.2.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-objects</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-rules</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.logback-extensions</groupId>
@@ -176,7 +176,7 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-resource-loader</artifactId>
-				<version>1.1.0</version>
+				<version>1.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jvnet.hyperjaxb3</groupId>
@@ -246,6 +246,10 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>2.9.1</version>
+					<configuration>
+						<additionalparam>-Xdoclint:none</additionalparam>
+					</configuration>
+
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
