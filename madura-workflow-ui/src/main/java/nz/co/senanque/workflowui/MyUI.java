@@ -217,12 +217,12 @@ public class MyUI extends UI implements MessageSourceAware {
 
     private MenuBar.MenuItem createHelpMenu(final MessageSourceAccessor messageSourceAccessor) {
     	MenuBar.MenuItem help = menuBar.addItem(messageSourceAccessor.getMessage("help","Help"), null);
-		help.addItem(messageSourceAccessor.getMessage("demo.script","GitHub"), new Command() {
-
-			private static final long serialVersionUID = 1L;
-			public void menuSelected(MenuItem selectedItem) {
-				Page.getCurrent().open(messageSourceAccessor.getMessage("demo.url"), null);
-			}});
+//		help.addItem(messageSourceAccessor.getMessage("demo.script","GitHub"), new Command() {
+//
+//			private static final long serialVersionUID = 1L;
+//			public void menuSelected(MenuItem selectedItem) {
+//				Page.getCurrent().open(messageSourceAccessor.getMessage("demo.url"), null);
+//			}});
 
 		help.addItem(messageSourceAccessor.getMessage("about","About"), new Command(){
 
