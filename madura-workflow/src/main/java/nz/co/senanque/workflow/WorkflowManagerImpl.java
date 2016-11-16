@@ -43,6 +43,7 @@ import nz.co.senanque.process.parser.ParsePackage;
 import nz.co.senanque.process.parser.ProcessTextProvider;
 import nz.co.senanque.schemaparser.FieldDescriptor;
 import nz.co.senanque.schemaparser.SchemaParser;
+import nz.co.senanque.schemaparser.SchemaParserImpl;
 import nz.co.senanque.validationengine.ValidationEngine;
 import nz.co.senanque.workflow.instances.Audit;
 import nz.co.senanque.workflow.instances.DeferredEvent;
@@ -445,7 +446,7 @@ public class WorkflowManagerImpl extends WorkflowManagerAbstract {
 		Document doc = null;
 		try {
 			doc = builder.build(getSchema().getInputStream());
-			SchemaParser schemaParser = new SchemaParser();
+			SchemaParserImpl schemaParser = new SchemaParserImpl();
 			schemaParser.parse(doc);
 			ParserSource parserSource = new InputStreamParserSource(getProcesses());
 			

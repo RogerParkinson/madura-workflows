@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import nz.co.senanque.parser.InputStreamParserSource;
 import nz.co.senanque.parser.ParserSource;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.schemaparser.SchemaParser;
+import nz.co.senanque.schemaparser.SchemaParserImpl;
 import nz.co.senanque.workflow.WorkflowManager;
 
 import org.jdom.Document;
@@ -62,7 +62,7 @@ public class ParsePackageTest6 {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		doc = builder.build(m_schema.getInputStream());
-		SchemaParser schemaParser = new SchemaParser();
+		SchemaParserImpl schemaParser = new SchemaParserImpl();
 		schemaParser.parse(doc, "nz.co.senanque.processparser");
 		WorkflowManager workflowManager = m_workflowManager;
 		
