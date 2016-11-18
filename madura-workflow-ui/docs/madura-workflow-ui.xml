@@ -781,6 +781,12 @@ Bundle-Description: A sample bundle containing a workflow.
 			<table width="12cm">
 				<tw>12cm</tw>
 			<tr>
+				<th>2.1.1</th>
+			</tr>
+			<tr>
+				<td>Aligning with madura-workflows version.</td>
+			</tr>
+			<tr>
 				<th>1.0.1</th>
 			</tr>
 			<tr>

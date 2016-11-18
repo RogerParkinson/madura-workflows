@@ -63,6 +63,7 @@
 		<jaxb22.version>2.2.4-1</jaxb22.version>
 		<skipITs>true</skipITs>
 		<maduradocs.version>6.2.1</maduradocs.version>
+		<madura.vaadin.version>3.2.1</madura.vaadin.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -94,17 +95,17 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-login</artifactId>
-				<version>3.2.0-SNAPSHOT</version>
+				<version>${madura.vaadin.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin</artifactId>
-	            <version>3.2.0</version>
+	            <version>${madura.vaadin.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-vaadin-tableeditor</artifactId>
-	            <version>3.2.0-SNAPSHOT</version>
+	            <version>${madura.vaadin.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>

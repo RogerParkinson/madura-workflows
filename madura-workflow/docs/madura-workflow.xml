@@ -17,7 +17,7 @@
             <reference t="Spring Integration" url="http://projects.spring.io/spring-integration/" />
 			<reference t="Apache Commons Beanutils" url="http://commons.apache.org/proper/commons-beanutils/javadocs/v1.8.3/apidocs/org/apache/commons/beanutils/package-summary.html#package_description" />
 			<reference t="eclipse" url="http://www.eclipse.org"/>
-			<reference t="madura-plugin" url="http://www.madurasoftware.com/madura-plugin"/>
+			<reference t="madura-eclipse" url="http://www.madurasoftware.com/madura-eclipse"/>
 		</references>
 	</title>
 	<body>
@@ -754,7 +754,7 @@ process: Order "AcceptOrder" {
         core workflow.</p>
         </h1>
 		<a1 t="Eclipse Plugin">
-		<p>The Eclipse<referenceLink t="eclipse"/> plugin<referenceLink t="madura-plugin"/> supports creating and editing rules files. There is a Wizard that creates
+		<p>The Eclipse<referenceLink t="eclipse"/> plugin<referenceLink t="madura-eclipse"/> supports creating and editing rules files. There is a Wizard that creates
 		new files under File&gt;New&gt;Other&gt;MaduraWizards...Workflow File.</p>
 		<img width="250px" href="images/WorkflowWizard.png">Workflow Wizard</img>
 		<p>It asks for:</p>
@@ -817,6 +817,12 @@ process: Order "AcceptOrder" {
 		<a1 t="Release Notes">
 		<table width="12cm">
 			<tw>12cm</tw>
+		<tr>
+			<th>2.1.1</th>
+		</tr>
+		<tr>
+			<td>Minor documenation changes.</td>
+		</tr>
 		<tr>
 			<th>2.1.0</th>
 		</tr>
