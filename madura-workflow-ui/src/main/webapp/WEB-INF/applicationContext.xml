@@ -40,7 +40,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<context:annotation-config />
     <import resource="database-context.xml"/>
     
-    <context:component-scan base-package="nz.co.senanque.workflowui, nz.co.senanque.login" />
+    <context:component-scan base-package="nz.co.senanque.myui, nz.co.senanque.workflowui, nz.co.senanque.login" />
    
 	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
 		<property name="basenames">

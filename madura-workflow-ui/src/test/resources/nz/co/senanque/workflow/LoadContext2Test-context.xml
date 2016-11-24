@@ -47,7 +47,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 
     <description>Main Configuration</description>
     
-    <context:component-scan base-package="nz.co.senanque.workflowui" />
+    <context:component-scan base-package="nz.co.senanque.myui,nz.co.senanque.workflowui" />
     <import resource="database-context.xml"/>
     
     <bean id="permissionManager" class="nz.co.senanque.vaadin.permissionmanager.PermissionManagerImpl" scope="vaadin-ui"/>

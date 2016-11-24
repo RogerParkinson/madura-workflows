@@ -32,7 +32,7 @@ There are several subprojects to this:
 
 ## madura-workflow
 
-This is the core library the others depend on. It also hold the documentation. You'll find a pdf in the target directory after you've done the maven build. You can use this library to build your own UI is you don't want to use the one in madura-workflow-ui.
+This is the core library the others depend on. It also holds the documentation. You'll find a pdf in the target directory after you've done the maven build. You can use this library to build your own UI if you don't want to use the one in madura-workflow-ui.
 
 ## madura-workflow-ui
 

@@ -1,4 +1,4 @@
-package nz.co.senanque.workflowui;
+package nz.co.senanque.myui;
 
 import java.lang.reflect.Method;
 
@@ -18,6 +18,11 @@ import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
 import nz.co.senanque.workflow.WorkflowJPA;
 import nz.co.senanque.workflow.instances.ProcessInstance;
+import nz.co.senanque.workflowui.AboutWindow;
+import nz.co.senanque.workflowui.FieldGroupWizard;
+import nz.co.senanque.workflowui.LaunchWizard;
+import nz.co.senanque.workflowui.ProcessInstances;
+import nz.co.senanque.workflowui.WorkflowUIHints;
 import nz.co.senanque.workflowui.ProcessInstances.ProcessInstanceEvent;
 import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
@@ -38,7 +43,6 @@ import org.springframework.web.context.ContextLoaderListener;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.EnableVaadin;
 import com.vaadin.spring.annotation.SpringUI;
