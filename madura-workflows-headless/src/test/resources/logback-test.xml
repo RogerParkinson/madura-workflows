@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%-35(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{35} - %F:%L %msg%n</pattern>
+		</encoder>
+	</appender>
+
+<!-- 
+	<logger name="nz.co.senanque.database" level="info" />
+	<logger name="nz.co.senanque.madura.bundle.BundleInvocationHandler" level="debug" />
+	<logger name="nz.co.senanque.database.Bundle2Selector" level="debug" />
+    <logger name="nz.co.senanque.madura.bundle.BundleManagerImpl" level="debug"/>
+    <logger name="nz.co.senanque.workflow.ContextJPA" level="debug"/>
+    <logger name="nz.co.senanque.workflow" level="debug"/>
+	<logger name="nz.co.senanque.database.Workflow1Test" level="debug" />
+    <logger name="nz.co.senanque.workflow.WorkflowJPA" level="debug"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.type" level="trace"/>
+    <logger name="org.springframework.transaction" level="debug"/>
+    <logger name="org.springframework.orm.hibernate3.HibernateTransactionManager" level="debug"/>
+    <logger name="nz.co.senanque.workflow.WorkflowManagerImpl" level="debug"/>
+    <logger name="nz.co.senanque.messaging.GenericEndpoint" level="debug"/>
+    <logger name="nz.co.senanque.messaging.ErrorEndpoint" level="debug"/>
+    <logger name="nz.co.senanque.workflow.WorkflowManagerAbstract" level="debug"/>
+    <logger name="nz.co.senanque.process.instances" level="debug"/>
+	<logger name="nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory" level="debug"/>
+-->
+	<logger name="nz.co.senanque.madura.bundle.BundleMangerDelegateJar" level="debug"/>
+    <logger name="com.atomikos.icatch" level="error"/>
+    <logger name="org.springframework.ws.client.MessageTracing.sent" level="trace"/>
+    <logger name="org.springframework.ws.client.MessageTracing.received" level="debug"/>
+	<root level="warn">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
+
