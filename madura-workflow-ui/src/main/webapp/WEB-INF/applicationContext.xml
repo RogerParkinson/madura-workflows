@@ -42,13 +42,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     
     <context:component-scan base-package="nz.co.senanque.myui, nz.co.senanque.workflowui, nz.co.senanque.login" />
    
-	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt">
-		<property name="basenames">
-			<list>
-				<value>ApplicationMessages</value>
-			</list>
-		</property>
-	</bean>
+	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt"/>
 
  	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">

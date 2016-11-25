@@ -22,6 +22,7 @@ import java.util.TreeSet;
 
 import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.process.instances.QueueDefinition;
+import nz.co.senanque.resourceloader.MessageResource;
 import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.instances.TaskStatus;
 import nz.co.senanque.workflowui.FixedPermissions;
@@ -42,6 +43,7 @@ import com.vaadin.data.util.filter.Or;
  *
  */
 @org.springframework.stereotype.Component
+@MessageResource("ApplicationMessages")
 public class QueueProcessManager {
 
 	private Set<QueueDefinition> m_queues = new TreeSet<>(new Comparator<QueueDefinition>(){
