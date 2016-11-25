@@ -64,6 +64,7 @@
 		<skipITs>true</skipITs>
 		<maduradocs.version>6.2.1</maduradocs.version>
 		<madura.vaadin.version>3.2.2-SNAPSHOT</madura.vaadin.version>
+		<madura.version>3.1.1-SNAPSHOT</madura.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -93,6 +94,17 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.atomikos</groupId>
+				<artifactId>transactions-hibernate3</artifactId>
+				<version>3.9.3</version>
+			</dependency>
+			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-login</artifactId>
 				<version>${madura.vaadin.version}</version>
@@ -110,12 +122,12 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-objects</artifactId>
-				<version>3.1.0</version>
+				<version>${madura.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-rules</artifactId>
-				<version>3.1.0</version>
+				<version>${madura.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.logback-extensions</groupId>
@@ -173,11 +185,56 @@
 			    <artifactId>spring-test</artifactId>
 			    <version>${spring.framework.version}</version>
 			    <scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
 			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>4.0.2.GA</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-annotations</artifactId>
+				<version>3.5.4-Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate-version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-resource-loader</artifactId>
-				<version>1.2.0</version>
+				<version>1.2.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jvnet.hyperjaxb3</groupId>
