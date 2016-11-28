@@ -62,22 +62,4 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <!-- The executor is responsible for scanning for active processes etc -->
     <bean id="executor" class="nz.co.senanque.workflow.ExecutorImpl" />
 
-    <task:scheduler id="myScheduler" pool-size="10" />
-    <task:scheduled-tasks scheduler="myScheduler">
-        <task:scheduled ref="bundleManager" method="scan"
-            fixed-delay="10000" />
-    </task:scheduled-tasks>
-    <task:scheduled-tasks scheduler="myScheduler">
-        <task:scheduled ref="executor" method="activeProcesses"
-            fixed-delay="10000" />
-    </task:scheduled-tasks>
-    <task:scheduled-tasks scheduler="myScheduler">
-        <task:scheduled ref="executor" method="deferredEvents"
-            fixed-delay="10000" />
-    </task:scheduled-tasks>
-    <task:scheduled-tasks scheduler="myScheduler">
-        <task:scheduled ref="executor" method="clearDeferredEvents"
-            fixed-delay="60000" />
-    </task:scheduled-tasks>
-
 </beans>

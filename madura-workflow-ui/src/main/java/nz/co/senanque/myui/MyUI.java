@@ -22,8 +22,8 @@ import nz.co.senanque.workflowui.AboutWindow;
 import nz.co.senanque.workflowui.FieldGroupWizard;
 import nz.co.senanque.workflowui.LaunchWizard;
 import nz.co.senanque.workflowui.ProcessInstances;
-import nz.co.senanque.workflowui.WorkflowUIHints;
 import nz.co.senanque.workflowui.ProcessInstances.ProcessInstanceEvent;
+import nz.co.senanque.workflowui.WorkflowUIHints;
 import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.context.ContextLoaderListener;
 
 import com.vaadin.annotations.Theme;
@@ -105,6 +106,7 @@ public class MyUI extends UI implements MessageSourceAware {
 
     @Configuration
     @EnableVaadin
+    @EnableScheduling
     @Import(BundledInterfaceRegistrar.class)
     @ComponentScan(basePackages = {
     		"nz.co.senanque.vaadin",			// madura-vaadin
