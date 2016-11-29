@@ -85,7 +85,7 @@
 	<modules>
 		<module>madura-workflow</module>
  		<module>madura-workflow-vaadin</module>
- 		<module>madura-workflow-ui</module>
+ 		<module>madura-workflow-impl</module>
 		<module>simple-workflow</module>
 		<module>order-workflow</module>
  		<module>nmc-workflow</module>
