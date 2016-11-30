@@ -1,3 +1,10 @@
+## Build this with the following command:
+## docker build -t workflow-impl .
+##
+## run it with:
+## docker run -it --rm -p 8080:8080 workflow-impl:latest
+##
+
 # Pull base image
 From tomcat:8-jre8
 
@@ -6,3 +13,4 @@ MAINTAINER "Roger Parkinson <roger.parkinson35@gmail.com">
 
 # Copy to images tomcat path removing version because it messes up the url
 ADD target/madura-workflow-impl*.war /usr/local/tomcat/webapps/madura-workflow-impl
+
