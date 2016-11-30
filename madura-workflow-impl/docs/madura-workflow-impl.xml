@@ -8,7 +8,6 @@
 		<Revision>$Revision: 1$</Revision>
 		<image>logo.jpg</image>
 		<references>
-			<reference url="https://code.google.com/p/weblogic-jndi-startup/" t="Weblogic JNDI" />
 			<reference url="http://www.atomikos.com/" t="Atomikos" />
 			<reference url="http://tomcat.apache.org/" t="Tomcat" />
 			<reference url="http://www.h2database.com" t="H2" />
@@ -328,9 +327,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			we need to look at the bundle configuration in the main application.</p>
 			<h2 t="Bundle Configuration">
         <code><![CDATA[
-<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 <bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
-  <property name="directory" ref="bundlesDir"/>
+  <property name="directory" value="${workflow.bundles.dir}"/>
     <property name="exportedBeans">
       <map>
         <entry key="errorEndpoint" value-ref="errorEndpoint"/>
@@ -339,8 +337,8 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
     </property>
 </bean>
         ]]></code>
-        <p>This is from the <courier>application-context.xml</courier> file. It defines a JNDI variable which holds the location of the directory the bundles
-        are held in. This directory will be scanned every few (configurable) seconds for new files.</p>
+        <p>This is from the <courier>application-context.xml</courier> file. It uses an external variable which holds the location of the directory the bundles
+        are held in. This directory will be scanned every few (configurable) seconds for new files. You should configure this </p>
         <p>Notice that we explicitly export the two endpoint beans. Most of the time we can annotate the beans
         for export and leave this list empty but these two beans have the bundle proxy <courier>workflowManager</courier>
         injected into them. Spring gets confused when handling that case but explicitly adding them to the list works just fine.</p>
@@ -621,7 +619,7 @@ Bundle-Description: A sample bundle containing a workflow.
 	<property name="allowCustomIsolationLevels" value="true" />
 </bean>
 
-   <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+<bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
         ]]></code>
         <p>The <courier>JDBCPool</courier> bean is used to display the table of relevant process instances
         to a user. It uses simple JDBC protocol rather than JPA because that is all the Vaadin table
@@ -709,21 +707,8 @@ Bundle-Description: A sample bundle containing a workflow.
 		rogue locks. You can also freeze and restart the executor mentioned in <sectionLink t="Scheduler"/>.</p>
 	</h1>
     <h1 t="Configuring for Production">
-		<p>The process bundles are held in a sweep directory defined as follows:</p>
-		<code><![CDATA[
-<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
-<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
-	<property name="directory" ref="bundlesDir"/>
-	...
-</bean>
-		]]></code>
-        <p>You will find the above configuration in <courier>applicationContext.xml</courier>.</p>
-        <p>The next step is to tell your application server what value to give that JNDI name. This depends on your application server. For Tomcat you
-        can just edit it into your <courier>context.xml</courier> file like this:</p>
-		<code><![CDATA[
-<Environment name="WorkflowUIBundlesDir" value="MY_DIRECTORY/bundles" type="java.lang.String" override="true"/>
-		]]></code>
-        <p>Finally you want to actually add some bundles to that directory. There are two example bundle projects you can use right away, these are projects
+		<p>The process bundles are held in a sweep directory defined by <courier>workflow.bundles.dir</courier>. You need
+		to set an environment variable the points to that directory. Then you want to actually add some bundles to that directory. There are two example bundle projects you can use right away, these are projects
         inside the main project's <courier>bundles</courier> directory and they are from child projects (simple-workflow and order-workflow). Use those as templates
         for your own bundles.</p> 
 		<p>You can use this application in production, with appropriate configuration changes, or you can enhance it. Here is a summary of things
@@ -732,15 +717,11 @@ Bundle-Description: A sample bundle containing a workflow.
 		<le>Database. Obviously you do not want an in-memory database for a production system. You may want to review whether you want H2 or
 		some other database product more widely used in enterprise applications. Hibernate and Atomikos are also only options that can be
 		replaced by alternatives you may prefer.</le>
-		<le>Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities. The one area that might
-		be a little tricky is if you want to use WebLogic because it has no easy way of defining a JNDI name to point to a simple string. That
-		problem is solved by <referenceLink t="Weblogic JNDI"/>. Your reconfigured application will likely make use of JNDI data sources instead
-		of the simpler ones configured here. There are also decisions to be made around how many instances of the application, particularly how many
-		copies of the scheduler are running.</le>
+		<le>Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities.</le>
 		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation
 		for Madura Login<referenceLink t="Madura Login"/> for details.</le>
 		<le>The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or
-		you might just have different preferences in your enterprise.</le>
+		you might just have different preferences in your enterprise. You might want some application instances acting solely as schedulers and other acting solely as UI servers.</le>
 		<le>Locking. You will almost certainly need to move from SimpleLock to SQLLock or perhaps something else you prefer. This is
 		documented in Madura Utils<referenceLink t="Madura Utils"/></le>
 		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS 
@@ -785,6 +766,9 @@ Bundle-Description: A sample bundle containing a workflow.
 			</tr>
 			<tr>
 				<td>Added Dockerfile.</td>
+			</tr>
+			<tr>
+				<td>Changed the JNDI reference to bundles directory to a config.properties value.</td>
 			</tr>
 			<tr>
 				<td>Renamed to Impl from ui because it will soon run (optionally) headless.</td>

@@ -44,9 +44,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
    
 	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt"/>
 
- 	<jee:jndi-lookup id="bundlesDir" jndi-name="java:/comp/env/WorkflowUIBundlesDir" expected-type="java.lang.String" />
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
- 		<property name="directory" ref="bundlesDir"/>
+ 		<property name="directory" value="${workflow.bundles.dir}"/>
 		<property name="exportedBeans">
 			<map>
 				<entry key="errorEndpoint" value-ref="errorEndpoint"/>
