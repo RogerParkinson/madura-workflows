@@ -45,6 +45,8 @@ limitations under the License.
 
     <description>Main Configuration</description>
     
+    <bean id="PropertySourcesPlaceholderConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"/>
+    
     <import resource="classpath:/database-nmcinstances-context.xml"/>
 
 	<context:component-scan base-package="nz.co.senanque.workflow.nmcrules"/>

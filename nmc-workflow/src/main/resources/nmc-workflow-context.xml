@@ -49,7 +49,7 @@ limitations under the License.
 
     <context:annotation-config />
 	<context:component-scan base-package="nz.co.senanque.validationengine,nz.co.senanque.rules,nz.co.senanque.vaadin,nz.co.senanque.workflow.conf,nz.co.senanque.workflow.nmc,nz.co.senanque.workflow.nmcrules" />
-	<context:property-placeholder location="classpath:/config.properties" />
+	<context:property-placeholder local-override="true" location="classpath:/config.properties" />
 
 	<!-- These are used by the demo process -->
     <bean id="VaadinLaunchForm" class="nz.co.senanque.workflow.VaadinLaunchForm" scope="prototype">

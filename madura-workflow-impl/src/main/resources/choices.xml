@@ -17,7 +17,7 @@ limitations under the License.
 <MaduraValidator xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://repo1.maven.org/maven2/nz/co/senanque/madura-objects/2.2.3/madura-objects-2.2.3-choices.xsd">
 	<Constants>
-		<Constant name="xyz">aaaab</Constant>
+		<Constant name="xyz">aaaabc</Constant>
 	</Constants>
 </MaduraValidator>
 	

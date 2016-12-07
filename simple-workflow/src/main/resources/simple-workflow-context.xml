@@ -44,11 +44,11 @@ limitations under the License.
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <description>Main Configuration</description>
-    
+
     <import resource="classpath:/database-orderinstances-context.xml"/>
 	<context:component-scan base-package="nz.co.senanque.workflow.conf,nz.co.senanque.workflow.simple,nz.co.senanque.vaadin"/>
     <context:annotation-config />
-	<context:property-placeholder location="classpath:/config.properties" />
+	<context:property-placeholder local-override="true" location="classpath:/config.properties" />
 
      <bean id="workflowManager" class="nz.co.senanque.workflow.WorkflowManagerImpl">
         <property name="schema" value="classpath:/OrderInstances.xsd" />

@@ -60,7 +60,7 @@ limitations under the License.
 		<property name="jpaProperties">
 			<map>
 				<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
-				<entry key="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+				<entry key="hibernate.dialect" value="${database.dialect}" />
 				<entry key="hibernate.format_sql" value="true" />
 				<entry key="hibernate.connection.autocommit" value="false" />
 			</map>
@@ -69,10 +69,10 @@ limitations under the License.
 
     <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="pu__workflow" />
-	    <property name="xaDataSourceClassName" value="org.h2.jdbcx.JdbcDataSource" />
+	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
 	    <property name="xaProperties">
 	        <props>
-	        <prop key="url">jdbc:h2:mem:workflow;DB_CLOSE_ON_EXIT=FALSE;MVCC=true</prop>
+	        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
 	        </props>
 	    </property>
 	    <property name="maxPoolSize" value="20"/>
@@ -83,7 +83,7 @@ limitations under the License.
 		<property name="showSql" value="false" />
 		<!-- ensures new db is auto created if needed -->
 		<property name="generateDdl" value="true" />
-		<property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />
+		<property name="databasePlatform" value="${database.dialect}" />
 	</bean>
 
     <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">

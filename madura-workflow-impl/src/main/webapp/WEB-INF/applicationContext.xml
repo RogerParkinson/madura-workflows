@@ -43,7 +43,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <context:component-scan base-package="nz.co.senanque.workflowimpl, nz.co.senanque.workflowui, nz.co.senanque.login" />
    
 	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt"/>
-
+	<util:properties id="ep" location="classpath:config.properties"/>
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
  		<property name="directory" value="${workflow.bundles.dir}"/>
 		<property name="exportedBeans">
@@ -52,6 +52,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
  				<entry key="genericEndpoint" value-ref="genericEndpoint"/> 
 			</map>
 		</property>
+		<property name="exportedProperties" ref="ep"/>
 	</bean>
 	
     <!-- endpoints needed by SI -->

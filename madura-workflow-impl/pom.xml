@@ -3,12 +3,12 @@
 	<parent>
 		<groupId>nz.co.senanque</groupId>
 		<artifactId>madura-workflows</artifactId>
-		<version>2.1.2-SNAPSHOT</version>
+		<version>2.2.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>madura-workflow-impl</artifactId>
 	<packaging>war</packaging>
 	<name>madura-workflow-impl</name>
-	<description>Madura Workflow UI. Both Admin and User UIs.</description>
+	<description>Madura Workflow UI. Both Admin and User UIs. Talks to a memory-resident database so must run standalone.</description>
 	<organization>
 		<name>Prometheus Consulting</name>
 		<url>www.madurasoftware.com</url>
@@ -70,6 +70,10 @@
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-workflow-vaadin</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>nz.co.senanque</groupId>
+			<artifactId>madura-resource-loader</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

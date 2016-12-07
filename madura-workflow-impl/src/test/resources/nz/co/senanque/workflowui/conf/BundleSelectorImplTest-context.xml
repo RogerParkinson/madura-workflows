@@ -36,9 +36,11 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<description>Object Spring Configuration</description>
 	
 	<import resource="database-workflow-context.xml"/>
-
+<!-- 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+ -->
+	<context:property-placeholder location="classpath:config.properties" />
 
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
@@ -50,7 +52,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	</bean>
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
  		<property name="directory" value="./bundles"/>
-		<property name="inheritableBeans">
+		<property name="exportedBeans">
 			<map>
 				<entry key="jpaVendorAdapter" value-ref="jpaVendorAdapter"/>
 				<entry key="transactionManager" value-ref="transactionManager"/>
@@ -65,19 +67,22 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			</map>
 		</property>
 	</bean>
-	<bean id="permissionManager" class="nz.co.senanque.vaadinsupport.permissionmanager.PermissionManagerImpl">
+	<bean id="permissionManager" class="nz.co.senanque.vaadin.permissionmanager.PermissionManagerImpl">
 		<property name="permissionsList">
 			<list>
 				<value>ADMIN</value>
 			</list>
 		</property>
+		<property name="permissionResolver">
+			<bean class="nz.co.senanque.workflowui.conf.PermissionResolverImpl"/>
+		</property>
 	</bean>
 	<bean id="lockFactory" class="nz.co.senanque.locking.simple.SimpleLockFactory"/>
 
-	<bean id="bundleListener" class="nz.co.senanque.workflowui.bundles.BundleListenerImpl">
+	<bean id="bundleListener" class="nz.co.senanque.workflowui.conf.BundleListenerImpl">
 		<property name="messageSource" ref="messageSource"/>
 	</bean>
-	<bean id="queueProcessManager" class="nz.co.senanque.workflowui.bundles.QueueProcessManager"/>
+	<bean id="queueProcessManager" class="nz.co.senanque.workflowui.conf.QueueProcessManager"/>
 	
 	<bean id="workflowDAO" class="nz.co.senanque.workflow.WorkflowJPA"/>
 	
