@@ -197,7 +197,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>madura-workflow-ui</warName>
+					<warName>madura-workflow</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<attachClasses>true</attachClasses>
 				</configuration>

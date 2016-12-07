@@ -2,7 +2,7 @@ Madura Workflows
 ===============
 
 (More detailed documentation (PDFs) can be found on the [core workflow](http://www.madurasoftware.com/madura-workflow.pdf) and
-the [workflow ui](http://www.madurasoftware.com/madura-workflow-ui.pdf)).
+the [workflow ui](http://www.madurasoftware.com/madura-workflow-impl.pdf)).
 
 This is yet another workflow package, but it is a little different from its competitors in that it is tightly integrated with [Madura Objects](https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-objects) and optionally [Madura Rules](https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-rules). It also ignores BPEL formats in favour of an easy-to-learn Java like syntax on the basis that it is always programmers rather than business analysts who end up writing business processes. Consequently there are no efforts made to provide a diagramatic UI to define them in favour of a syntax-aware editor as an Eclipse plugin: [madura-eclipse](https://github.com/RogerParkinson/madura-eclipse).
 
