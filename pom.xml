@@ -64,7 +64,7 @@
 		<skipITs>true</skipITs>
 		<maduradocs.version>6.2.1</maduradocs.version>
 		<madura.vaadin.version>3.2.2-SNAPSHOT</madura.vaadin.version>
-		<madura.version>3.1.1-SNAPSHOT</madura.version>
+		<madura.version>3.2.0-SNAPSHOT</madura.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -90,7 +90,7 @@
 		<module>order-workflow</module>
  		<module>nmc-workflow</module>
  		<module>madura-test-webservice</module>
- 		<module>madura-workflow-postgres</module>
+<!--  		<module>madura-workflow-postgres</module> -->
 	</modules>
 	<dependencyManagement>
 		<dependencies>

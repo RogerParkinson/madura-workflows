@@ -73,16 +73,19 @@ limitations under the License.
 	    <property name="xaProperties">
 	        <props>
 	        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
+	        <prop key="user">${database.user}</prop>
+	        <prop key="password">${database.password}</prop>
+	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
 	        </props>
 	    </property>
-	    <property name="maxPoolSize" value="20"/>
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
 	</bean>
 
 	<bean id="jpaVendorAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
 		<property name="showSql" value="false" />
 		<!-- ensures new db is auto created if needed -->
-		<property name="generateDdl" value="true" />
+		<property name="generateDdl" value="${database.generateDdl}" />
 		<property name="databasePlatform" value="${database.dialect}" />
 	</bean>
 
@@ -94,7 +97,7 @@ limitations under the License.
 		<property name="forceShutdown" value="false" />
 	</bean>
     <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
-        <property name="transactionTimeout" value="300" />
+        <property name="transactionTimeout" value="${database.transaction.timeout}" />
     </bean>
 	<bean id="transactionManager"
 		class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">

@@ -12,6 +12,6 @@
         </dependent-module>
         <property name="java-output-path" value="/madura-workflow-impl/target/classes"/>
         <property name="component.exclusion.patterns" value="WEB-INF/classes/VAADIN/gwt-unitCache/**,WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**"/>
-        <property name="context-root" value="madura-workflow"/>
+        <property name="context-root" value="madura-workflow-impl"/>
     </wb-module>
 </project-modules>

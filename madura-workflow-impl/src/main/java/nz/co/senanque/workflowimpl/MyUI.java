@@ -2,6 +2,7 @@ package nz.co.senanque.workflowimpl;
 
 import java.lang.reflect.Method;
 
+import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 
@@ -102,6 +103,10 @@ public class MyUI extends UI implements MessageSourceAware {
     public static class MyContextLoaderListener extends ContextLoaderListener {
     	// This causes the applicationContext.xml context file to be loaded
     	// per session.
+    	@Override
+    	public void contextInitialized(ServletContextEvent event) {
+    		initWebApplicationContext(event.getServletContext());
+    	}
     }
 
     @Configuration

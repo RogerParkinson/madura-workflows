@@ -545,20 +545,24 @@ Bundle-Description: A sample bundle containing a workflow.
 		</h2>
 		</h1>
 		<h1 t="Database">
-		<p>Madura Workflow requires a JPA database and a transaction handler that supports two phase commit. For this application the choice is an H2<referenceLink t="H2"/> memory
-		resident database and the Atomikos<referenceLink t="Atomikos"/> transaction handler. Memory resident databases are, of course, not a good choice for production but very good for a demo.
-		The H2 database, while not normally a choice for enterprise databases, has the advantage that it requires no installation, which means it is that
-		much less setup to do to run this application out of the box. The database configuration is defined in <courier>database-context.xml</courier> as well
-		as a separate configuration for each workflow bundle.</p>
-		<p>It is important to note that there are two databases or, at least, two database connections. They are both JPA and they are normally, though not necessarily
-		the same database product. But why exactly are there two databases?</p>
-		<p>There is one for the basic workflow, that holds the process instances and so on, but nothing about the data that is being manipulated by the workflow.
-		For example a process definition might refer to an Order object and this has to be serialized to a database between workflow tasks. But the Order
-		is part of the process definition, not the core workflow. Process definitions are free to operate on any objects they want to so those objects cannot
-		be dictated by the core workflow. That means that the bundle containing the process definition must contain the object definitions as well, so there are
-		Java POJOs annotated with JPA included in the bundle, effectively defining the database tables needed for the bundle.</p>
-		<p>The database configuration is deliberately all in XML because it is likely a production system will need to adjust
-		it to local needs, so there is no point hiding it in components to make it simpler.</p>
+		<p>There is a database for the core workflow tables and a database to hold the data for each bundle. It is important that these databases
+		are kept separate because new bundles can be added or removed independently of the core workflow, and independently of each other.
+		Transactions across multiple connections have to be coordinated too.</p>
+		<p>The default application uses either MYSQL or H2 as a database. H2 has the advantage that it can be memory resident and requires
+		no installation, which makes it very good for demos, though not so good for production. H2 can also be configured to be non-memory
+		resident but it is not often used in production. MYSQL is widely accepted as a production database but it requires installation etc.</p>
+		<p>To configure the specific options you want you can edit the config.properties file or use environment variables to override the
+		config.properties values. All the config.properties are described detail in <referenceLink t="Configuring for Production"/>
+		but in general you should assume all your databases are of the same type and on the same server, though each has a different name.
+		For example if you decide to use MYSQL on your localhost then your workflow database and each bundle database will all be
+		MYSQL on localhost. You can customise each database to be in a different location if you want but it makes it more difficult to maintain.</p>
+		<p>What follows is technical details of the database configuration. These have been put into XML to make them more visible in case
+		you need to change them. In practice you should not need to change the core database definitions, but you might. When you build
+		a bundle of your own you will want to clone one of the example configurations so that is described in detail.</p>
+		<p>An important option to note is whether you want the database tables etc to be created automatically on first access. This makes
+		sense when using memory resident H2 in a demo, but often you want to fine tune the database structure in production, in which
+		case you want to modify the relevant config.properties setting.</p>
+
 		<h2 t="Workflow Database">
 		<p>Now it is time to look at the workflow database configuration (as opposed to the one in the bundle). This is
 		the <courier>database-context.xml</courier> file:</p>
@@ -594,47 +598,78 @@ Bundle-Description: A sample bundle containing a workflow.
     <property name="maxPoolSize" value="20"/>
 </bean>
 
-<bean id="jpaVendorAdapter"
-	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
-	<property name="showSql" value="false" />
-	<!-- ensures new db is auto created if needed -->
-	<property name="generateDdl" value="true" />
-	<property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />
-</bean>
+	<bean id="em-workflow"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter" bundle:export="true">
+		<property name="persistenceXmlLocation" value="classpath:META-INF/persistence-workflow.xml" />
+		<property name="persistenceUnitName" value="pu-workflow" />
+		<property name="dataSource" ref="dataSourceWorkflow" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+		</property>
+		<property name="jpaProperties">
+			<map>
+				<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
+				<entry key="hibernate.dialect" value="${database.dialect}" />
+				<entry key="hibernate.format_sql" value="true" />
+				<entry key="hibernate.connection.autocommit" value="false" />
+			</map>
+		</property>
+	</bean>
 
-   <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
-       <property name="jtaTransactionManager" ref="transactionManager" />
-   </bean>
-   <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
-	init-method="init" destroy-method="close" bundle:export="true">
-	<property name="forceShutdown" value="false" />
-</bean>
-   <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
-       <property name="transactionTimeout" value="300" />
-   </bean>
-<bean id="transactionManager"
-	class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">
-	<property name="transactionManager" ref="atomikosTransactionManager" />
-	<property name="userTransaction" ref="atomikosUserTransaction" />
-	<property name="allowCustomIsolationLevels" value="true" />
-</bean>
+    <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+	    <property name="uniqueResourceName" value="pu__workflow" />
+	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
+	    <property name="xaProperties">
+	        <props>
+	        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
+	        <prop key="user">${database.user}</prop>
+	        <prop key="password">${database.password}</prop>
+	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
+	        </props>
+	    </property>
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	</bean>
 
-<bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	<bean id="jpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
+		<property name="showSql" value="false" />
+		<!-- ensures new db is auto created if needed -->
+		<property name="generateDdl" value="${database.generateDdl}" />
+		<property name="databasePlatform" value="${database.dialect}" />
+	</bean>
+
+    <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
+        <property name="jtaTransactionManager" ref="transactionManager" />
+    </bean>
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
+		init-method="init" destroy-method="close" bundle:export="true">
+		<property name="forceShutdown" value="false" />
+	</bean>
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
+        <property name="transactionTimeout" value="${database.transaction.timeout}" />
+    </bean>
+	<bean id="transactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">
+		<property name="transactionManager" ref="atomikosTransactionManager" />
+		<property name="userTransaction" ref="atomikosUserTransaction" />
+		<property name="allowCustomIsolationLevels" value="true" />
+	</bean>
+	
+    <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
         ]]></code>
-        <p>The <courier>JDBCPool</courier> bean is used to display the table of relevant process instances
-        to a user. It uses simple JDBC protocol rather than JPA because that is all the Vaadin table
-        control needs.</p>
-        <p><courier>em-workflow</courier> is the JPA entity manager for the workflow
+        <p><courier>em-workflow</courier> is the JPA entity manager for the core workflow
         database. This specifes the persistence xml file and a unit name. It also specifies
-        that this entity manager uses Hibernate and the H2 dialect, as well as a datasource
+        that this entity manager uses Hibernate and the selected dialect, as well as a datasource
         called <courier>datasourceWorkflow</courier>.</p>
         <p><courier>datasourceWorkflow</courier> is the Atomikos wrapper for the
-        H2 JDBC datasource and it specifies the url for the database location. It also specifes 
+        selected JDBC datasource and it specifies the url for the database location. It also specifes 
         a unique resource name which is used by the transaction manager. In this
         case we just supply a constant but for the bundles this is more complex.</p>
 		<p><courier>jpaVendorAdapter</courier> specifies some Hibernate switches.</p>
-		<p>The database configuration included assumes the databases will be created (in memory) when the connection
-		is requested. In production you would more likely have SQL scripts to do this and you would run them beforehand.</p>
+		<p>The database configuration included assumes the databases will be created when the connection
+		is requested, depending on the value of <courier>database.generateDdl</courier>. In production you would more 
+		likely have SQL scripts to do this and you would run them beforehand.</p>
 		<p>The rest of the beans are all relating to transaction management. They ensure
 		that the Atomikos transaction manager is configured properly with Spring, including annotation
 		driven transactions.</p>
@@ -649,37 +684,40 @@ Bundle-Description: A sample bundle containing a workflow.
 		database. The configuration in the bundle should look like this:</p>
         <code><![CDATA[
 ...
-<bean id="em-local"
-	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-orderinstances.xml" />
-	<property name="persistenceUnitName" value="pu-orderinstances" />
-	<property name="dataSource" ref="dataSourceLocal" />
-	<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-	<property name="jpaDialect">
-		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
-	</property>
-	<property name="jpaProperties">
-		<map>
-			<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
-			<entry key="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<entry key="hibernate.format_sql" value="true" />
-			<entry key="hibernate.connection.autocommit" value="false" />
-		</map>
-	</property>
-</bean>
+	<bean id="em-local"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-orderinstances.xml" />
+		<property name="persistenceUnitName" value="pu-orderinstances" />
+		<property name="dataSource" ref="dataSourceLocal" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+		</property>
+		<property name="jpaProperties">
+			<map>
+				<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
+				<entry key="hibernate.dialect" value="${database.dialect}" />
+				<entry key="hibernate.format_sql" value="true" />
+				<entry key="hibernate.connection.autocommit" value="false" />
+			</map>
+		</property>
+	</bean>
 
-<bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
-    <property name="uniqueResourceName" value="${bundle.name}" />
-    <property name="xaDataSourceClassName" value="org.h2.jdbcx.JdbcDataSource" />
-    <property name="xaProperties">
-        <props>
-        <prop key="url">jdbc:h2:mem:local;DB_CLOSE_DELAY=-1;MVCC=true</prop>
-        </props>
-    </property>
-    <property name="maxPoolSize" value="20"/>
-</bean>
+    <bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+	    <property name="uniqueResourceName" value="${bundle.name}" />
+	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
+	    <property name="xaProperties">
+	        <props>
+	        <prop key="url">${database.url.prefix}orders${database.url.suffix}</prop>
+	        <prop key="user">${database.user}</prop>
+	        <prop key="password">${database.password}</prop>
+	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
+	        </props>
+	    </property>
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	</bean>
 
-<bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+    <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
         ]]></code>
         <p>This is simpler than the earlier configuration because the transaction beans are
         already defined there and shared with this configuration. So all we need here is an
@@ -689,7 +727,7 @@ Bundle-Description: A sample bundle containing a workflow.
         name will still be unique, and it needs to be. The <courier>${bundle.name}</courier> is always
         set by the bundle manager so you don't have to do anything to set it.</p>
         <p>It is worth noting that the <courier>persistenceXmlLocation</courier> refers to a file contained in the
-        bundle and that, in turn, refers to annotated POJOS also contained in the bundle. Also that the reference
+        bundle and that, in turn, refers to annotated POJOs also contained in the bundle. Also that the reference
         to the <courier>jpaVendorAdapter</courier> bean is actually a reference to a bean in the main application
         that is passed to the bundle</p>
         </h2>
@@ -707,21 +745,92 @@ Bundle-Description: A sample bundle containing a workflow.
 		rogue locks. You can also freeze and restart the executor mentioned in <sectionLink t="Scheduler"/>.</p>
 	</h1>
     <h1 t="Configuring for Production">
-		<p>The process bundles are held in a sweep directory defined by <courier>workflow.bundles.dir</courier>. You need
-		to set an environment variable the points to that directory. Then you want to actually add some bundles to that directory. There are two example bundle projects you can use right away, these are projects
-        inside the main project's <courier>bundles</courier> directory and they are from child projects (simple-workflow and order-workflow). Use those as templates
-        for your own bundles.</p> 
-		<p>You can use this application in production, with appropriate configuration changes, or you can enhance it. Here is a summary of things
-		to look at if you follow the former route.</p>
+    	<p>The configuration options are all in <courier>config.properties</courier> but to change them you do not have to edit
+    	the source code. You can override any of them with an environment variable.</p>
+        <code><![CDATA[
+# Do not change settings in this group (unless you want it to break :))
+nz.co.senanque.validationengine.ValidationEngineImpl.identifier=my-identifier
+nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory.packages=nz.co.senanque.workflow.instances
+nz.co.senanque.forms.FormEnvironment.name=Vaadin
+
+# The following entry will auto login to admin/admin, useful for testing.
+#nz.co.senanque.login.RequestValidatorImpl.defaultLogin=admin/admin
+# This is the sweep directory that holds the current bundles.
+# YOU DEFINITELY NEED TO CHANGE THIS
+workflow.bundles.dir=/bundles
+
+# sweep time to check for new bundles
+nz.co.senanque.workflowimpl.BundleScheduler.scan=10000
+
+# Sweep times for active processes etc.
+# only used if nz.co.senanque.workflowimpl.ScheduleCondition=on
+nz.co.senanque.workflowimpl.Scheduler.activeProcesses=10000
+nz.co.senanque.workflowimpl.Scheduler.deferredEvents=10000
+nz.co.senanque.workflowimpl.Scheduler.clearDeferredEvents=60000
+# This turns on the scheduled sweeps for active processes etc
+# if this is off the above settings are inactive.
+nz.co.senanque.workflowimpl.ScheduleCondition=on
+
+# Use these values for an H2 memory resident database 
+#database.dialect=org.hibernate.dialect.H2Dialect
+#database.datasource.class=org.h2.jdbcx.JdbcDataSource
+#database.url.prefix=jdbc:h2:mem:
+#database.url.suffix=;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
+#database.user=
+#database.password=
+
+# Use these values for a MYSQL database on localhost
+database.dialect=org.hibernate.dialect.MySQL5Dialect
+database.datasource.class=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
+database.url.prefix=jdbc:mysql://localhost:3306/
+database.url.suffix=?autoReconnect=true&useSSL=false
+database.user=workflow
+database.password=workflow
+
+database.max.pool.size=20
+database.transaction.timeout=300
+database.generateDdl=true
+        ]]></code>
+		<p>First note that you must change the value for <courier>workflow.bundles.dir</courier> or it will not know
+		where to find your bundles.</p>
+		<p>The <courier>nz.co.senanque.workflowimpl.BundleScheduler.scan</courier> probably does not need to change. You could make
+		it longer if you have performance issues and you do not add new bundles very often. Bundle scans are not resource hungry though.</p>
+		<p>The next section covers how often the database is swept for active processes, deferred events and for dead deferred events that need cleaning up.
+		These sweeps are more resource intensive so making the time between sweeps might help performance in some circumstances. You can also turn all
+		these sweeps off (except the BundleScheduler) using <courier>nz.co.senanque.workflowimpl.ScheduleCondition=off</courier>. This is done when you
+		are running multiple workflow servers on the same database and you don't want all of them sweeping.</p>
+		<p>The next two sections define the database connections. One of them shows how to define connections to an H2 memory residentdatabase, the other to a
+		persistent MYSQL database. The application supports either. If you need to add another database choice then you need to change the dependencies and
+		rebuild. Using these choices, though, you can see there are two database URL entries: the prefix and the suffix. These are used to surround the
+		base name of the database. For example the core workflow database is always called 'workflow' so for MYSQL the resulting URL is:
+        <code><![CDATA[
+dbc:mysql://localhost:3306/workflow?autoReconnect=true&useSSL=false
+        ]]></code>
+		Each bundle has its own unique database name that has a URL
+		generated the same way, although you can also customise bundle URLs as you please.</p>
+		<p>The last section contains some database tunable values as well as the instruction whether or not to generate the DDL forthe database. If true then
+		the database tables will be created when you first connect. This needs to be the case if you are using an in-memory database, but if you are using
+		MYSQL you have more choice.</p>
+		<p>For MYSQL you always need to create the all the databases you are going to need as well as a user to access them. For the core application and
+		the demo bundles use the mysql utility to enter these commands:</p>
+        <code><![CDATA[
+create user 'workflow'@'%' identified by 'workflow';
+create database workflow;
+create database nmc;
+create database simple;
+create database orders;
+grant all privileges on workflow.* to 'workflow'@'%';
+grant all privileges on nmc.* to 'workflow'@'%';
+grant all privileges on simple.* to 'workflow'@'%';
+grant all privileges on orders.* to 'workflow'@'%';
+flush privileges;
+        ]]></code>
+        <p>With that done you can leave the <courier>database.generateDdl</courier> as true (the default) and the DDL scripts will be generated and run
+        when needed. But you may want to tune that DDL. In that case you should use the mysql utility to run your own DDL and set <courier>database.generateDdl</courier> to false.</p>
+		<p>Other changes to consider when moving to production:</p>
 		<list>
-		<le>Database. Obviously you do not want an in-memory database for a production system. You may want to review whether you want H2 or
-		some other database product more widely used in enterprise applications. Hibernate and Atomikos are also only options that can be
-		replaced by alternatives you may prefer.</le>
-		<le>Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities.</le>
 		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation
 		for Madura Login<referenceLink t="Madura Login"/> for details.</le>
-		<le>The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or
-		you might just have different preferences in your enterprise. You might want some application instances acting solely as schedulers and other acting solely as UI servers.</le>
 		<le>Locking. You will almost certainly need to move from SimpleLock to SQLLock or perhaps something else you prefer. This is
 		documented in Madura Utils<referenceLink t="Madura Utils"/></le>
 		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS 
@@ -763,6 +872,9 @@ Bundle-Description: A sample bundle containing a workflow.
 				<tw>12cm</tw>
 			<tr>
 				<th>2.1.2</th>
+			</tr>
+			<tr>
+				<td>Added options for MYSQL.</td>
 			</tr>
 			<tr>
 				<td>Added Dockerfile.</td>

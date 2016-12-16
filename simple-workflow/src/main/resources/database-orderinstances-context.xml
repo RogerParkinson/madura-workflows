@@ -54,9 +54,12 @@ limitations under the License.
 	    <property name="xaProperties">
 	        <props>
 	        <prop key="url">${database.url.prefix}simple${database.url.suffix}</prop>
+	        <prop key="user">${database.user}</prop>
+	        <prop key="password">${database.password}</prop>
+	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
 	        </props>
 	    </property>
-	    <property name="maxPoolSize" value="20"/>
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
 	</bean>
 
     <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />

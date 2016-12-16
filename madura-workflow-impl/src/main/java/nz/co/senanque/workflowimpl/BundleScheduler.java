@@ -3,7 +3,7 @@
  */
 package nz.co.senanque.workflowimpl;
 
-import nz.co.senanque.madura.bundle.AbstractBundleManager;
+import nz.co.senanque.madura.bundle.BundleManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BundleScheduler {
 	
-	@Autowired AbstractBundleManager m_bundleManager;
+	@Autowired BundleManager m_bundleManager;
 
 	@Scheduled(fixedDelayString="${nz.co.senanque.workflowimpl.BundleScheduler.scan:10000}")
 	public void activeProcesses() throws Exception {
