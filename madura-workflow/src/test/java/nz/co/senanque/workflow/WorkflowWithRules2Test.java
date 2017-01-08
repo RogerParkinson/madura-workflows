@@ -83,7 +83,9 @@ public class WorkflowWithRules2Test {
     }
 	@AfterClass
 	public static void destroy() {
-		s_applicationContext.close();
+		if (s_applicationContext != null) {
+			s_applicationContext.close();
+		}
 		s_endpoint.stop();
 	}
     /**
