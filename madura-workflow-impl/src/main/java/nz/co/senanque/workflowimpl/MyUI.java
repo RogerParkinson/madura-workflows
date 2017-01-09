@@ -42,6 +42,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.context.ContextLoaderListener;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
@@ -162,6 +163,9 @@ public class MyUI extends UI implements MessageSourceAware {
     	@BundleExport
     	public LockFactory getLockFactory() {
     		return new SimpleLockFactory();
+//    		SQLLockFactory ret = new SQLLockFactory();
+//    		ret.setDataSource(atomikosDataSourceBean);
+//    		return ret;
     	}
     	
     }

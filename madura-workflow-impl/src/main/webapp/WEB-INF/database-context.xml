@@ -66,18 +66,26 @@ limitations under the License.
 			</map>
 		</property>
 	</bean>
+	
+	<util:properties id="xaProperties1">
+        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
+        <prop key="user">${database.user}</prop>
+        <prop key="password">${database.password}</prop>
+	</util:properties>
+	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
+	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger" bundle:export="true">
+		<property name="list">
+			<list>
+				<ref bean="xaProperties1"/>
+				<ref bean="xaProperties2"/>
+			</list>
+		</property>
+	</bean>
 
     <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="pu__workflow" />
 	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties">
-	        <props>
-	        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
-	        <prop key="user">${database.user}</prop>
-	        <prop key="password">${database.password}</prop>
-	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
-	        </props>
-	    </property>
+	    <property name="xaProperties" ref="xaProperties"/>
 	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
 	</bean>
 
