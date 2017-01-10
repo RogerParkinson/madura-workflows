@@ -50,6 +50,13 @@ limitations under the License.
 		</property>
 	</bean>
 
+ 	<util:properties id="xaProperties">
+        <prop key="url">${database.url.prefix}nmc${database.url.suffix}</prop>
+        <prop key="user">${database.user}</prop>
+        <prop key="password">${database.password}</prop>
+        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
+	</util:properties>
+
     <bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="${bundle.name}" />
 	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />

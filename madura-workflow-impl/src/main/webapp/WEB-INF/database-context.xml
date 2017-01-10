@@ -90,7 +90,7 @@ limitations under the License.
         <prop key="password">${database.password}</prop>
 	</util:properties>
 	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
-	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger" bundle:export="true">
+	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger">
 		<property name="list">
 			<list>
 				<ref bean="xaProperties1"/>
