@@ -548,15 +548,15 @@ Bundle-Description: A sample bundle containing a workflow.
 		<p>There is a database for the core workflow tables and a database to hold the data for each bundle. It is important that these databases
 		are kept separate because new bundles can be added or removed independently of the core workflow, and independently of each other.
 		Transactions across multiple connections have to be coordinated too.</p>
-		<p>The default application uses either MYSQL or H2 as a database. H2 has the advantage that it can be memory resident and requires
+		<p>The default application uses either MySQL or H2 as a database. H2 has the advantage that it can be memory resident and requires
 		no installation, which makes it very good for demos, though not so good for production. H2 can also be configured to be non-memory
-		resident but it is not often used in production. MYSQL is widely accepted as a production database but it requires installation etc.</p>
+		resident but it is not often used in production. MySQL is widely accepted as a production database but it requires installation etc.</p>
 		<p>To configure the specific options you want you can edit the config.properties file or use environment variables to override the
 		config.properties values. All the config.properties are described detail in <referenceLink t="Configuring for Production"/>
 		but in general you should assume all your databases are of the same type and on the same server, though each has a different name.
-		For example if you decide to use MYSQL on your localhost then your workflow database and each bundle database will all be
-		MYSQL on localhost. You can customise each database to be in a different location if you want but it makes it more difficult to maintain.</p>
-		<p>What follows is technical details of the database configuration. These have been put into XML to make them more visible in case
+		For example if you decide to use MySQL on your localhost then your workflow database and each bundle database will all be
+		MySQL on localhost. You can customise each database to be in a different location if you want but it makes it more difficult to maintain.</p>
+		<p>What follows are technical details of the database configuration. These have been put into XML to make them more visible in case
 		you need to change them. In practice you should not need to change the core database definitions, but you might. When you build
 		a bundle of your own you will want to clone one of the example configurations so that is described in detail.</p>
 		<p>An important option to note is whether you want the database tables etc to be created automatically on first access. This makes
@@ -568,36 +568,6 @@ Bundle-Description: A sample bundle containing a workflow.
 		the <courier>database-context.xml</courier> file:</p>
         <code><![CDATA[
 ...
-<bean id="em-workflow"
-	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter" bundle:export="true">
-	<property name="persistenceXmlLocation" value="classpath:META-INF/persistence-workflow.xml" />
-	<property name="persistenceUnitName" value="pu-workflow" />
-	<property name="dataSource" ref="dataSourceWorkflow" />
-	<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-	<property name="jpaDialect">
-		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
-	</property>
-	<property name="jpaProperties">
-		<map>
-			<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
-			<entry key="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<entry key="hibernate.format_sql" value="true" />
-			<entry key="hibernate.connection.autocommit" value="false" />
-		</map>
-	</property>
-</bean>
-
-<bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
-    <property name="uniqueResourceName" value="pu__workflow" />
-    <property name="xaDataSourceClassName" value="org.h2.jdbcx.JdbcDataSource" />
-    <property name="xaProperties">
-        <props>
-        <prop key="url">jdbc:h2:mem:workflow;DB_CLOSE_ON_EXIT=FALSE;MVCC=true</prop>
-        </props>
-    </property>
-    <property name="maxPoolSize" value="20"/>
-</bean>
-
 	<bean id="em-workflow"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="springJtaPlatformAdapter" bundle:export="true">
 		<property name="persistenceXmlLocation" value="classpath:META-INF/persistence-workflow.xml" />
@@ -616,19 +586,29 @@ Bundle-Description: A sample bundle containing a workflow.
 			</map>
 		</property>
 	</bean>
+	
+	<util:properties id="xaProperties1">
+        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
+        <prop key="user">${database.user}</prop>
+        <prop key="password">${database.password}</prop>
+	</util:properties>
+	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
+	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger" bundle:export="true">
+		<property name="list">
+			<list>
+				<ref bean="xaProperties1"/>
+				<ref bean="xaProperties2"/>
+			</list>
+		</property>
+	</bean>
 
     <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="pu__workflow" />
 	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties">
-	        <props>
-	        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
-	        <prop key="user">${database.user}</prop>
-	        <prop key="password">${database.password}</prop>
-	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
-	        </props>
-	    </property>
+	    <property name="xaProperties" ref="xaProperties"/>
 	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	    <property name="minPoolSize" value="${database.min.pool.size}"/>
+	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
 	</bean>
 
 	<bean id="jpaVendorAdapter"
@@ -670,6 +650,12 @@ Bundle-Description: A sample bundle containing a workflow.
 		<p>The database configuration included assumes the databases will be created when the connection
 		is requested, depending on the value of <courier>database.generateDdl</courier>. In production you would more 
 		likely have SQL scripts to do this and you would run them beforehand.</p>
+		<p>The <courier>xaProperties</courier> bean is a list of properties injected into the <courier>dataSourceWorkflow</courier>. It
+		is a bit complicated because the list varies depending on the database platform you are using. The list is made
+		up of two merged lists. The first of these is just the url, user and password derived from
+		the configuration. The second list is pulled from a properties file that depends on the database type.
+		For an H2 database this file is empty, for MySQL it needs a setting. If you are using a different database
+		you need to supply file named <courier>xa-XXX.properties</courier> where XXX is the database.type.</p>
 		<p>The rest of the beans are all relating to transaction management. They ensure
 		that the Atomikos transaction manager is configured properly with Spring, including annotation
 		driven transactions.</p>
@@ -706,15 +692,10 @@ Bundle-Description: A sample bundle containing a workflow.
     <bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="${bundle.name}" />
 	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties">
-	        <props>
-	        <prop key="url">${database.url.prefix}orders${database.url.suffix}</prop>
-	        <prop key="user">${database.user}</prop>
-	        <prop key="password">${database.password}</prop>
-	        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
-	        </props>
-	    </property>
+	    <property name="xaProperties" ref="xaProperties"/>
 	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	    <property name="minPoolSize" value="${database.min.pool.size}"/>
+	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
 	</bean>
 
     <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
@@ -735,10 +716,9 @@ Bundle-Description: A sample bundle containing a workflow.
 	<h1 t="Locking">
 		<p>While it is common to rely on database for locking the workflow often needs to lock things across transactions so it uses
 		the locking facility from Madura Utils<referenceLink t="Madura Utils"/>. This has two variants, and it is easy to add more.</p>
-		<p>For this demo the choice is <courier>SimpleLocking</courier> which relies on memory-based flags and only works if there
-		is only one instance of the application running, albeit supporting multiple users. A more likely choice for production is <courier>SQLLocking</courier>
-		which uses its own database connection to store the flags on a database table. See the Madura Utils documentation for how to configure that.
-		You may also want to develop your own locking mechanism and Madura Utils has documentaiton for that too.</p>	
+		<p>For this demo the choice is <courier>SQLLocking</courier> which uses its own database connection to store the flags on a database table. 
+		See the Madura Utils documentation for how to configure that.
+		You may also want to develop your own locking mechanism and Madura Utils has documentation for that too.</p>	
 	</h1>
 	<h1 t="JMX">
 		<p>The application supports JMX. Using JMX you can monitor the status of <courier>SimpleLocking</courier> and, if necessary, kill
@@ -746,7 +726,7 @@ Bundle-Description: A sample bundle containing a workflow.
 	</h1>
     <h1 t="Configuring for Production">
     	<p>The configuration options are all in <courier>config.properties</courier> but to change them you do not have to edit
-    	the source code. You can override any of them with an environment variable.</p>
+    	the source code. You can override any of them with environment variables.</p>
         <code><![CDATA[
 # Do not change settings in this group (unless you want it to break :))
 nz.co.senanque.validationengine.ValidationEngineImpl.identifier=my-identifier
@@ -778,16 +758,21 @@ nz.co.senanque.workflowimpl.ScheduleCondition=on
 #database.url.suffix=;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
 #database.user=
 #database.password=
+#database.type=H2
 
-# Use these values for a MYSQL database on localhost
-database.dialect=org.hibernate.dialect.MySQL5Dialect
-database.datasource.class=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
-database.url.prefix=jdbc:mysql://localhost:3306/
+# Use these values for a MySQL database on localhost
+database.dialect=org.hibernate.dialect.MySQL57InnoDBDialect
+database.datasource.class=com.MySQL.jdbc.jdbc2.optional.MySQLXADataSource
+database.url.prefix=jdbc:MySQL://localhost:3306/
 database.url.suffix=?autoReconnect=true&useSSL=false
 database.user=workflow
 database.password=workflow
+database.type=MySQL
 
-database.max.pool.size=20
+# misc database settings
+database.min.pool.size=5
+database.max.pool.size=100
+database.borrow.connection.timeout=60
 database.transaction.timeout=300
 database.generateDdl=true
         ]]></code>
@@ -800,19 +785,19 @@ database.generateDdl=true
 		these sweeps off (except the BundleScheduler) using <courier>nz.co.senanque.workflowimpl.ScheduleCondition=off</courier>. This is done when you
 		are running multiple workflow servers on the same database and you don't want all of them sweeping.</p>
 		<p>The next two sections define the database connections. One of them shows how to define connections to an H2 memory residentdatabase, the other to a
-		persistent MYSQL database. The application supports either. If you need to add another database choice then you need to change the dependencies and
+		persistent MySQL database. The application supports either. If you need to add another database choice then you need to change the dependencies and
 		rebuild. Using these choices, though, you can see there are two database URL entries: the prefix and the suffix. These are used to surround the
-		base name of the database. For example the core workflow database is always called 'workflow' so for MYSQL the resulting URL is:
+		base name of the database. For example the core workflow database is always called 'workflow' so for MySQL the resulting URL is:
         <code><![CDATA[
-dbc:mysql://localhost:3306/workflow?autoReconnect=true&useSSL=false
+dbc:MySQL://localhost:3306/workflow?autoReconnect=true&useSSL=false
         ]]></code>
 		Each bundle has its own unique database name that has a URL
 		generated the same way, although you can also customise bundle URLs as you please.</p>
 		<p>The last section contains some database tunable values as well as the instruction whether or not to generate the DDL forthe database. If true then
 		the database tables will be created when you first connect. This needs to be the case if you are using an in-memory database, but if you are using
-		MYSQL you have more choice.</p>
-		<p>For MYSQL you always need to create the all the databases you are going to need as well as a user to access them. For the core application and
-		the demo bundles use the mysql utility to enter these commands:</p>
+		MySQL you have more choice.</p>
+		<p>For MySQL you always need to create the all the databases you are going to need as well as a user to access them. For the core application and
+		the demo bundles use the MySQL utility to enter these commands:</p>
         <code><![CDATA[
 create user 'workflow'@'%' identified by 'workflow';
 create database workflow;
@@ -826,12 +811,12 @@ grant all privileges on orders.* to 'workflow'@'%';
 flush privileges;
         ]]></code>
         <p>With that done you can leave the <courier>database.generateDdl</courier> as true (the default) and the DDL scripts will be generated and run
-        when needed. But you may want to tune that DDL. In that case you should use the mysql utility to run your own DDL and set <courier>database.generateDdl</courier> to false.</p>
+        when needed. But you may want to tune that DDL. In that case you should use the MySQL utility to run your own DDL and set <courier>database.generateDdl</courier> to false.</p>
 		<p>Other changes to consider when moving to production:</p>
 		<list>
 		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation
 		for Madura Login<referenceLink t="Madura Login"/> for details.</le>
-		<le>Locking. You will almost certainly need to move from SimpleLock to SQLLock or perhaps something else you prefer. This is
+		<le>Locking. You will need to create the lock table in your workflow database. This is
 		documented in Madura Utils<referenceLink t="Madura Utils"/></le>
 		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS 
 		and just a little about Vaadin<referenceLink t="Vaadin"/>. The CSS files are in <courier>src/main/webapp/VAADIN/themes/mytheme</courier>.</le>
@@ -848,7 +833,7 @@ flush privileges;
 		about using bundles to hold the forms. Maybe you want a very cut down app that someone can run on a tablet. In that case all you really need is a way for them to scan the PROCESSINSTANCE table for
 		records that are in WAIT state and whose Queue Name is the one they are to access. Once they find one they should do the following:</p>
 		<list>
-		<le>Lock the process instance using your chosen lock mechanism.</le>
+		<le>Lock the process instance using your chosen lock mechanism eg SQLLock.</le>
 		<le>Change the status to BUSY and write the current user name into the LockedBy field.</le>
 		<le>Save the record.</le>
 		<le>Release the lock.</le>
@@ -863,7 +848,7 @@ flush privileges;
 	</h1>
 			
 	<a1 t="License">
-		<p>The code specific to MaduraWorkflowUI is licensed under the Apache License 2.0 <referenceLink t="Apache Licence 2.0"/>.</p>
+		<p>The code specific to Madura Workflow Impl is licensed under the Apache License 2.0 <referenceLink t="Apache Licence 2.0"/>.</p>
 		<p>The dependent products have compatible licenses specified in their pom files. Madura Rules (optional) has a dual
 		license to cover projects that do not qualify for the Apache License.</p>
 	</a1>
@@ -874,7 +859,7 @@ flush privileges;
 				<th>2.1.2</th>
 			</tr>
 			<tr>
-				<td>Added options for MYSQL.</td>
+				<td>Added options for MySQL.</td>
 			</tr>
 			<tr>
 				<td>Added Dockerfile.</td>
