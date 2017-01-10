@@ -67,7 +67,24 @@ limitations under the License.
 		</property>
 	</bean>
 	
-	<util:properties id="xaProperties1">
+    <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+	    <property name="uniqueResourceName" value="pu__workflow" />
+	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
+	    <property name="xaProperties" ref="xaProperties"/>
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	    <property name="minPoolSize" value="${database.min.pool.size}"/>
+	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
+	</bean>
+
+	<bean id="jpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
+		<property name="showSql" value="false" />
+		<!-- ensures new db is auto created if needed -->
+		<property name="generateDdl" value="${database.generateDdl}" />
+		<property name="databasePlatform" value="${database.dialect}" />
+	</bean>
+
+ 	<util:properties id="xaProperties1">
         <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
         <prop key="user">${database.user}</prop>
         <prop key="password">${database.password}</prop>
@@ -80,21 +97,6 @@ limitations under the License.
 				<ref bean="xaProperties2"/>
 			</list>
 		</property>
-	</bean>
-
-    <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
-	    <property name="uniqueResourceName" value="pu__workflow" />
-	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
-	</bean>
-
-	<bean id="jpaVendorAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" bundle:export="true">
-		<property name="showSql" value="false" />
-		<!-- ensures new db is auto created if needed -->
-		<property name="generateDdl" value="${database.generateDdl}" />
-		<property name="databasePlatform" value="${database.dialect}" />
 	</bean>
 
     <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
