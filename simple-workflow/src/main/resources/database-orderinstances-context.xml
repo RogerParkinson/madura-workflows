@@ -54,9 +54,9 @@ limitations under the License.
 	    <property name="uniqueResourceName" value="${bundle.name}" />
 	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
 	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="minPoolSize" value="5" />
-	    <property name="maxPoolSize" value="50"/>
-	    <property name="borrowConnectionTimeout" value="60" />
+	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
+	    <property name="minPoolSize" value="${database.min.pool.size}"/>
+	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
 	</bean>
 
     <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
