@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import nz.co.senanque.forms.FormEnvironment;
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.locking.LockFactory;
-import nz.co.senanque.locking.simple.SimpleLockFactory;
+import nz.co.senanque.locking.sql.SQLLockFactory;
 import nz.co.senanque.madura.bundle.BundleExport;
 import nz.co.senanque.madura.bundle.spring.BundledInterfaceRegistrar;
 import nz.co.senanque.vaadin.Hints;
@@ -27,6 +27,8 @@ import nz.co.senanque.workflowui.ProcessInstances.ProcessInstanceEvent;
 import nz.co.senanque.workflowui.WorkflowUIHints;
 import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
@@ -71,7 +73,7 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI implements MessageSourceAware {
 
 	private static final long serialVersionUID = 1L;
-//	private static Logger m_logger = LoggerFactory.getLogger(MyUI.class);
+	private static Logger m_logger = LoggerFactory.getLogger(MyUI.class);
 	
 	@Autowired private PermissionManager m_permissionManager;
 	@Autowired private AboutWindow m_aboutWindow;
@@ -122,6 +124,7 @@ public class MyUI extends UI implements MessageSourceAware {
     public static class MyConfiguration {
     	
     	@Autowired MessageSource messageSource;
+    	@Autowired AtomikosDataSourceBean atomikosDataSourceBean;
     	
     	public MyConfiguration() {
     	}
@@ -162,10 +165,10 @@ public class MyUI extends UI implements MessageSourceAware {
     	@Bean(name="lockFactory")
     	@BundleExport
     	public LockFactory getLockFactory() {
-    		return new SimpleLockFactory();
-//    		SQLLockFactory ret = new SQLLockFactory();
-//    		ret.setDataSource(atomikosDataSourceBean);
-//    		return ret;
+//    		return new SimpleLockFactory();
+    		SQLLockFactory ret = new SQLLockFactory();
+    		ret.setDataSource(atomikosDataSourceBean);
+    		return ret;
     	}
     	
     }
