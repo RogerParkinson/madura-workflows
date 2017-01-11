@@ -586,29 +586,20 @@ Bundle-Description: A sample bundle containing a workflow.
 			</map>
 		</property>
 	</bean>
-	
-	<util:properties id="xaProperties1">
-        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
-        <prop key="user">${database.user}</prop>
-        <prop key="password">${database.password}</prop>
-	</util:properties>
-	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
-	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger" bundle:export="true">
-		<property name="list">
-			<list>
-				<ref bean="xaProperties1"/>
-				<ref bean="xaProperties2"/>
-			</list>
+
+	<bean id="databaseConfigurer" class="nz.co.senanque.workflowimpl.DatabaseConfigurer" bundle:export="true">
+		<property name="extraProperties">
+			<util:properties location="classpath:xa-${database.type}.properties"/>
 		</property>
 	</bean>
-
+	
     <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="pu__workflow" />
-	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
-	    <property name="minPoolSize" value="${database.min.pool.size}"/>
-	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
+	    <property name="xaDataSourceClassName" value="#{databaseConfigurer.datasourceClass}" />
+	    <property name="xaProperties" value="#{databaseConfigurer.properties('workflow')}"/>
+	    <property name="maxPoolSize" value="#{databaseConfigurer.maxPoolSize}"/>
+	    <property name="minPoolSize" value="#{databaseConfigurer.minPoolSize}"/>
+	    <property name="borrowConnectionTimeout" value="#{databaseConfigurer.borrowConnectionTimeout}" />
 	</bean>
 
 	<bean id="jpaVendorAdapter"
@@ -616,7 +607,7 @@ Bundle-Description: A sample bundle containing a workflow.
 		<property name="showSql" value="false" />
 		<!-- ensures new db is auto created if needed -->
 		<property name="generateDdl" value="${database.generateDdl}" />
-		<property name="databasePlatform" value="${database.dialect}" />
+		<property name="databasePlatform" value="#{databaseConfigurer.dialect}" />
 	</bean>
 
     <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
@@ -642,26 +633,50 @@ Bundle-Description: A sample bundle containing a workflow.
         database. This specifes the persistence xml file and a unit name. It also specifies
         that this entity manager uses Hibernate and the selected dialect, as well as a datasource
         called <courier>datasourceWorkflow</courier>.</p>
+        <p>The <courier>databaseConfigurer</courier> bean is used to construct a properties list for the data source. If
+        we were just configuring one data source this bean would be overkill but we want to pass a similar list to
+        the bundles and keep their configuration needs as simple as possible. The bean is injected with values from
+        <courier>config.properties</courier>, all of which can be overidden by environment variables (eg the <courier>-D</courier> flag on the command line).
+        The values specify the connection url and the user, password etc. The url is specified as a prefix and a suffix so
+        that you can specify a particular schema in the target database. For example the main workflow database
+        is <courier>workflow</courier> and in <courier>config.properties</courier> we have:</p>
+        <code><![CDATA[
+...
+#database.url.prefix=jdbc:h2:mem:
+#database.url.suffix=;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
+...
+        ]]></code>
+        <p>When the <courier>databaseConfigurer</courier> bean supplies the list of properties it accepts an argument which
+        names the specific schema so that it can construct the url correctly. </p>
         <p><courier>datasourceWorkflow</courier> is the Atomikos wrapper for the
         selected JDBC datasource and it specifies the url for the database location. It also specifes 
-        a unique resource name which is used by the transaction manager. In this
-        case we just supply a constant but for the bundles this is more complex.</p>
-		<p><courier>jpaVendorAdapter</courier> specifies some Hibernate switches.</p>
-		<p>The database configuration included assumes the databases will be created when the connection
+        a unique resource name which is used by the transaction manager. In this file there is a reference in
+        the <courier>dataSourceWorkflow</courier> bean that looks like this:</p>
+        <code><![CDATA[        
+<property name="xaProperties" value="#{databaseConfigurer.properties('workflow')}"/>
+        ]]></code>
+		<p>That results in the full list of properties, including the url which looks like this:</p>
+        <code><![CDATA[        
+jdbc:h2:mem:workflow;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
+        ]]></code>
+        <p>As you can see the url is constructed from the specified prefix, schema ('workflow'), and suffix. The other properties
+        such as user and password are passed without alteration. The only other thing to notice about this bean is that it
+        is injected with a list of extra properties which depend on the the <courier>database.type</courier> value in the <courier>config.properties</courier> file.
+        It looks for a properties file called, for example <courier>xa-H2.properties</courier> or <courier>xa.MySQL.properties</courier> in the top of the classpath. 
+        The H2 file can be empty but the MySQL file needs to have <courier>pinGlobalTxToPhysicalConnection=true</courier>. Those are the two database platforms
+        that have been tested, other platforms would need their own xa file.</p>
+        <p>The <courier>databaseConfigurer</courier> bean also carries other injected values such as the data source class and the pool size limits.
+        You can see these being used in the <courier>dataSourceWorkflow</courier> bean.</p>
+        <p>As noted above, this is more complicated than it needs to be for just one database connection which is all we need in the main application.
+        But notice that the <courier>databaseConfigurer</courier> bean is exported to the bundles, meaning they can pick up the same bean (and its contents)
+        to specify their own database connections.</p>
+		<p><courier>jpaVendorAdapter</courier> specifies some Hibernate switches, this is also exported to the bundles.
+		The database configuration included assumes the databases will be created when the connection
 		is requested, depending on the value of <courier>database.generateDdl</courier>. In production you would more 
 		likely have SQL scripts to do this and you would run them beforehand.</p>
-		<p>The <courier>xaProperties</courier> bean is a list of properties injected into the <courier>dataSourceWorkflow</courier>. It
-		is a bit complicated because the list varies depending on the database platform you are using. The list is made
-		up of two merged lists. The first of these is just the url, user and password derived from
-		the configuration. The second list is pulled from a properties file that depends on the database type.
-		For an H2 database this file is empty, for MySQL it needs a setting. If you are using a different database
-		you need to supply file named <courier>xa-XXX.properties</courier> where XXX is the database.type.</p>
 		<p>The rest of the beans are all relating to transaction management. They ensure
 		that the Atomikos transaction manager is configured properly with Spring, including annotation
 		driven transactions.</p>
-		<p>You will notice several of these beans are tagged with <courier>bundle:export="true"</courier>. This
-		makes the bundle manager export those beans to the bundles so they can see them too. This is particularly important
-		in the case of the transaction beans because we want both databases to participate in the same transactions.</p>
 		</h2>
 		<h2 t="Bundled Databases">
 		<p>Meanwhile the bundles define their own database connections and it is vital that
@@ -682,7 +697,7 @@ Bundle-Description: A sample bundle containing a workflow.
 		<property name="jpaProperties">
 			<map>
 				<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
-				<entry key="hibernate.dialect" value="${database.dialect}" />
+				<entry key="hibernate.dialect" value="#{databaseConfigurer.dialect}" />
 				<entry key="hibernate.format_sql" value="true" />
 				<entry key="hibernate.connection.autocommit" value="false" />
 			</map>
@@ -691,16 +706,15 @@ Bundle-Description: A sample bundle containing a workflow.
 
     <bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="${bundle.name}" />
-	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
-	    <property name="minPoolSize" value="${database.min.pool.size}"/>
-	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
+	    <property name="xaDataSourceClassName" value="#{databaseConfigurer.datasourceClass}" />
+	    <property name="xaProperties" value="#{databaseConfigurer.properties('orders')}"/>
+	    <property name="maxPoolSize" value="#{databaseConfigurer.maxPoolSize}"/>
+	    <property name="minPoolSize" value="#{databaseConfigurer.minPoolSize}"/>
+	    <property name="borrowConnectionTimeout" value="#{databaseConfigurer.borrowConnectionTimeout}" />
 	</bean>
-
-    <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+...
         ]]></code>
-        <p>This is simpler than the earlier configuration because the transaction beans are
+        <p>This is simpler than the main application configuration because many of the beans are
         already defined there and shared with this configuration. So all we need here is an
         entity manager and a data source, and they look much like the ones we already saw.</p>
         <p>The one key difference is the unique resource name, which is here set to <courier>${bundle.name}</courier>.
@@ -709,8 +723,14 @@ Bundle-Description: A sample bundle containing a workflow.
         set by the bundle manager so you don't have to do anything to set it.</p>
         <p>It is worth noting that the <courier>persistenceXmlLocation</courier> refers to a file contained in the
         bundle and that, in turn, refers to annotated POJOs also contained in the bundle. Also that the reference
-        to the <courier>jpaVendorAdapter</courier> bean is actually a reference to a bean in the main application
-        that is passed to the bundle</p>
+        to the <courier>jpaVendorAdapter</courier> and <courier>databaseConfigurer</courier> beans are actually a 
+        reference to a bean in the main application that is passed to the bundle. In the case of the <courier>databaseConfigurer</courier>
+        bean we pass a schema name when we get the xaProperties value:</p>
+        <code><![CDATA[
+<property name="xaProperties" value="#{databaseConfigurer.properties('orders')}"/>
+        ]]></code>
+        <p>This will create the full properties list using the values in the bean, but the url will be formed from the specified
+        prefix+schema+suffix to get the specific url for the database used by this bundle.</p>
         </h2>
 		</h1>
 	<h1 t="Locking">
@@ -752,26 +772,25 @@ nz.co.senanque.workflowimpl.Scheduler.clearDeferredEvents=60000
 nz.co.senanque.workflowimpl.ScheduleCondition=on
 
 # Use these values for an H2 memory resident database 
-#database.dialect=org.hibernate.dialect.H2Dialect
-#database.datasource.class=org.h2.jdbcx.JdbcDataSource
-#database.url.prefix=jdbc:h2:mem:
-#database.url.suffix=;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
-#database.user=
-#database.password=
-#database.type=H2
+database.dialect=org.hibernate.dialect.H2Dialect
+database.datasource.class=org.h2.jdbcx.JdbcDataSource
+database.url.prefix=jdbc:h2:mem:
+database.url.suffix=;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
+database.user=
+database.password=
+database.type=H2
 
 # Use these values for a MySQL database on localhost
-database.dialect=org.hibernate.dialect.MySQL57InnoDBDialect
-database.datasource.class=com.MySQL.jdbc.jdbc2.optional.MySQLXADataSource
-database.url.prefix=jdbc:MySQL://localhost:3306/
-database.url.suffix=?autoReconnect=true&useSSL=false
-database.user=workflow
-database.password=workflow
-database.type=MySQL
+#database.datasource.class=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
+#database.url.prefix=jdbc:mysql://localhost:3306/
+#database.url.suffix=?autoReconnect=true&useSSL=false
+#database.user=workflow
+#database.password=workflow
+#database.type=MySQL
 
 # misc database settings
-database.min.pool.size=5
-database.max.pool.size=100
+database.min.pool.size=2
+database.max.pool.size=50
 database.borrow.connection.timeout=60
 database.transaction.timeout=300
 database.generateDdl=true
@@ -817,7 +836,7 @@ flush privileges;
 		<le>Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation
 		for Madura Login<referenceLink t="Madura Login"/> for details.</le>
 		<le>Locking. You will need to create the lock table in your workflow database. This is
-		documented in Madura Utils<referenceLink t="Madura Utils"/></le>
+		documented in Madura Utils<referenceLink t="Madura Utils"/>. By default the locking table is auto-created but your DBA may prefer you use a script.</le>
 		<le>The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS 
 		and just a little about Vaadin<referenceLink t="Vaadin"/>. The CSS files are in <courier>src/main/webapp/VAADIN/themes/mytheme</courier>.</le>
 		<le>Language translations. The application is, we believe, fully i18n compliant. You will want to look at <courier>src/main/resources/messages.properties</courier>

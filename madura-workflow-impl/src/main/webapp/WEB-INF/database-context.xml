@@ -66,14 +66,20 @@ limitations under the License.
 			</map>
 		</property>
 	</bean>
+
+	<bean id="databaseConfigurer" class="nz.co.senanque.workflowimpl.DatabaseConfigurer" bundle:export="true">
+		<property name="extraProperties">
+			<util:properties location="classpath:xa-${database.type}.properties"/>
+		</property>
+	</bean>
 	
     <bean id="dataSourceWorkflow" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="pu__workflow" />
-	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
-	    <property name="minPoolSize" value="${database.min.pool.size}"/>
-	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
+	    <property name="xaDataSourceClassName" value="#{databaseConfigurer.datasourceClass}" />
+	    <property name="xaProperties" value="#{databaseConfigurer.properties('workflow')}"/>
+	    <property name="maxPoolSize" value="#{databaseConfigurer.maxPoolSize}"/>
+	    <property name="minPoolSize" value="#{databaseConfigurer.minPoolSize}"/>
+	    <property name="borrowConnectionTimeout" value="#{databaseConfigurer.borrowConnectionTimeout}" />
 	</bean>
 
 	<bean id="jpaVendorAdapter"
@@ -81,22 +87,7 @@ limitations under the License.
 		<property name="showSql" value="false" />
 		<!-- ensures new db is auto created if needed -->
 		<property name="generateDdl" value="${database.generateDdl}" />
-		<property name="databasePlatform" value="${database.dialect}" />
-	</bean>
-
- 	<util:properties id="xaProperties1">
-        <prop key="url">${database.url.prefix}workflow${database.url.suffix}</prop>
-        <prop key="user">${database.user}</prop>
-        <prop key="password">${database.password}</prop>
-	</util:properties>
-	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
-	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger">
-		<property name="list">
-			<list>
-				<ref bean="xaProperties1"/>
-				<ref bean="xaProperties2"/>
-			</list>
-		</property>
+		<property name="databasePlatform" value="#{databaseConfigurer.dialect}" />
 	</bean>
 
     <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">

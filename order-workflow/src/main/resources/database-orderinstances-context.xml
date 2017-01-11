@@ -43,36 +43,20 @@ limitations under the License.
 		<property name="jpaProperties">
 			<map>
 				<entry key="hibernate.transaction.jta.platform" value="nz.co.senanque.hibernate.SpringJtaPlatformAdapter" />
-				<entry key="hibernate.dialect" value="${database.dialect}" />
+				<entry key="hibernate.dialect" value="#{databaseConfigurer.dialect}" />
 				<entry key="hibernate.format_sql" value="true" />
 				<entry key="hibernate.connection.autocommit" value="false" />
 			</map>
 		</property>
 	</bean>
 
- 	<util:properties id="xaProperties1">
-        <prop key="url">${database.url.prefix}orders${database.url.suffix}</prop>
-        <prop key="user">${database.user}</prop>
-        <prop key="password">${database.password}</prop>
-	</util:properties>
-	<util:properties id="xaProperties2" location="classpath:xa-${database.type}.properties"/>
-	<bean id="xaProperties" class="nz.co.senanque.spring.PropertiesMerger">
-		<property name="list">
-			<list>
-				<ref bean="xaProperties1"/>
-				<ref bean="xaProperties2"/>
-			</list>
-		</property>
-	</bean>
-
-
     <bean id="dataSourceLocal" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
 	    <property name="uniqueResourceName" value="${bundle.name}" />
-	    <property name="xaDataSourceClassName" value="${database.datasource.class}" />
-	    <property name="xaProperties" ref="xaProperties"/>
-	    <property name="maxPoolSize" value="${database.max.pool.size}"/>
-	    <property name="minPoolSize" value="${database.min.pool.size}"/>
-	    <property name="borrowConnectionTimeout" value="${database.borrow.connection.timeout}" />
+	    <property name="xaDataSourceClassName" value="#{databaseConfigurer.datasourceClass}" />
+	    <property name="xaProperties" value="#{databaseConfigurer.properties('orders')}"/>
+	    <property name="maxPoolSize" value="#{databaseConfigurer.maxPoolSize}"/>
+	    <property name="minPoolSize" value="#{databaseConfigurer.minPoolSize}"/>
+	    <property name="borrowConnectionTimeout" value="#{databaseConfigurer.borrowConnectionTimeout}" />
 	</bean>
 
     <bean id="persistenceAnnotation" class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
