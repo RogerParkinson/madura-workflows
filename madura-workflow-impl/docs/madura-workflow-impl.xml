@@ -906,6 +906,12 @@ flush privileges;
 				<th>2.1.2</th>
 			</tr>
 			<tr>
+				<td>Verified JMX working.</td>
+			</tr>
+			<tr>
+				<td>Implemented SQLLocks.</td>
+			</tr>
+			<tr>
 				<td>Added options for MySQL.</td>
 			</tr>
 			<tr>
