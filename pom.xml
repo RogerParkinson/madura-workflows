@@ -65,6 +65,8 @@
 		<maduradocs.version>6.2.1</maduradocs.version>
 		<madura.vaadin.version>3.2.2-SNAPSHOT</madura.vaadin.version>
 		<madura.version>3.2.0-SNAPSHOT</madura.version>
+   		<timestamp>${maven.build.timestamp}</timestamp>
+   		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 	</properties>
 	<repositories>
 		<repository>
