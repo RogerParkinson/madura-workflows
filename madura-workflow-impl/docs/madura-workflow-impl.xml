@@ -741,8 +741,36 @@ jdbc:h2:mem:workflow;DB_CLOSE_ON_EXIT=FALSE;MVCC=true
 		You may also want to develop your own locking mechanism and Madura Utils has documentation for that too.</p>	
 	</h1>
 	<h1 t="JMX">
-		<p>The application supports JMX. Using JMX you can monitor the status of <courier>SimpleLocking</courier> and, if necessary, kill
-		rogue locks. You can also freeze and restart the executor mentioned in <sectionLink t="Scheduler"/>.</p>
+		<p>The application supports JMX which allows you to monitor it and perform some maintenance operations remotely. This feature
+		is completely optional so you can ignore this section if you do not want to use JMX.</p>
+		<p>For Tomcat you need to set up some environmental variables to start the MBean server:</p>
+        <code><![CDATA[
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=1099
+-Dcom.sun.management.jmxremote.local.only=false 
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+        ]]></code>
+        <p>This is a minimal list and your specific requirements may be different, especially in production where turning off authentication is unlikely
+        to be a good idea. Also if you are not using Tomcat your requirements may be different. The important thing is to ensure that
+        you have an MBean server. There are several JMX clients available and the example shown here uses jconsole which is
+        distributed with the HotSpot JVM. When you invoke it you need to give an IP address (127.0.0.1 for the local machine) and
+        the port (eg 1099) you configured earlier.</p>
+<img width="12cm" href="images/jconsole.png">jconsole</img>
+		<p>The relevant entries on the side pane shown in <figureLink t="jconsole"/> are SQLLockFactory, BundleManager and ExecutorJMX.</p>
+		<p>The SQLLockFactory entry allows you to change the sleep time, max retries and prefix. You can also get a list of all the locks
+		currently held (getAllLocksJMX) and you can force an unlock for a specific lock by name. Unlocking is the same as removing the
+		row from the SQL_LOCK table. You should never have to do this, but some unexpected situation might require it.</p>
+		<p>The BundleManager entry allows you to get a list of the current bundles (showBundles), force a scan for new bundles and
+		restart which removes all bundles and reloads them. Again you should never normally need these. Perhaps if you prefer to turn the
+		automatic bundle scanning off you would use it to manually scan when you deployed a new bundle.</p>
+		<p>The ExecutorJMX entry allows you to stop and start the background executor. As with the other entries this should not be necessary for normal
+		operation but there might be an emergency situation which requires it.</p>
+		<p>All of these settings and operations, with the exception of the SQLLockFactory getAllLocks and unlock, apply to a specific server.
+		If you have multiple servers running, which is likely enough in production, then the JMX interface is only talking to <emph>one</emph>
+		of them and if you need the operation or setting to apply to the others you must connect jconsole to each one of them and
+		make your changes there as well. The reason SQLLockFactory is different is that it writes its changes to the lock database
+		which is (obviously) visible to all servers.</p>
 	</h1>
     <h1 t="Configuring for Production">
     	<p>The configuration options are all in <courier>config.properties</courier> but to change them you do not have to edit

@@ -62,4 +62,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <!-- The executor is responsible for scanning for active processes etc -->
     <bean id="executor" class="nz.co.senanque.workflow.ExecutorImpl" />
 
+	<bean id="mbeanServer" class="java.lang.management.ManagementFactory" lazy-init="false" factory-method="getPlatformMBeanServer"/>
+	<context:mbean-export server="mbeanServer"/>
+    <!-- exposes freeze/resume switch on the executor through JMX -->
+    <bean id="executorJMX" class="nz.co.senanque.workflow.ExecutorJMX"/>
+
 </beans>

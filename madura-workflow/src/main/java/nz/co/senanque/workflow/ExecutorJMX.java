@@ -17,10 +17,7 @@ package nz.co.senanque.workflow;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
@@ -29,41 +26,24 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  *
  */
 @ManagedResource(objectName = "nz.co.senanque.workflow:name=ExecutorJMX")
-public class ExecutorJMX  implements BeanFactoryAware{
+public class ExecutorJMX {
 
 	private static final Logger log = LoggerFactory.getLogger(ExecutorJMX.class);
 	
-	private Executor m_executor;
+	@Autowired Executor m_executor;
 
 	boolean m_freeze = false;
 
-	private DefaultListableBeanFactory m_beanFactory;
-	
 	@ManagedOperation
 	public void freeze() {
-		getExecutor().freeze();
+		m_executor.freeze();
 	}
 	@ManagedOperation
 	public void resume() {
-		getExecutor().resume();
+		m_executor.resume();
 	}
 	@ManagedOperation
 	public boolean isFrozen() {
-		return getExecutor().isFrozen();
-	}
-	@Override
-	public void setBeanFactory(BeanFactory arg0) throws BeansException {
-		m_beanFactory = (DefaultListableBeanFactory)arg0;
-	}
-	private Executor getExecutor() {
-		if (m_executor == null) {
-			try {
-				m_executor = (Executor)m_beanFactory.getBean(nz.co.senanque.workflow.Executor.class);
-			} catch (BeansException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return m_executor;
+		return m_executor.isFrozen();
 	}
 }
