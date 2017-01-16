@@ -93,15 +93,33 @@ limitations under the License.
     <bean id="springJtaPlatformAdapter" class="nz.co.senanque.hibernate.SpringJtaPlatformAdapter">
         <property name="jtaTransactionManager" ref="transactionManager" />
     </bean>
-    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
-		init-method="init" destroy-method="close" bundle:export="true">
+	<bean id="atomikosUserTransactionService" 
+		class="com.atomikos.icatch.config.UserTransactionServiceImp"
+	    init-method="init" destroy-method="shutdownForce" bundle:export="true">
+	    <constructor-arg>
+	        <props>
+	            <prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory</prop>
+	            <prop key="com.atomikos.icatch.log_base_name">${database.transaction.id}</prop>
+<!-- 
+	            <prop key="com.atomikos.icatch.output_dir">../standalone/log/</prop>
+	            <prop key="com.atomikos.icatch.log_base_dir">../standalone/log/</prop>
+ -->
+	        </props>
+	    </constructor-arg>
+	</bean>
+    <bean id="atomikosTransactionManager" 
+    	class="com.atomikos.icatch.jta.UserTransactionManager"
+		init-method="init" destroy-method="close" 
+		bundle:export="true" depends-on="atomikosUserTransactionService">
 		<property name="forceShutdown" value="false" />
 	</bean>
-    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" bundle:export="true">
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" 
+    	bundle:export="true" depends-on="atomikosUserTransactionService">
         <property name="transactionTimeout" value="${database.transaction.timeout}" />
     </bean>
 	<bean id="transactionManager"
-		class="org.springframework.transaction.jta.JtaTransactionManager" bundle:export="true">
+		class="org.springframework.transaction.jta.JtaTransactionManager" 
+		depends-on="atomikosUserTransactionService" bundle:export="true">
 		<property name="transactionManager" ref="atomikosTransactionManager" />
 		<property name="userTransaction" ref="atomikosUserTransaction" />
 		<property name="allowCustomIsolationLevels" value="true" />
