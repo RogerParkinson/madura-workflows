@@ -37,10 +37,13 @@ This is the core library the others depend on. It also holds the documentation. 
 ## madura-workflow-impl
 
 ### Deploying
-This is the UI and it builds a war file you can deploy to an application server such as Tomcat 7. There are a number of configuration options to turn this into
-a production application, especially the location of the bundles. These are all in config.properties.
+This is the UI and it builds a war file you can deploy to an application server such as Tomcat 7. There are a number of configuration options to turn this into a production application, especially the location of the bundles. These are all in config.properties.
 
-The maven build copies the example processes into the PROJECT/bundles directory. 
+The maven build copies the example processes into the PROJECT/bundles directory of this project. 
+
+## madura-workflow-headless
+
+This project builds an uber jar file that can be used to run the background processes if you want to separate them from the UI. By default the background runs in the war file from madura-workflow-impl so this project is optional. Instructions for using headless are in the impl documentation.
 
 ### Demo Script
 There is a demo script and other documentation on the ui [here](http://www.madurasoftware.com/madura-workflow-impl.pdf). See 'Running the Application'.

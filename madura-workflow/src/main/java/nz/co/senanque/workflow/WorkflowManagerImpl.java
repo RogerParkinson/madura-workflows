@@ -42,7 +42,6 @@ import nz.co.senanque.process.instances.TaskTry;
 import nz.co.senanque.process.parser.ParsePackage;
 import nz.co.senanque.process.parser.ProcessTextProvider;
 import nz.co.senanque.schemaparser.FieldDescriptor;
-import nz.co.senanque.schemaparser.SchemaParser;
 import nz.co.senanque.schemaparser.SchemaParserImpl;
 import nz.co.senanque.validationengine.ValidationEngine;
 import nz.co.senanque.workflow.instances.Audit;
