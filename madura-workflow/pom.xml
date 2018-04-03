@@ -260,6 +260,20 @@
 							<destFile>${sql}.H2.sql</destFile>
 						</configuration>
 					</execution>
+					<execution>
+						<id>sql-generate-postgres</id>
+						<phase>package</phase>
+						<goals>
+							<goal>sql</goal>
+						</goals>
+						<configuration>
+							<persistenceFile>${basedir}/src/main/resources/META-INF/persistence-workflow.xml</persistenceFile>
+							<persistenceUnit>pu-workflow</persistenceUnit>
+							<dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dialect>
+							<drops>false</drops>
+							<destFile>${sql}.mysql.sql</destFile>
+						</configuration>
+					</execution>
 				</executions>
 				<dependencies>
 					<!-- Need this because the entity classes refer to items in MaduraObjects -->

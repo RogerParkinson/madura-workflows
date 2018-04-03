@@ -37,12 +37,11 @@ import javax.annotation.PostConstruct;
 
 import nz.co.senanque.madura.bundle.BundleManager;
 import nz.co.senanque.madura.bundle.BundleManagerImpl;
+import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.InitialBundleSelector;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
-import nz.co.senanque.workflowui.conf.QueueProcessManager;
 
 import org.junit.AfterClass;
 import org.junit.Test;

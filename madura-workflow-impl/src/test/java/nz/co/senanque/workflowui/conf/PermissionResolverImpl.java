@@ -1,12 +1,13 @@
 package nz.co.senanque.workflowui.conf;
 
-import nz.co.senanque.vaadin.permissionmanager.PermissionResolver;
+import nz.co.senanque.permissionmanager.PermissionResolver;
+import nz.co.senanque.permissionmanager.PermissionResolverDTO;
 
 public class PermissionResolverImpl implements PermissionResolver {
 
 	@Override
-	public void unpackPermissions() {
-		// TODO Auto-generated method stub
+	public PermissionResolverDTO unpackPermissions() {
+		return null;
 
 	}
 

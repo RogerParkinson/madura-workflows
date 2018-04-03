@@ -19,8 +19,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.vaadin.format.FormattingTable;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 import nz.co.senanque.workflowui.conf.QueueProcessManager;
 

@@ -24,8 +24,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.vaadin.format.FormattingTable;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowDAO;
 import nz.co.senanque.workflow.instances.Attachment;
 import nz.co.senanque.workflowui.AttachmentPopup.AttachmentEvent;

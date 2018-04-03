@@ -80,6 +80,10 @@
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-resource-loader</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>nz.co.senanque</groupId>
+			<artifactId>madura-springsecurity-login</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>package</defaultGoal>

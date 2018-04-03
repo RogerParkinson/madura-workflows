@@ -10,11 +10,12 @@ import nz.co.senanque.forms.FormEnvironment;
 import nz.co.senanque.forms.WorkflowForm;
 import nz.co.senanque.locking.LockFactory;
 import nz.co.senanque.locking.sql.SQLLockFactory;
+import nz.co.senanque.login.PermissionResolverSpringSecurity;
 import nz.co.senanque.madura.bundle.BundleExport;
 import nz.co.senanque.madura.bundle.spring.BundledInterfaceRegistrar;
+import nz.co.senanque.permissionmanager.PermissionManager;
+import nz.co.senanque.permissionmanager.PermissionManagerImpl;
 import nz.co.senanque.vaadin.Hints;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManagerImpl;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
 import nz.co.senanque.workflow.WorkflowJPA;
@@ -49,6 +50,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.EnableVaadin;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.UIScope;
@@ -96,7 +98,7 @@ public class MyUI extends UI implements MessageSourceAware {
 	private MessageSource m_messageSource;
 	private transient MenuItem launch;
 
-    @WebServlet(name = "MyUIServlet", urlPatterns = "/*", asyncSupported = true)
+    @WebServlet(name = "MyUIServlet", urlPatterns = {"/app/*", "/VAADIN/*"}, asyncSupported = true)
     public static class MyUIServlet extends SpringVaadinServlet {
 
 		private static final long serialVersionUID = 1L;
@@ -144,7 +146,8 @@ public class MyUI extends UI implements MessageSourceAware {
     	@Scope(value="vaadin-ui", proxyMode = ScopedProxyMode.TARGET_CLASS)
     	@BundleExport
     	public PermissionManager getPermissionManager() {
-    		PermissionManagerImpl ret = new PermissionManagerImpl();
+    		PermissionManagerImpl ret =  new PermissionManagerImpl();
+    		ret.setPermissionResolver(new PermissionResolverSpringSecurity());
     		return ret;
     	}
     	@Bean(name="workflowClient")
@@ -192,7 +195,10 @@ public class MyUI extends UI implements MessageSourceAware {
 			private static final long serialVersionUID = -1L;
 
 			public void menuSelected(MenuItem selectedItem) {
-				m_permissionManager.close(getUI());
+		    	VaadinService.getCurrentRequest().getWrappedSession().invalidate();
+		    	getUI().close();
+		        String contextPath = VaadinService.getCurrentRequest().getContextPath();
+		        getUI().getPage().setLocation(contextPath);
 			}
 			});
 		Method formWizardClickMethod;
