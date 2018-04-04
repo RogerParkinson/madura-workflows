@@ -80,6 +80,10 @@
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-resource-loader</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>nz.co.senanque</groupId>
+			<artifactId>madura-springsecurity-login</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>package</defaultGoal>
@@ -125,6 +129,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<subprojectDir>madura-workflow-impl</subprojectDir>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -163,10 +170,6 @@
 			    </executions>
 			</plugin>
 
- 			<plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>

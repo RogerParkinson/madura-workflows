@@ -45,7 +45,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="messageSource" class="nz.co.senanque.resourceloader.ResourceBundleMessageSourceExt"/>
 	<util:properties id="ep" location="classpath:config.properties"/>
 	<bean id="bundleManager" class="nz.co.senanque.madura.bundle.BundleManagerImpl">
- 		<property name="directory" value="${workflow.bundles.dir}"/>
+ 		<property name="directory" value="/home/roger/madura-workflows/madura-workflows/madura-workflow-impl/bundles"/>
 		<property name="exportedBeans">
 			<map>
 				<entry key="errorEndpoint" value-ref="errorEndpoint"/>

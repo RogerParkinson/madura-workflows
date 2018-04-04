@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>nz.co.senanque</groupId>
 			<artifactId>madura-perspectives-library</artifactId>
-			<version>3.2.2</version>
+			<version>3.3.0</version>
 		</dependency>
 	</dependencies>
 	<build>

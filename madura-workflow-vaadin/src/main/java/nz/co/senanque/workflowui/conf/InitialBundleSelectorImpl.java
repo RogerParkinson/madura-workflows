@@ -18,8 +18,8 @@ package nz.co.senanque.workflowui.conf;
 import java.io.Serializable;
 
 import nz.co.senanque.madura.bundle.BundleManager;
+import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.process.instances.ProcessDefinition;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.InitialBundleSelector;
 
 import org.slf4j.Logger;

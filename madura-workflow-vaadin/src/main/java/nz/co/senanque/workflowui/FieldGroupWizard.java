@@ -20,10 +20,10 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import nz.co.senanque.forms.WorkflowForm;
+import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.process.instances.ProcessDefinition;
 import nz.co.senanque.vaadin.MaduraFieldGroup;
 import nz.co.senanque.vaadin.MaduraSessionManager;
-import nz.co.senanque.vaadin.permissionmanager.PermissionManager;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.instances.ProcessInstance;
 

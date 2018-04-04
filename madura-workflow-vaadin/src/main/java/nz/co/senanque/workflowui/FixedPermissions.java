@@ -21,7 +21,7 @@ package nz.co.senanque.workflowui;
  */
 public class FixedPermissions {
 	
-	public static String TECHSUPPORT = "TECHSUPPORT";
-	public static String ADMIN = "ADMIN";
+	public static String TECHSUPPORT = "ROLE_TECHSUPPORT";
+	public static String ADMIN = "ROLE_ADMIN";
 
 }
