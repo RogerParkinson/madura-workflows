@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:pizza="http://www.senanque.co.nz/pizzaorder"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:temp="http://www.w3schools.com/xml/">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:temp="https://w3schools.com/xml/">
     <xsl:template match="/">
         <xsl:apply-templates select="temp:FahrenheitToCelsiusResponse " />
     </xsl:template>
