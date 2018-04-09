@@ -12,7 +12,7 @@
 			<reference url="http://tomcat.apache.org/" t="Tomcat" />
 			<reference url="http://www.h2database.com" t="H2" />
 			<reference url="https://vaadin.com/home" t="Vaadin" />
-			<reference url="https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-login" t="Madura Login" />
+			<reference url="https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-springsecurity-login" t="Madura Login" />
 			<reference url="https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-utils" t="Madura Utils" />
 			<reference url="https://github.com/RogerParkinson/madura-objects-parent" t="Madura Objects" />
 			<reference url="https://github.com/RogerParkinson/madura-vaadin-support" t="Madura Vaadin Support" />
@@ -63,27 +63,26 @@
 			</h2>
 			</h1>
 			<h1 t="Running the application">
-			<p>The README.md file in <referenceLink t="Madura Workflow"/> gives information about deploying this, including some minor but necessary
-			configuration.</p>
-			<p>You will need an application server. We tested this with Tomcat V7, but any application server you are comfortable with
-			should be just fine. It also runs on VMWare's cloud server, and probably most others. Make sure you are running
-			Java 7 or later.</p>
+			<p>You will need an application server. We tested this with Tomcat V8, but any application server you are comfortable with
+			should be just fine. Make sure you are running Java 8 or later. Then you just build with maven and deploy the war file
+			from the <courier>madura-workflow-impl</courier> subproject.</p>
+			<p>This war file is pre-configured to use an in-memory H2 database which it creates when it starts. It is also pre-configured
+			to run stand alone, by which we mean it does not expect a headless application running in the background.</p>
+			<p>The demo sequence described below needs an external SOAP service to talk to. This is a simple temperature conversion service
+			implemented in a second war file you will find in then <courier>temperature-conversion-service</courier> subproject. Deploy that
+			war file to your application server as well. It is just an example service for the demo to invoke.</p>
 			<p>When you start your application server the console log will show some warnings:</p>
 			<code><![CDATA[
-14:14:07.813 [localhost-startStop-1] WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 No properties path set - looking for transactions.properties in classpath...
-14:14:07.816 [localhost-startStop-1] WARN  c.a.i.c.UserTransactionServiceImp - Slf4jLogger.java:12 Using init file: /home/roger/madura-workflows/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/madura-workflow-impl/WEB-INF/classes/transactions.properties
-14:14:08.064 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'pu__workflow': poolSize equals default - this may cause performance problems!
-14:14:09.460 [localhost-startStop-1] WARN  o.s.b.f.s.DefaultListableBeanFactory - AbstractBeanFactory.java:1480 Bean creation exception on FactoryBean type check: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'workflowManager': Cannot resolve reference to bean 'bundleManager' while setting bean property 'bundleManager'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'bundleManager' defined in ServletContext resource [/WEB-INF/applicationContext.xml]: Cannot resolve reference to bean 'errorEndpoint' while setting bean property 'exportedBeans' with key [TypedStringValue: value [errorEndpoint], target type [null]]; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'errorEndpoint': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private nz.co.senanque.workflow.WorkflowManager nz.co.senanque.messaging.ErrorEndpoint.m_workflowManager; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [nz.co.senanque.workflow.WorkflowManager] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-14:14:10.015 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'nmc-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
-14:14:10.504 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: nmc-workflow-1.0.2-SNAPSHOT.jar
-14:14:12.278 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'order-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
-14:14:13.042 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: order-workflow-1.0.2-SNAPSHOT.jar
-14:14:13.131 [localhost-startStop-1] WARN  c.a.jdbc.AbstractDataSourceBean - Slf4jLogger.java:12 AtomikosDataSoureBean 'simple-workflow-1.0.2-SNAPSHOT': poolSize equals default - this may cause performance problems!
-14:14:13.344 [localhost-startStop-1] INFO  n.c.s.m.b.BundleMangerDelegateJar - BundleMangerDelegateJar.java:90 Added bundle: simple-workflow-1.0.2-SNAPSHOT.jar
-14:14:13.420 [localhost-startStop-1] WARN  c.v.s.navigator.SpringViewProvider - SpringViewProvider.java:165 No SpringViews found
-				]]></code>
+14:42:04.199 [localhost-startStop-1] WARN  o.s.c.a.ConfigurationClassPostProcessor - ConfigurationClassPostProcessor.java:389 Cannot enhance @Configuration bean definition 'com.vaadin.spring.VaadinConfiguration' since its singleton instance has been created too early. The typical cause is a non-static @Bean method with a BeanDefinitionRegistryPostProcessor return type: Consider declaring such methods as 'static'.
+14:42:04.539 [localhost-startStop-1] WARN  o.s.b.f.s.DefaultListableBeanFactory - AbstractBeanFactory.java:1490 Bean creation exception on non-lazy FactoryBean type check: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'workflowManager': Cannot resolve reference to bean 'bundleManager' while setting bean property 'bundleManager'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'bundleManager' defined in ServletContext resource [/WEB-INF/applicationContext.xml]: Cannot resolve reference to bean 'errorEndpoint' while setting bean property 'exportedBeans' with key [TypedStringValue: value [errorEndpoint], target type [null]]; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'errorEndpoint': Unsatisfied dependency expressed through field 'm_workflowManager'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean found for dependency [nz.co.senanque.workflow.WorkflowManager]: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+14:42:04.829 [localhost-startStop-1] WARN  c.a.i.provider.imp.AssemblerImp - Slf4jLogger.java:24 Thanks for using Atomikos! Evaluate http://www.atomikos.com/Main/ExtremeTransactions for advanced features and professional support
+or register at http://www.atomikos.com/Main/RegisterYourDownload to disable this message and receive FREE tips & advice
+Thanks for using Atomikos! Evaluate http://www.atomikos.com/Main/ExtremeTransactions for advanced features and professional support
+or register at http://www.atomikos.com/Main/RegisterYourDownload to disable this message and receive FREE tips & advice
+			]]></code>
 			<p>These are all normal and do not cause problems, though the poolSize should be reviewed before going into production. The
-			<courier>DefaultListableBeanFactory</courier> looks a little alarming but it is benign.</p>
+			<courier>DefaultListableBeanFactory</courier> looks a little alarming but it is benign. If you do plan to go into production you
+			should consider checking out Atomikos' offer.</p>
 			<p>Browse to <courier>http://localhost:8080/madura-workflow-impl/</courier>
 			(your server name and port may vary if you are not running a default configured Tomcat on your local machine). You should see a
 			login page.</p>
@@ -105,7 +104,7 @@
 			<p>Just clicking on one of the process definitions will show its launch form. Click on the first one, the Demo process.</p>
 			<p>Before going any further we should look at what this process does. The definition of the process is in the <courier>order-workflow</courier>
 			sub project in the file <courier>src/main/resources/OrderWorkflow.wrk</courier>:</p>
-				<code><![CDATA[
+			<code><![CDATA[
 process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q1"{
 	try {
 		message=orderMessageSender;
@@ -117,7 +116,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 }  
 				]]></code>
 			<p>This is a trivial example of a process. It starts with a launch form which we will see next. Once underway it tries to send a message
-			to an external web service. The web service converts Fahrenheit to Celsuis, total overkill for this kind of software, but it does give us
+			to the external web service. The web service converts Fahrenheit to Celsuis, total overkill for this kind of software, but it does give us
 			an understandable sequence to work through. If the web service fails the compute task is performed and this just runs some Java code to
 			convert the temperature.</p>
 			<p>Finally the process shows a form that displays the converted temperature.</p>
@@ -179,7 +178,7 @@ process: Order "Demo" "This is the demo process" launchForm=LaunchDemo  queue="Q
 			Process tab.</p>
 			<img width="12cm" href="images/P1B.png">Process1-Process</img>
 			<p>The Process tab shows the internal details of the process instance. You can see what bundle this process was loaded from, its current status (Busy because you have got it locked)
-			what queue it is in and so on. You can view these details but unless you have TECHSUPPORT permission you cannot change them. TECHSUPPORT can change anything
+			what queue it is in and so on. You can view these details but unless you have TECHSUPPORT permission (login as tech/tech) you cannot change them. TECHSUPPORT can change anything
 			you see here. There is also an opportunity to view the attachments. Now press the Audit tab.</p>
 			<img width="12cm" href="images/P1C.png">Process1-Audits</img>
 			<p>The Audit tab shows all the audit records generated for this process instance. You can see what tasks were run and when, and you can see who locked the process instance
@@ -782,8 +781,6 @@ nz.co.senanque.validationengine.ValidationEngineImpl.identifier=my-identifier
 nz.co.senanque.validationengine.metadata.AnnotationsMetadataFactory.packages=nz.co.senanque.workflow.instances
 nz.co.senanque.forms.FormEnvironment.name=Vaadin
 
-# The following entry will auto login to admin/admin, useful for testing.
-#nz.co.senanque.login.RequestValidatorImpl.defaultLogin=admin/admin
 # This is the sweep directory that holds the current bundles.
 # YOU DEFINITELY NEED TO CHANGE THIS
 workflow.bundles.dir=/bundles
@@ -876,6 +873,7 @@ flush privileges;
 		<le>Writing your own workflow definitions, forms, objects and rules. The whole reason for doing this is to get the workflow you really want,
 		so this step is obvious. It is where, hopefully, most of the work will go to get the application where you want it.</le>
 		</list>
+		<h2 t="Headless">
 		<p>The default application runs everything in one war file, that means the UI and the background functions are all running in the same
 		instance. In production you may want to deploy multiple war files across different servers etc. In that case make sure you set each of them
 		to use a different <courier>database.transaction.id</courier> value. It does not matter too much what it contains as long as it is unique.
@@ -891,6 +889,15 @@ java -Ddatabase.transaction.id=MY_UNIQUE_NAME -jar madura-workflow-headless-2.2.
         ]]></code>
         <p>You will, of course, need to define other environment variables to specify the database connection, bundles directory, and other settings. You can use
         lots of <courier>-D</courier> options, or use the relevant feature of your operating system to set them externally.</p>
+        <p>The resulting configuration will look like <figureLink t="Headless Deployment"/> which shows the interactive functions
+        driven by a user, and the background functions driven by timer events. They share a common database which contains the
+        queued processes etc.</p>
+        <p>Naturally this configuration depends on haveing an external database rather than a memeory resident one, but you
+        would not deploy a production system without a real database anyway. It also needs the scanning timers turned off
+        in the <courier>madura-workflow-impl</courier> application so that it concentrates on servicing the users rather than handling the
+        back end processing which is now the job of <courier>madura-workflow-headless</courier>.</p>
+<img width="12cm" href="images/WorkflowDeployment.png">Headless Deployment</img>
+        </h2>
         </h1>
 	<h1 t="Building Your Own">
 		<p>But there may be times when it is simpler to deploy a new application for your workflow. This might be because you don't like Vaadin as
@@ -920,6 +927,18 @@ java -Ddatabase.transaction.id=MY_UNIQUE_NAME -jar madura-workflow-headless-2.2.
 		<a1 t="Release Notes">
 			<table width="12cm">
 				<tw>12cm</tw>
+			<tr>
+				<th>2.3.0</th>
+			</tr>
+			<tr>
+				<td>Using Spring login.</td>
+			</tr>
+			<tr>
+				<td>Implemented local temperature conversion service (example)</td>
+			</tr>
+			<tr>
+				<td>Implemented headless application</td>
+			</tr>
 			<tr>
 				<th>2.2.0</th>
 			</tr>
