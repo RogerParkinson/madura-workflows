@@ -45,23 +45,6 @@ The maven build copies the example processes into the PROJECT/bundles directory 
 
 This project builds an uber jar file that can be used to run the background processes if you want to separate them from the UI. By default the background runs in the war file from madura-workflow-impl so this project is optional. Instructions for using headless are in the impl documentation.
 
-### Demo Script
-There is a demo script and other documentation on the ui [here](http://www.madurasoftware.com/madura-workflow-impl.pdf). See 'Running the Application'.
-
-### From Demo to Production
-The intention of this project is to provide a customisable template rather than a production application. Things you would want to review to turn it into production include:
-
- * Database. The in memory H2 database used in this would obviously be replaced in a production system. The default setting is to auto-create tables in the database which may not be the preference of your DBA.
- * Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities. There are also decisions to be made around how many instances of the application, particularly how many copies of the scheduler are running.
- * Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation for [Madura Login](https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-login) for details.
- * The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or you might just have different preferences in your enterprise.
- * Locking. You will need to create the lock table in your workflow database. This is documented in [Madura Utils](https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-utils)
- * The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS.
- * Language translations. The application is, we believe, fully i18n compliant. You will want to look at src/main/resources/messages.properties and produce a translated version of that. There is already a French one there. You also need to check localmessages.properties in the bundles.
- * Writing your own workflow definitions, forms, objects and rules. The whole reason for doing this is to get the workflow you really want, so this step is obvious. It is where, hopefully, most of the work will go to get the application where you want it.
- 
-Many of these settings are determined in the config.properties file and every setting there can be overridden by an environment variable, so you should be able to keep code edits to a minimum.
-
 ## madura-workflow-vaadin
 
 Holds some definitions shared by the example processes and the Vaadin UI.
@@ -73,3 +56,25 @@ An example workflow bundle that does very little. It mostly serves as a dummy fo
 ## order-workflow
 
 An example workflow bundle that holds four process. The most interesting one is the "Demo" process which includes an external call and a user form.
+
+## temperature-conversion-service
+
+An simple SOAP service that converts temperatures from fahrenheit to celsius and back. It is used in the demos to show that a workflow can easily invoke an external service. 
+
+# Demo Script
+There is a demo script and other documentation on the ui [here](http://www.madurasoftware.com/madura-workflow-impl.pdf). See 'Running the Application'.
+
+# From Demo to Productionn
+The intention of this project is to provide a customisable template rather than a production application. Things you would want to review to turn it into production include:
+
+ * Database. The in memory H2 database used in this would obviously be replaced in a production system. The default setting is to auto-create tables in the database which may not be the preference of your DBA. There are example settings for a MySQL database in the config file as well as DDL for manual db creation..
+ * Tomcat. The application is not particularly dependent on Tomcat because it only uses standard JEE facilities. There are also decisions to be made around how many instances of the application, particularly how many copies of the scheduler are running.
+ * Security. The hard coded users in the security configuration must be reworked to use your enterprise security facilities. See the documentation for [Madura Login](https://github.com/RogerParkinson/madura-vaadin-support/tree/master/madura-login) for details.
+ * The scheduler options configured here are probably about right, but your workload might mean they need to be tuned or tweaked, or you might just have different preferences in your enterprise.
+ * Locking. You will need to create the lock table in your workflow database. This is documented in [Madura Utils](https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-utils)
+ * The CSS definitions. You do not have to keep the defaults. You can change all the fonts, colours and images and completely rebrand this application if you know enough about CSS.
+ * Language translations. The application is, we believe, fully i18n compliant. You will want to look at src/main/resources/messages.properties and produce a translated version of that. There is already a French one there. You also need to check localmessages.properties in the bundles.
+ * Writing your own workflow definitions, forms, objects and rules. The whole reason for doing this is to get the workflow you really want, so this step is obvious. It is where, hopefully, most of the work will go to get the application where you want it.
+ 
+Many of these settings are determined in the config.properties file and every setting there can be overridden by an environment variable, so you should be able to keep code edits to a minimum.
+
