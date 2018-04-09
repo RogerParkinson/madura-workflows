@@ -77,7 +77,7 @@ Key:				http://www.springframework.org/schema/integration/spring-integration-1.0
             <int-ws:soap-action value="https://w3schools.com/xml/FahrenheitToCelsius" />
         </int-ws:header-enricher>
 
-        <int-ws:outbound-gateway uri="http://localhost:8081/temperature-conversion-service/w3schools/xml/tempconvert" >            
+        <int-ws:outbound-gateway uri="http://localhost:8080/temperature-conversion-service/w3schools/xml/tempconvert" >            
             <int-ws:request-handler-advice-chain>
                 <bean class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
                     <property name="recoveryCallback">

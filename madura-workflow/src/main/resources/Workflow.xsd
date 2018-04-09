@@ -257,7 +257,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -275,7 +275,7 @@ limitations under the License.
                     </xsd:documentation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -289,7 +289,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -303,7 +303,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -321,7 +321,7 @@ limitations under the License.
                     </xsd:documentation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -335,7 +335,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -349,7 +349,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -377,7 +377,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -386,7 +386,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>
@@ -440,7 +440,7 @@ limitations under the License.
             	<xsd:annotation>
 					<xsd:appinfo>
 						<annox:annotate>
-							<md:WritePermission name="TECHSUPPORT" />
+							<md:WritePermission name="ROLE_TECHSUPPORT" />
 						</annox:annotate>
 					</xsd:appinfo>
 				</xsd:annotation>

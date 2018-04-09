@@ -92,6 +92,7 @@
  		<module>nmc-workflow</module>
  		<module>madura-test-webservice</module>
 		<module>madura-workflow-headless</module>
+		<module>temperature-conversion-service</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
