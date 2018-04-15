@@ -817,7 +817,45 @@ process: Order "AcceptOrder" {
 		<a1 t="Release Notes">
 		<table width="12cm">
 			<tw>12cm</tw>
-		<tr>
+			<tr>
+				<th>2.3.0</th>
+			</tr>
+			<tr>
+				<td>Travis.</td>
+			</tr>
+			<tr>
+				<td>Using Spring login.</td>
+			</tr>
+			<tr>
+				<td>Implemented local temperature conversion service (example)</td>
+			</tr>
+			<tr>
+				<td>Implemented headless application</td>
+			</tr>
+			<tr>
+				<th>2.2.0</th>
+			</tr>
+			<tr>
+				<td>Verified JMX working.</td>
+			</tr>
+			<tr>
+				<td>Implemented SQLLocks.</td>
+			</tr>
+			<tr>
+				<td>Added options for MySQL.</td>
+			</tr>
+			<tr>
+				<td>Added Dockerfile.</td>
+			</tr>
+			<tr>
+				<td>Changed the JNDI reference to bundles directory to a config.properties value.</td>
+			</tr>
+			<tr>
+				<td>Renamed to Impl from ui because it will soon run (optionally) headless.</td>
+			</tr>
+			<tr>
+				<td>Added conditional instantiation of scheduler to allow UI to not schedule.</td>
+			</tr>		<tr>
 			<th>2.1.1</th>
 		</tr>
 		<tr>
