@@ -928,6 +928,12 @@ java -Ddatabase.transaction.id=MY_UNIQUE_NAME -jar madura-workflow-headless-2.2.
 			<table width="12cm">
 				<tw>12cm</tw>
 			<tr>
+				<th>2.4.0</th>
+			</tr>
+			<tr>
+				<td>Realigned to new version of madura-vaadin-support.</td>
+			</tr>
+			<tr>
 				<th>2.3.0</th>
 			</tr>
 			<tr>
