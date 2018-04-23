@@ -62,7 +62,7 @@
 		<jaxb22.version>2.2.4-1</jaxb22.version>
 		<skipITs>true</skipITs>
 		<maduradocs.version>6.3.2</maduradocs.version>
-		<madura.vaadin.version>3.3.0</madura.vaadin.version>
+		<madura.vaadin.version>3.4.0</madura.vaadin.version>
 		<madura.version>3.3.5</madura.version>
    		<timestamp>${maven.build.timestamp}</timestamp>
    		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -122,6 +122,11 @@
 			<dependency>
 				<groupId>nz.co.senanque</groupId>
 				<artifactId>madura-springsecurity-login</artifactId>
+				<version>${madura.vaadin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>nz.co.senanque</groupId>
+				<artifactId>madura-oauth2-login</artifactId>
 				<version>${madura.vaadin.version}</version>
 			</dependency>
 			<dependency>

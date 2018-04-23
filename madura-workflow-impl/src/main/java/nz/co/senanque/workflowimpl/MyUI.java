@@ -15,6 +15,7 @@ import nz.co.senanque.madura.bundle.BundleExport;
 import nz.co.senanque.madura.bundle.spring.BundledInterfaceRegistrar;
 import nz.co.senanque.permissionmanager.PermissionManager;
 import nz.co.senanque.permissionmanager.PermissionManagerImpl;
+import nz.co.senanque.permissionmanager.PermissionResolver;
 import nz.co.senanque.vaadin.Hints;
 import nz.co.senanque.workflow.WorkflowClient;
 import nz.co.senanque.workflow.WorkflowDAO;
@@ -127,6 +128,7 @@ public class MyUI extends UI implements MessageSourceAware {
     	
     	@Autowired MessageSource messageSource;
     	@Autowired AtomikosDataSourceBean atomikosDataSourceBean;
+    	@Autowired private PermissionResolver permissionResolver;
     	
     	public MyConfiguration() {
     	}
@@ -147,7 +149,7 @@ public class MyUI extends UI implements MessageSourceAware {
     	@BundleExport
     	public PermissionManager getPermissionManager() {
     		PermissionManagerImpl ret =  new PermissionManagerImpl();
-    		ret.setPermissionResolver(new PermissionResolverSpringSecurity());
+    		ret.setPermissionResolver(permissionResolver);
     		return ret;
     	}
     	@Bean(name="workflowClient")
